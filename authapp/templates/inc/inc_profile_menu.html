@@ -1,0 +1,8 @@
+{% with request.resolver_match.url_name as url_name %}
+<div class="tab">
+		  <button class="tablinks" onclick="openCity(event, 'Мои объявления')">Мои объявления</button>
+		  <button class="tablinks" onclick="openCity(event, 'Избранные объявления')">Избранные объявления</button>
+		  <button class="tablinks" onclick="openCity(event, 'Разместить объявление')">Разместить объявление</button>
+		  <button class="tablinks {% if url_name == 'editprofile' %}active{% endif %}" onclick="location.href = '{% url 'auth:editprofile' user.uslugeuserprofile.pk %}'">Настройки профиля</button>
+</div>
+{% endwith %}

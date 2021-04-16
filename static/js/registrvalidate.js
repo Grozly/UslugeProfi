@@ -242,3 +242,6 @@ loginSubmit.onclick = (e) => {
             });
     }
 };
+
+//Отключаем кнопку верификации телефона
+document.getElementById("phoneVerify").disabled = true;

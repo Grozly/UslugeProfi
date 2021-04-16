@@ -13,7 +13,9 @@
                 >
                 {% else %}
                 <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                <a href="{% url 'auth:profile' user.pk %}" class="signup"
+                <a
+                    href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
+                    class="signup"
                     >{{ user }}</a
                 >
                 {% endif %} {% else %}
@@ -51,12 +53,24 @@
         </div>
     </div>
     <div class="ad_block mobile_top only_mobile">
-        <!-- <a href="{% url 'auth:profile' user.pk %}" class="advetisement">
-				Личный кабинет
-				</a>
-				<a href="#" class="favorites">
-					<img src="{% static "img/heart.png" %}" alt="" class="favorites_icon">Избранное
-				</a> -->
+        {% if user.is_authenticated %} {% if user.is_superuser %}
+        <a href="{% url 'admin:index' %}" class="advetisement"> Админка </a>
+        {% else %}
+        <a
+            href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
+            class="advetisement"
+        >
+            Личный кабинет
+        </a>
+        {% endif %} {% else %}
+        <a href="{% url 'main:main' %}" class="advetisement myLinkModal">
+            Личный кабинет
+        </a>
+        {% endif %}
+        <a href="#" class="favorites">
+            <img src="{% static "img/heart.png" %}" alt=""
+            class="favorites_icon">Избранное
+        </a>
     </div>
     <div class="header__bottom">
         <div class="header__links">
@@ -68,7 +82,9 @@
                 >
                 {% else %}
                 <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                <a href="{% url 'auth:profile' user.pk %}" class="signup"
+                <a
+                    href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
+                    class="signup"
                     >{{ user }}</a
                 >
                 {% endif %} {% else %}
@@ -77,9 +93,25 @@
                 {% endif %}
             </div>
             <div class="ad_block">
-                <!-- <a href="{% url 'auth:profile' user.pk %}" class="advetisement">
+                {% if user.is_authenticated %} {% if user.is_superuser %}
+                <a href="{% url 'admin:index' %}" class="advetisement">
+                    Админка
+                </a>
+                {% else %}
+                <a
+                    href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
+                    class="advetisement"
+                >
                     Личный кабинет
-                </a> -->
+                </a>
+                {% endif %} {% else %}
+                <a
+                    href="{% url 'main:main' %}"
+                    class="advetisement myLinkModal"
+                >
+                    Личный кабинет
+                </a>
+                {% endif %}
             </div>
         </div>
         <form class="header__search_form">

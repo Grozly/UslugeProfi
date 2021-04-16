@@ -1,6 +1,5 @@
-{% extends 'authapp/base.html' %}
+{% extends 'mainapp/base.html' %}
 {% load static %}
-{% load my_tags %}
 {% block header %}
 <div class="container">
 	<div class="header__top">
@@ -52,12 +51,24 @@
 		</div>
 	</div>
 	<div class="ad_block mobile_top only_mobile">
-		<!-- <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
+		{% if user.is_authenticated %}
+		{% if user.is_superuser %}
+		<a href="{% url 'admin:index' %}" class="advetisement">
+			Админка
+		</a>
+		{% else %}
+		<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
 			Личный кабинет
 		</a>
+		{% endif %}
+		{% else %}
+		<a href="{% url 'main:main' %}" class="advetisement myLinkModal">
+			Личный кабинет
+		</a>
+		{% endif %}
 		<a href="#" class="favorites">
 			<img src="{% static "img/heart.png" %}" alt="" class="favorites_icon">Избранное
-		</a> -->
+		</a>
 	</div>
 	<div class="header__bottom">
 		<div class="header__links">
@@ -76,9 +87,21 @@
 				{% endif %}
 			</div>
 			<div class="ad_block">
-				<!-- <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
+				{% if user.is_authenticated %}
+				{% if user.is_superuser %}
+				<a href="{% url 'admin:index' %}" class="advetisement">
+					Админка
+				</a>
+				{% else %}
+				<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
 					Личный кабинет
-				</a> -->
+				</a>
+				{% endif %}
+				{% else %}
+				<a href="{% url 'main:main' %}" class="advetisement myLinkModal">
+					Личный кабинет
+				</a>
+				{% endif %}
 			</div>
 		</div>
 		<form class="header__search_form personal">
@@ -114,12 +137,13 @@
 	<div class="main_info">
 		<div class="profile_avatar_wrapper">
 			{% if uslugeuserprofile.photo_profile %}
-			<img src="{{ uslugeuserprofile.photo_profile|media_folder_users }}" alt="{{ user.email }}" class="profile_avatar per_photo">
+			<img src="/media/{{ uslugeuserprofile.photo_profile }}" alt="{{ uslugeuserprofile.email }}"
+				class="per_photo">
 			{% else %}
 			<img src="{% static "img/personal.png" %}" alt="" class="profile_avatar per_photo">
 			{% endif %}
 		</div>
-
+		
 		<div class="per_text">
 			<div class="per_name bold">
 				{% if uslugeuserprofile.name_profile %}
@@ -136,10 +160,9 @@
 			</div>
 			<div class="per_tel bold">
 				{% if uslugeuserprofile.phone_profile %}
-				+7(999) 999-99-99
-
-				{% else %}
 				{{ user.uslugeuserprofile.phone_profile }}
+				{% else %}
+				+7(999) 999-99-99
 				{% endif %}
 			</div>
 			<div class="per_email bold">
@@ -147,14 +170,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="tab">
-		<button class="tablinks" onclick="openCity(event, 'Мои объявления')">Мои объявления</button>
-		<button class="tablinks" onclick="openCity(event, 'Избранные объявления')">Избранные объявления</button>
-		<button class="tablinks" onclick="openCity(event, 'Разместить объявление')">Разместить объявление</button>
-		<button class="tablinks"
-			onclick="location.href = '{% url 'auth:editprofile' user.uslugeuserprofile.pk %}'">Настройки
-			профиля</button>
-	</div>
+	{% include '../inc/inc_profile_menu.html' %}
 	<div id="Мои объявления" class="tabcontent">
 		<div class="tab">
 			<button class="tablinks" onclick="openCity(event, 'Объявление 1')">Объявление 1</button>

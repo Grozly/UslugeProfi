@@ -3,10 +3,11 @@
 {% block editprofile %}
     <div id="Настройки профиля" class="tabcontent" style="display:block">
 							<h3 class="adv_title">Изменить профиль</h3>
-							<div class="profile_settings">
-								<form method="post" action="{% url 'auth:editprofile' user.uslugeuserprofile.pk %}" class="profile_form" enctype="multipart/form-data">
-									{% csrf_token %}
+								<form method="post" action="{% url 'auth:editprofile' uslugeuserprofile.pk %}" class="profile_form" enctype="multipart/form-data">
+									{{ form.errors }}
+                                    {% csrf_token %}
 									<div class="profile_col-1">
+                                        <div class="user_profile_select">{{ form.user_profile }}</div>
                                         {{ form.status_profile }}
                                         {{ form.name_profile }}
                                         {{ form.surname_profile }}
@@ -15,27 +16,15 @@
                                         {{ form.inn_profile }}
 									  	<div class="phone_block">
                                             {{ form.phone_profile }}
-<!--									  		<input class="blue_btn form_btn" type="submit" value="Верификация">-->
+                                            <input id="phoneVerify" class="blue_btn form_btn" type="submit" value="Верификация">
 									  	</div>
                                         {{ form.photo_profile }}
                                         {{ form.address_profile }}
                                         {{ form.country_profile }}
-									   <p>Сменить пароль</p>
-									   <div class="password">
-                                            <input class="form_input" type="password" id="password-input" placeholder="Новый пароль" name="password">
-                                            <a href="#" class="password-control"></a>
-                                        </div>
-                                        <div class="password">
-                                            <input class="form_input" type="password" id="password-input" placeholder="Повторите новый пароль" name="password">
-                                            <a href="#" class="password-control"></a>
-                                        </div>
-                                        <div class="password">
-                                            <input class="form_input" type="password" id="password-input" placeholder="Действующий пароль" name="password">
-                                            <a href="#" class="password-control"></a>
-                                        </div>
                                         <input class="blue_btn form_btn" type="submit" value="Сохранить">
-
-									</div>
+                                </form>
+                            {% include 'authapp/password_change_form.html' %}
+                            </div>
 									<div class="pofile_col-2">
 										<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1999.058118409584!2d30.358355016070213!3d59.931177781873465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469631a5e66d51c5%3A0x6f00589ac258db97!2z0J3QtdCy0YHQutC40Lkg0L_RgC4sINCh0LDQvdC60YIt0J_QtdGC0LXRgNCx0YPRgNCz!5e0!3m2!1sru!2sru!4v1613214625240!5m2!1sru!2sru" width="100%" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
 										<div><input class="subcat_checkbox show_checkbox" type="checkbox" name="option1" value="a1">Показывать адрес во всех объявлениях<br></div>

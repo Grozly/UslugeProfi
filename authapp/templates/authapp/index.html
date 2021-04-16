@@ -138,9 +138,9 @@
 		<div class="profile_avatar_wrapper">
 			{% if uslugeuserprofile.photo_profile %}
 			<img src="/media/{{ uslugeuserprofile.photo_profile }}" alt="{{ uslugeuserprofile.email }}"
-				class="per_photo">
+				class="profile_avatar">
 			{% else %}
-			<img src="{% static "img/personal.png" %}" alt="" class="profile_avatar per_photo">
+			<img src="{% static "img/personal.png" %}" alt="" class="profile_avatar">
 			{% endif %}
 		</div>
 		

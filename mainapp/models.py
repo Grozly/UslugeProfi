@@ -1,3 +1,95 @@
 from django.db import models
 
-# Create your models here.
+
+class Category(models.Model):
+    name = models.CharField(verbose_name='имя', max_length=64, unique=True)
+    is_active = models.BooleanField(verbose_name='активна', default=True)
+
+    class Meta:
+        verbose_name = 'категория'
+        verbose_name_plural = 'категории'
+
+    def __str__(self):
+        return self.name
+
+
+class SubCategory(models.Model):
+    category_id = models.ForeignKey('Category', on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='имя', max_length=64, unique=True)
+    is_active = models.BooleanField(verbose_name='активна', default=True)
+
+    class Meta:
+        verbose_name = 'подкатегория'
+        verbose_name_plural = 'подкатегории'
+
+    def __str__(self):
+        return self.name
+
+
+class Service(models.Model):
+    class Meta:
+        verbose_name = 'услуга'
+        verbose_name_plural = 'услуги'
+
+    category_id = models.ForeignKey('Category', verbose_name='категория', on_delete=models.CASCADE)
+    subcategory_id = models.ForeignKey('SubCategory', verbose_name='подкатегория', on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='имя', max_length=64, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Announcement(models.Model):
+    class Meta:
+        verbose_name = 'объявление'
+        verbose_name_plural = 'объявления'
+
+    PR = 'PR'
+    NE = 'NE'
+    RE = 'RE'
+    PRICE = (
+        (PR, 'Цена'),
+        (NE, 'Дороворная'),
+        (RE, 'Диапозон'),
+    )
+
+    DI = 'DI'
+    RUB = 'RUB'
+    DOL = 'DOL'
+    CURRENCY = (
+        (DI, 'дин'),
+        (RUB, 'рубль'),
+        (DOL, 'доллар'),
+    )
+
+    PIE = 'PIE'
+    ME = 'ME'
+    KG = 'KG'
+
+    MEASUREMENT = (
+        (PIE, 'шт'),
+        (ME, 'м2'),
+        (KG, 'кг'),
+    )
+
+    user_id = models.ForeignKey('authapp.UslugeUser', verbose_name='автор', on_delete=models.CASCADE)
+    category_id = models.ForeignKey('Category', verbose_name='категория', on_delete=models.CASCADE)
+    subcategory_id = models.ForeignKey('SubCategory', verbose_name='подкатегория', on_delete=models.CASCADE)
+    service_id = models.ForeignKey('Service', verbose_name='услуга', on_delete=models.CASCADE)
+    name = models.CharField(max_length=64, verbose_name='имя')
+    description = models.TextField(verbose_name='описание', blank=True)
+    photo_announcement = models.ImageField(upload_to='photos_announcement',
+                                      blank=True,
+                                      verbose_name='фото',
+                                      default='photo_announcement/default.png')
+    price_select = models.CharField(max_length=3, choices=PRICE, default=PR)
+    price_from = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    price_up_to = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    currency_select = models.CharField(max_length=3, choices=CURRENCY, default=RUB)
+    measurement_selection = models.CharField(max_length=3, choices=MEASUREMENT, default=PIE)
+    address = models.CharField(max_length=80, verbose_name='Адрес', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name

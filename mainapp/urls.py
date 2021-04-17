@@ -12,5 +12,6 @@ urlpatterns = [
     path('logout/', mainapp.LogoutUserView.as_view(), name='logout'),
     path('activate/<uidb64>/<token>/', mainapp.VerificationView.as_view(), name='activate'),
     path('validate-email/', csrf_exempt(mainapp.EmailValidationView.as_view()), name='validate-email'),
+    path('create-ad/', mainapp.CreateViewAd.as_view(), name='create-ad'),
 ]
 

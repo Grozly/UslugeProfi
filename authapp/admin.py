@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
+from authapp.models import UslugeUserProfile
+
 
 class CustomUserAdmin(UserAdmin):
     """Define admin model for custom User model with no username field."""
@@ -25,3 +27,4 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(get_user_model(), CustomUserAdmin)
+admin.site.register(UslugeUserProfile)

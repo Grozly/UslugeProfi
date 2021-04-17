@@ -52,6 +52,11 @@ class UslugeUser(AbstractUser):
 
 
 class UslugeUserProfile(models.Model):
+
+    class Meta:
+        verbose_name = 'профиль'
+        verbose_name_plural = 'профили'
+
     IP = 'IP'
     OOO = 'OOO'
     PF = 'PF'
@@ -83,3 +88,6 @@ class UslugeUserProfile(models.Model):
     @receiver(post_save, sender=UslugeUser)
     def save_user_profile(sender, instance, **kwargs):
         instance.uslugeuserprofile.save()
+
+    def __str__(self):
+        return self.user_profile

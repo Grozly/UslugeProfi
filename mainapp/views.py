@@ -13,6 +13,9 @@ from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeEr
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse, reverse_lazy
+
+from .forms import CreateAdModelForm
+from .models import Announcement
 from .utils import account_activation_token
 from django.contrib import auth
 
@@ -155,5 +158,13 @@ class LoginUserView(View):
 class LogoutUserView(LogoutView):
 
     template_name = 'mainapp/index.html'
+
+
+class CreateViewAd(CreateView):
+    model = Announcement
+    template_name = 'mainapp/announcement_form.html'
+    form_class = CreateAdModelForm
+    success_url = 'authapp/index.html'
+
 
 

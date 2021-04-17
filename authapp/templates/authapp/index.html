@@ -1,132 +1,132 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 {% block header %}
-		<div class="container">
-			<div class="header__top">
-				<a href="{% url 'main:main' %}">
-					<img src="{% static "img/logo.png" %}" class="header__logo">
-				</a>
-				<div class="header__links only_mobile">
-					<div class="login__links">
-						{% if user.is_authenticated %}
-							{% if user.is_superuser %}
-								<a href="{% url 'main:logout' %}" class="login">Выход</a> |
-								<a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
-							{% else %}
-								<a href="{% url 'main:logout' %}" class="login">Выход</a> |
-								<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
-							{% endif %}
-						{% else %}
-							<a href="#" class="login myLinkModal">Войти</a> |
-							<a href="#" class="signup myLinkModal1">Регистрация</a>
-						{% endif %}
-					</div>
-				</div>
-				<div class="header__selectors">
-					<select size="1" name="city">
-					    <option value="0">Все города</option>
-					    <option value="1">Санкт-Петербург</option>
-					    <option value="2">Москва</option>
-					    <option value="3">Краснодар</option>
-					    <option value="4">Калининград</option>
-				   </select>
-				   <select size="1" name="radius">
-					    <option value="0">Все расстояния</option>
-					    <option value="1">25 км</option>
-					    <option value="2">50 км</option>
-					    <option value="3">150 км</option>
-				   </select>
-				     <select size="1" name="face">
-					    <option value="0">Все</option>
-					    <option value="1">Юр.лицо</option>
-					     <option value="2">Физ.лицо</option>
-					     <option value="3">ИП</option>
-				   </select>
-				    <select size="1" name="ch_price">
-					    <option value="0">Фильтровать по</option>
-					    <option value="2">Сначала новые</option>
-					    <option value="1">Сначала старые</option>
-					    <option value="3">По рейтингу</option>
-				   </select>
-				</div>
-			</div>
-			<div class="ad_block mobile_top only_mobile">
+<div class="container">
+	<div class="header__top">
+		<a href="{% url 'main:main' %}">
+			<img src="{% static "img/logo.png" %}" class="header__logo">
+		</a>
+		<div class="header__links only_mobile">
+			<div class="login__links">
 				{% if user.is_authenticated %}
-							{% if user.is_superuser %}
-								<a href="{% url 'admin:index' %}" class="advetisement">
-								Админка
-								</a>
-							{% else %}
-								<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
-								Личный кабинет
-								</a>
-							{% endif %}
-						{% else %}
-							<a href="{% url 'main:main' %}" class="advetisement myLinkModal">
-								Личный кабинет
-							</a>
-						{% endif %}
-				<a href="#" class="favorites">
-					<img src="{% static "img/heart.png" %}" alt="" class="favorites_icon">Избранное
-				</a>
+				{% if user.is_superuser %}
+				<a href="{% url 'main:logout' %}" class="login">Выход</a> |
+				<a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
+				{% else %}
+				<a href="{% url 'main:logout' %}" class="login">Выход</a> |
+				<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
+				{% endif %}
+				{% else %}
+				<a href="#" class="login myLinkModal">Войти</a> |
+				<a href="#" class="signup myLinkModal1">Регистрация</a>
+				{% endif %}
 			</div>
-			<div class="header__bottom">
-				<div class="header__links">
-					<div class="login__links">
-                        {% if user.is_authenticated %}
-							{% if user.is_superuser %}
-								<a href="{% url 'main:logout' %}" class="login">Выход</a> |
-								<a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
-							{% else %}
-								<a href="{% url 'main:logout' %}" class="login">Выход</a> |
-								<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
-							{% endif %}
-						{% else %}
-							<a href="#" class="login myLinkModal">Войти</a> |
-							<a href="#" class="signup myLinkModal1">Регистрация</a>
-						{% endif %}
-                    </div>
-					<div class="ad_block">
-						{% if user.is_authenticated %}
-							{% if user.is_superuser %}
-								<a href="{% url 'admin:index' %}" class="advetisement">
-								Админка
-								</a>
-							{% else %}
-								<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
-								Личный кабинет
-								</a>
-							{% endif %}
-						{% else %}
-							<a href="{% url 'main:main' %}" class="advetisement myLinkModal">
-								Личный кабинет
-							</a>
-						{% endif %}
-					</div>
-				</div>
-				<form class="header__search_form personal">
-			  		Личный кабинет
-			  </form>
-			</div>
-			<form class="header__search_form personal top only_mobile">
-			  		Личный кабинет
-			  </form>
 		</div>
+		<div class="header__selectors">
+			<select size="1" name="city">
+				<option value="0">Все города</option>
+				<option value="1">Санкт-Петербург</option>
+				<option value="2">Москва</option>
+				<option value="3">Краснодар</option>
+				<option value="4">Калининград</option>
+			</select>
+			<select size="1" name="radius">
+				<option value="0">Все расстояния</option>
+				<option value="1">25 км</option>
+				<option value="2">50 км</option>
+				<option value="3">150 км</option>
+			</select>
+			<select size="1" name="face">
+				<option value="0">Все</option>
+				<option value="1">Юр.лицо</option>
+				<option value="2">Физ.лицо</option>
+				<option value="3">ИП</option>
+			</select>
+			<select size="1" name="ch_price">
+				<option value="0">Фильтровать по</option>
+				<option value="2">Сначала новые</option>
+				<option value="1">Сначала старые</option>
+				<option value="3">По рейтингу</option>
+			</select>
+		</div>
+	</div>
+	<div class="ad_block mobile_top only_mobile">
+		{% if user.is_authenticated %}
+		{% if user.is_superuser %}
+		<a href="{% url 'admin:index' %}" class="advetisement">
+			Админка
+		</a>
+		{% else %}
+		<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
+			Личный кабинет
+		</a>
+		{% endif %}
+		{% else %}
+		<a href="{% url 'main:main' %}" class="advetisement myLinkModal">
+			Личный кабинет
+		</a>
+		{% endif %}
+		<a href="#" class="favorites">
+			<img src="{% static "img/heart.png" %}" alt="" class="favorites_icon">Избранное
+		</a>
+	</div>
+	<div class="header__bottom">
+		<div class="header__links">
+			<div class="login__links">
+				{% if user.is_authenticated %}
+				{% if user.is_superuser %}
+				<a href="{% url 'main:logout' %}" class="login">Выход</a> |
+				<a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
+				{% else %}
+				<a href="{% url 'main:logout' %}" class="login">Выход</a> |
+				<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
+				{% endif %}
+				{% else %}
+				<a href="#" class="login myLinkModal">Войти</a> |
+				<a href="#" class="signup myLinkModal1">Регистрация</a>
+				{% endif %}
+			</div>
+			<div class="ad_block">
+				{% if user.is_authenticated %}
+				{% if user.is_superuser %}
+				<a href="{% url 'admin:index' %}" class="advetisement">
+					Админка
+				</a>
+				{% else %}
+				<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
+					Личный кабинет
+				</a>
+				{% endif %}
+				{% else %}
+				<a href="{% url 'main:main' %}" class="advetisement myLinkModal">
+					Личный кабинет
+				</a>
+				{% endif %}
+			</div>
+		</div>
+		<form class="header__search_form personal">
+			Личный кабинет
+		</form>
+	</div>
+	<form class="header__search_form personal top only_mobile">
+		Личный кабинет
+	</form>
+</div>
 {% endblock %}
 {% block sidebar %}
-    <div class="category__filter">
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-        <a class="filter_attr" href="#">Ремонт</a>
-    </div>
+<div class="category__filter">
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+	<a class="filter_attr" href="#">Ремонт</a>
+</div>
 {% endblock %}
 {% block content %}
 <div class="personal_info">
@@ -135,17 +135,21 @@
 		<input class="blue_btn form_btn" type="submit" value="Продлить">
 	</div>
 	<div class="main_info">
-		{% if uslugeuserprofile.photo_profile %}
-			<img src="/media/{{ uslugeuserprofile.photo_profile }}" alt="{{ uslugeuserprofile.email }}" class="per_photo">
-		{% else %}
-			<img src="{% static "img/personal.png" %}" alt="" class="per_photo">
-		{% endif %}
+		<div class="profile_avatar_wrapper">
+			{% if uslugeuserprofile.photo_profile %}
+			<img src="/media/{{ uslugeuserprofile.photo_profile }}" alt="{{ uslugeuserprofile.email }}"
+				class="profile_avatar">
+			{% else %}
+			<img src="{% static "img/personal.png" %}" alt="" class="profile_avatar">
+			{% endif %}
+		</div>
+		
 		<div class="per_text">
 			<div class="per_name bold">
 				{% if uslugeuserprofile.name_profile %}
-					{{ uslugeuserprofile.name_profile }} {{ uslugeuserprofile.surname_profile }}
+				{{ uslugeuserprofile.name_profile }} {{ uslugeuserprofile.surname_profile }}
 				{% else %}
-					{{user.email}}
+				{{user.email}}
 				{% endif %}
 			</div>
 			<div class="per_long">
@@ -156,9 +160,9 @@
 			</div>
 			<div class="per_tel bold">
 				{% if uslugeuserprofile.phone_profile %}
-					{{ user.uslugeuserprofile.phone_profile }}
+				{{ user.uslugeuserprofile.phone_profile }}
 				{% else %}
-					+7(999) 999-99-99
+				+7(999) 999-99-99
 				{% endif %}
 			</div>
 			<div class="per_email bold">
@@ -168,9 +172,9 @@
 	</div>
 	{% include '../inc/inc_profile_menu.html' %}
 	<div id="Мои объявления" class="tabcontent">
-		  <div class="tab">
-		  <button class="tablinks" onclick="openCity(event, 'Объявление 1')">Объявление 1</button>
-	</div>
+		<div class="tab">
+			<button class="tablinks" onclick="openCity(event, 'Объявление 1')">Объявление 1</button>
+		</div>
 	</div>
 
 	<div id="Избранные объявления" class="tabcontent">
@@ -188,26 +192,27 @@
 						от 10 000 руб.
 					</p>
 					<p class="description">
-						Ремонт квартир, офисов, нежилых помещений “под ключ”. Составление сметы, договор составляем, своя бригада, проверенные материалы
+						Ремонт квартир, офисов, нежилых помещений “под ключ”. Составление сметы, договор составляем,
+						своя бригада, проверенные материалы
 					</p>
 					<a href="#" class="location_link">
 						Санкт-Петербург
 					</a>
-				<div class="owner_block">
-					<img src="{% static "img/photo.png" %}" alt="">
-					<p class="owner_info">
-						Михаил Рябинин<br> <span class="bold tel">
-							+7(911) 123-45-56
-						</span>
-					</p>
-				</div>
+					<div class="owner_block">
+						<img src="{% static "img/photo.png" %}" alt="">
+						<p class="owner_info">
+							Михаил Рябинин<br> <span class="bold tel">
+								+7(911) 123-45-56
+							</span>
+						</p>
+					</div>
 			</li>
 		</ul>
 	</div>
 
 	<div id="Разместить объявление" class="tabcontent">
 		<h3 class="adv_title">Добавить объявление</h3>
-		  <form action="#" class="login_form flex_form">
+		<form action="#" class="login_form flex_form">
 			<input type="text" class="form_input" placeholder="Название">
 			<input type="text" class="form_input" placeholder="Описание">
 			<input type="file" class="form_input" name="f">
@@ -216,113 +221,131 @@
 				<option value="1">Ремонт</option>
 				<option selected value="2">Строительство</option>
 				<option value="3">Разработка</option>
-		   </select>
+			</select>
 			<select size="1" name="subcategory" class="form_input">
 				<option disabled>Подкатегория</option>
 				<option value="1">Ремонт</option>
 				<option selected value="2">Строительство</option>
 				<option value="3">Разработка</option>
-		   </select>
+			</select>
 			<div class="ads_options">
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="subcategory">
-				<option disabled>Цена</option>
-				<option value="1">Цена</option>
-				<option selected value="2">Договорная</option>
-				<option value="3">Диапазон</option>
-		   </select>
-		   <input type="text" class="ads_input" placeholder="Цена от">
-		   <input type="text" class="ads_input" placeholder="Цена до">
-		   <select size="1" name="subcategory">
-				<option disabled>Валюта</option>
-				<option value="1">дин</option>
-				<option selected value="2">руб</option>
-				<option value="3">доллар</option>
-		   </select>
-		   <select size="1" name="subcategory">
-				<option value="1">шт</option>
-				<option selected value="2">м2</option>
-				<option value="3">кг</option>
-		   </select>
-		</div>
-		<div class="ads_options">
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="subcategory">
-				<option disabled>Цена</option>
-				<option value="1">Цена</option>
-				<option selected value="2">Договорная</option>
-				<option value="3">Диапазон</option>
-		   </select>
-		   <input type="text" class="ads_input" placeholder="Цена от">
-		   <input type="text" class="ads_input" placeholder="Цена до">
-		   <select size="1" name="subcategory">
-				<option disabled>Валюта</option>
-				<option value="1">дин</option>
-				<option selected value="2">руб</option>
-				<option value="3">доллар</option>
-		   </select>
-		   <select size="1" name="subcategory">
-				<option value="1">шт</option>
-				<option selected value="2">м2</option>
-				<option value="3">кг</option>
-		   </select>
-		</div>
-		<div class="ads_options">
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="subcategory">
-				<option disabled>Цена</option>
-				<option value="1">Цена</option>
-				<option selected value="2">Договорная</option>
-				<option value="3">Диапазон</option>
-		   </select>
-		   <input type="text" class="ads_input" placeholder="Цена от">
-		   <input type="text" class="ads_input" placeholder="Цена до">
-		   <select size="1" name="subcategory">
-				<option disabled>Валюта</option>
-				<option value="1">дин</option>
-				<option selected value="2">руб</option>
-				<option value="3">доллар</option>
-		   </select>
-		   <select size="1" name="subcategory">
-				<option value="1">шт</option>
-				<option selected value="2">м2</option>
-				<option value="3">кг</option>
-		   </select>
-		</div>
-		   <input type="text" class="form_input" placeholder="Адрес">
-		   <div class="form_map"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1999.058118409584!2d30.358355016070213!3d59.931177781873465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469631a5e66d51c5%3A0x6f00589ac258db97!2z0J3QtdCy0YHQutC40Lkg0L_RgC4sINCh0LDQvdC60YIt0J_QtdGC0LXRgNCx0YPRgNCz!5e0!3m2!1sru!2sru!4v1613214625240!5m2!1sru!2sru" width="100%" height="70" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>
+				<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
+				<select size="1" name="subcategory" class="new_ad_price_category">
+					<option disabled>Цена</option>
+					<option selected value="1">Цена</option>
+					<option value="2">Договорная</option>
+					<option value="3">Диапазон</option>
+				</select>
+
+				<div class="ads_input_flex">
+					<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
+					<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
+					<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
+				</div>
+
+				<select size="1" name="subcategory">
+					<option disabled>Валюта</option>
+					<option value="1">дин</option>
+					<option selected value="2">руб</option>
+					<option value="3">доллар</option>
+				</select>
+				<select size="1" name="subcategory">
+					<option value="1">шт</option>
+					<option selected value="2">м2</option>
+					<option value="3">кг</option>
+				</select>
+			</div>
+			<div class="ads_options">
+				<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
+				<select size="1" name="subcategory" class="new_ad_price_category">
+					<option disabled>Цена</option>
+					<option selected value="1">Цена</option>
+					<option value="2">Договорная</option>
+					<option value="3">Диапазон</option>
+				</select>
+
+				<div class="ads_input_flex">
+					<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
+					<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
+					<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
+				</div>
+
+				<select size="1" name="subcategory">
+					<option disabled>Валюта</option>
+					<option value="1">дин</option>
+					<option selected value="2">руб</option>
+					<option value="3">доллар</option>
+				</select>
+				<select size="1" name="subcategory">
+					<option value="1">шт</option>
+					<option selected value="2">м2</option>
+					<option value="3">кг</option>
+				</select>
+			</div>
+			<div class="ads_options">
+				<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
+				<select size="1" name="subcategory" class="new_ad_price_category">
+					<option disabled>Цена</option>
+					<option selected value="1">Цена</option>
+					<option value="2">Договорная</option>
+					<option value="3">Диапазон</option>
+				</select>
+
+				<div class="ads_input_flex">
+					<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
+					<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
+					<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
+				</div>
+
+				<select size="1" name="subcategory">
+					<option disabled>Валюта</option>
+					<option value="1">дин</option>
+					<option selected value="2">руб</option>
+					<option value="3">доллар</option>
+				</select>
+				<select size="1" name="subcategory">
+					<option value="1">шт</option>
+					<option selected value="2">м2</option>
+					<option value="3">кг</option>
+				</select>
+			</div>
+			<input type="text" class="form_input" placeholder="Адрес">
+			<div class="form_map"><iframe
+					src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1999.058118409584!2d30.358355016070213!3d59.931177781873465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469631a5e66d51c5%3A0x6f00589ac258db97!2z0J3QtdCy0YHQutC40Lkg0L_RgC4sINCh0LDQvdC60YIt0J_QtdGC0LXRgNCx0YPRgNCz!5e0!3m2!1sru!2sru!4v1613214625240!5m2!1sru!2sru"
+					width="100%" height="70" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
+					tabindex="0"></iframe></div>
 			<input class="blue_btn form_btn" type="submit" value="Сохранить">
-		  </form>
+		</form>
 	</div>
 	{% block editprofile %}
 	{% endblock %}
 	<div id="Объявление 1" class="tabcontent">
 		<h3 class="adv_title">Объявление 1</h3>
 		<div class="my_ads">
-		  <select size="1" name="category">
+			<select size="1" name="category">
 				<option disabled>Категория</option>
 				<option value="1">Ремонт</option>
 				<option selected value="2">Строительство</option>
 				<option value="3">Разработка</option>
-		   </select>
-			<select size="1" name="subcategory">
+			</select>
+			<select size="1" name="subcategory" class="new_ad_price_category">
 				<option disabled>Подкатегория</option>
 				<option value="1">Ремонт</option>
 				<option selected value="2">Строительство</option>
 				<option value="3">Разработка</option>
-		   </select>
-		   <p>Активно с <span class="adv_end">31.02.21</span></p>
+			</select>
+			<p>Активно с <span class="adv_end">31.02.21</span></p>
 		</div>
 		<div class="ads_review">
 			<p class="catalog_rate">
-					<span class="fa fa-star checked"></span>
-					<span class="fa fa-star checked"></span>
-					<span class="fa fa-star checked"></span>
-					<span class="fa fa-star checked"></span>
-					<span class="fa fa-star"></span>
-				</p>
+				<span class="fa fa-star checked"></span>
+				<span class="fa fa-star checked"></span>
+				<span class="fa fa-star checked"></span>
+				<span class="fa fa-star checked"></span>
+				<span class="fa fa-star"></span>
+			</p>
 			<p class="catalog_com">
-					12 комментариев
+				12 комментариев
 			</p>
 			<p class="bold">
 				72 просмотра
@@ -330,69 +353,84 @@
 		</div>
 		<div class="ads_options">
 			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="subcategory">
+			<select size="1" name="subcategory" class="new_ad_price_category">
 				<option disabled>Цена</option>
-				<option value="1">Цена</option>
-				<option selected value="2">Договорная</option>
+				<option selected value="1">Цена</option>
+				<option value="2">Договорная</option>
 				<option value="3">Диапазон</option>
-		   </select>
-		   <input type="text" class="ads_input" placeholder="Цена">
-		   <input type="text" class="ads_input" placeholder="Цена">
-		   <select size="1" name="subcategory">
+			</select>
+
+			<div class="ads_input_flex">
+				<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
+				<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
+				<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
+			</div>
+
+			<select size="1" name="subcategory">
 				<option disabled>Валюта</option>
 				<option value="1">дин</option>
 				<option selected value="2">руб</option>
 				<option value="3">доллар</option>
-		   </select>
-		   <select size="1" name="subcategory">
+			</select>
+			<select size="1" name="subcategory">
 				<option value="1">шт</option>
 				<option selected value="2">м2</option>
 				<option value="3">кг</option>
-		   </select>
+			</select>
 		</div>
 		<div class="ads_options">
 			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="subcategory">
+			<select size="1" name="subcategory" class="new_ad_price_category">
 				<option disabled>Цена</option>
-				<option value="1">Цена</option>
-				<option selected value="2">Договорная</option>
+				<option selected value="1">Цена</option>
+				<option value="2">Договорная</option>
 				<option value="3">Диапазон</option>
-		   </select>
-		   <input type="text" class="ads_input" placeholder="Цена">
-		   <input type="text" class="ads_input" placeholder="Цена">
-		   <select size="1" name="subcategory">
+			</select>
+
+			<div class="ads_input_flex">
+				<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
+				<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
+				<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
+			</div>
+
+			<select size="1" name="subcategory">
 				<option disabled>Валюта</option>
 				<option value="1">дин</option>
 				<option selected value="2">руб</option>
 				<option value="3">доллар</option>
-		   </select>
-		   <select size="1" name="subcategory">
+			</select>
+			<select size="1" name="subcategory">
 				<option value="1">шт</option>
 				<option selected value="2">м2</option>
 				<option value="3">кг</option>
-		   </select>
+			</select>
 		</div>
 		<div class="ads_options">
 			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="subcategory">
+			<select size="1" name="subcategory" class="new_ad_price_category">
 				<option disabled>Цена</option>
-				<option value="1">Цена</option>
-				<option selected value="2">Договорная</option>
+				<option selected value="1">Цена</option>
+				<option value="2">Договорная</option>
 				<option value="3">Диапазон</option>
-		   </select>
-		   <input type="text" class="ads_input" placeholder="Цена">
-		   <input type="text" class="ads_input" placeholder="Цена">
-		   <select size="1" name="subcategory">
+			</select>
+
+			<div class="ads_input_flex">
+				<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
+				<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
+				<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
+			</div>
+
+			<select size="1" name="subcategory">
 				<option disabled>Валюта</option>
 				<option value="1">дин</option>
 				<option selected value="2">руб</option>
 				<option value="3">доллар</option>
-		   </select>
-		   <select size="1" name="subcategory">
+			</select>
+			<select size="1" name="subcategory">
 				<option value="1">шт</option>
 				<option selected value="2">м2</option>
 				<option value="3">кг</option>
-		   </select>
+			</select>
 		</div>
 		<input type="text" style="width: 100%; margin-top: 30px;" class="ads_input" placeholder="Название">
 		<textarea style="width: 100%; margin-top: 30px;" class="ads_input">Описание</textarea>
@@ -408,39 +446,39 @@
 </div>
 {% endblock %}
 {% block footer %}
-		<div class="container">
-			<div class="footer__top">
-				<a href="index.html">
-					<img src="{% static "img/logo-white.png" %}" class="header__logo">
-				</a>
-				<a href="#" class="up_link">Вверх</a>
-				<ul class="footer__menu_list">
-					<li class="footer__menu_item">
-						Безопасность
-					</li>
-					<li class="footer__menu_item">
-						Правила
-					</li>
-					<li class="footer__menu_item">
-						Пользовательское соглашение
-					</li>
-					<li class="footer__menu_item">
-						Помощь и контакты
-					</li>
-					<li class="footer__menu_item">
-						Цены
-					</li>
-					<li class="footer__menu_item">
-						О нас
-					</li>
-				</ul>
-			</div>
-			<div class="footer__bottom">
-				<p class="all-rights">
-					Usluge © {% now "Y" %} by MadiSpace <span class="all-rights-span">
-					All rights reserved
-				</span>
-				</p>
-			</div>
-		</div>
-    {% endblock %}
+<div class="container">
+	<div class="footer__top">
+		<a href="index.html">
+			<img src="{% static "img/logo-white.png" %}" class="header__logo">
+		</a>
+		<a href="#" class="up_link">Вверх</a>
+		<ul class="footer__menu_list">
+			<li class="footer__menu_item">
+				Безопасность
+			</li>
+			<li class="footer__menu_item">
+				Правила
+			</li>
+			<li class="footer__menu_item">
+				Пользовательское соглашение
+			</li>
+			<li class="footer__menu_item">
+				Помощь и контакты
+			</li>
+			<li class="footer__menu_item">
+				Цены
+			</li>
+			<li class="footer__menu_item">
+				О нас
+			</li>
+		</ul>
+	</div>
+	<div class="footer__bottom">
+		<p class="all-rights">
+			Usluge © {% now "Y" %} by MadiSpace <span class="all-rights-span">
+				All rights reserved
+			</span>
+		</p>
+	</div>
+</div>
+{% endblock %}

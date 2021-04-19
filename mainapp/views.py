@@ -15,7 +15,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse, reverse_lazy
 
 from .forms import CreateAdModelForm
-from .models import Announcement
+from .models import Announcement, SubCategory, Category
 from .utils import account_activation_token
 from django.contrib import auth
 
@@ -165,6 +165,18 @@ class CreateViewAd(CreateView):
     template_name = 'mainapp/announcement_form.html'
     form_class = CreateAdModelForm
     success_url = 'authapp/index.html'
+
+    def get_context_data(self, **kwargs):
+        context_data = super(CreateViewAd, self).get_context_data(**kwargs)
+        context_data['category'] = Category.objects.all()
+        context_data['subcategory'] = SubCategory.objects.all()
+        return context_data
+
+
+def load_subcategories(request):
+    category_id = request.GET.get('category')
+    subcategory = SubCategory.objects.filter(category_id=category_id).order_by('name')
+    return render(request, 'mainapp/announcement_form.html', {'subcategory': subcategory})
 
 
 

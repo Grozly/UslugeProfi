@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 
 from authapp.models import UslugeUser, UslugeUserProfile
-from mainapp.models import Announcement
+from mainapp.models import Announcement, SubCategory
 
 
 class CreateAdModelForm(forms.ModelForm):
@@ -12,6 +12,7 @@ class CreateAdModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['subcategory_id'].queyset = SubCategory.objects.none()
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form_input'
             field.help_text = ''

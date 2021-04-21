@@ -4,6 +4,8 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(verbose_name='имя', max_length=64, unique=True)
     is_active = models.BooleanField(verbose_name='активна', default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'категория'
@@ -17,6 +19,8 @@ class SubCategory(models.Model):
     category_id = models.ForeignKey('Category', on_delete=models.CASCADE)
     name = models.CharField(verbose_name='имя', max_length=64, unique=True)
     is_active = models.BooleanField(verbose_name='активна', default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'подкатегория'
@@ -34,6 +38,10 @@ class Service(models.Model):
     category_id = models.ForeignKey('Category', verbose_name='категория', on_delete=models.CASCADE)
     subcategory_id = models.ForeignKey('SubCategory', verbose_name='подкатегория', on_delete=models.CASCADE)
     name = models.CharField(verbose_name='имя', max_length=64, unique=True)
+    is_active = models.BooleanField(verbose_name='активна', default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.name
@@ -83,8 +91,8 @@ class Announcement(models.Model):
                                       verbose_name='фото',
                                       default='photo_announcement/default.png')
     price_select = models.CharField(max_length=3, choices=PRICE, default=PR)
-    price_from = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
-    price_up_to = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
+    price_from = models.DecimalField(max_digits=8, decimal_places=2, default=0.00, blank=True)
+    price_up_to = models.DecimalField(max_digits=8, decimal_places=2, default=0.00, blank=True)
     currency_select = models.CharField(max_length=3, choices=CURRENCY, default=RUB)
     measurement_selection = models.CharField(max_length=3, choices=MEASUREMENT, default=PIE)
     address = models.CharField(max_length=80, verbose_name='Адрес', blank=True)

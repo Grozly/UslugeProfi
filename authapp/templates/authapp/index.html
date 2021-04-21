@@ -136,8 +136,8 @@
 	</div>
 	<div class="main_info">
 		<div class="profile_avatar_wrapper">
-			{% if uslugeuserprofile.photo_profile %}
-			<img src="/media/{{ uslugeuserprofile.photo_profile }}" alt="{{ uslugeuserprofile.email }}"
+			{% if user.uslugeuserprofile.photo_profile %}
+			<img src="/media/{{ user.uslugeuserprofile.photo_profile }}" alt="{{ uslugeuserprofile.email }}"
 				class="profile_avatar">
 			{% else %}
 			<img src="{% static "img/personal.png" %}" alt="" class="profile_avatar">
@@ -146,8 +146,8 @@
 		
 		<div class="per_text">
 			<div class="per_name bold">
-				{% if uslugeuserprofile.name_profile %}
-				{{ uslugeuserprofile.name_profile }} {{ uslugeuserprofile.surname_profile }}
+				{% if user.uslugeuserprofile.name_profile %}
+				{{ user.uslugeuserprofile.name_profile }} {{ user.uslugeuserprofile.surname_profile }}
 				{% else %}
 				{{user.email}}
 				{% endif %}
@@ -159,7 +159,7 @@
 				Объявлений: <span class="bold">2</span>
 			</div>
 			<div class="per_tel bold">
-				{% if uslugeuserprofile.phone_profile %}
+				{% if user.uslugeuserprofile.phone_profile %}
 				{{ user.uslugeuserprofile.phone_profile }}
 				{% else %}
 				+7(999) 999-99-99
@@ -209,7 +209,7 @@
 			</li>
 		</ul>
 	</div>
-	{% block createad %}
+	{% block placead %}
 	{% endblock %}
 	{% block editprofile %}
 	{% endblock %}

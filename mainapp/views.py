@@ -164,7 +164,6 @@ class CreateViewAd(CreateView):
     model = Announcement
     template_name = 'mainapp/announcement_form.html'
     form_class = CreateAdModelForm
-    success_url = 'authapp/index.html'
 
     def get_context_data(self, **kwargs):
         context_data = super(CreateViewAd, self).get_context_data(**kwargs)
@@ -172,11 +171,17 @@ class CreateViewAd(CreateView):
         context_data['subcategory'] = SubCategory.objects.all()
         return context_data
 
+    def get_success_url(self):
+        return reverse("auth:profile", args=(self.object.pk,))
+
 
 def load_subcategories(request):
     category_id = request.GET.get('category')
     subcategory = SubCategory.objects.filter(category_id=category_id).order_by('name')
     return render(request, 'mainapp/announcement_form.html', {'subcategory': subcategory})
+
+class ApiCreateViewAd(View):
+    pass
 
 
 

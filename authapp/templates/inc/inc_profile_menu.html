@@ -2,7 +2,7 @@
 <div class="tab">
 		  <button class="tablinks" onclick="openCity(event, 'Мои объявления')">Мои объявления</button>
 		  <button class="tablinks" onclick="openCity(event, 'Избранные объявления')">Избранные объявления</button>
-		  <button class="tablinks" onclick="openCity(event, 'Разместить объявление')">Разместить объявление</button>
+		  <button class="tablinks {% if url_name == 'create-ad' %}active{% endif %}" onclick="location.href = '{% url 'main:create-ad' %}'">Разместить объявление</button>
 		  <button class="tablinks {% if url_name == 'editprofile' %}active{% endif %}" onclick="location.href = '{% url 'auth:editprofile' user.uslugeuserprofile.pk %}'">Настройки профиля</button>
 </div>
 {% endwith %}

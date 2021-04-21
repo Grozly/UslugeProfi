@@ -223,6 +223,18 @@
 	<div id="myOverlay4"></div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function()
+		{
+			let $select_category=$('#select_category'),
+				$select_subcategory=$('#select_subcategory')
+				$options=$select_subcategory.find('option');
+				$select_category.on('change', function()
+				{
+					$select_subcategory.html($options.filter('[value="'+this.value+'"]'));
+				}).trigger('change');
+		});
+	</script>
 	<script src="https://unpkg.com/axios@0.21.1/dist/axios.min.js"></script>
 	<script src="{% static "js/main.js" %}"></script>
 	<script src="{% static "js/registrvalidate.js" %}"></script>

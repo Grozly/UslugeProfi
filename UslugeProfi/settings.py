@@ -84,6 +84,8 @@ WSGI_APPLICATION = 'UslugeProfi.wsgi.application'
 #         'PASSWORD': 'adminusluge',
 #         'HOST': 'localhost',
 #         'PORT': 5432,
+# postgres, 5546554
+# 'ENGINE': 'django.db.backends.postgresql',
 #     }
 # }
 DATABASES = {

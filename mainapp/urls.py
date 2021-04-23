@@ -13,7 +13,7 @@ urlpatterns = [
     path('activate/<uidb64>/<token>/', mainapp.VerificationView.as_view(), name='activate'),
     path('validate-email/', csrf_exempt(mainapp.EmailValidationView.as_view()), name='validate-email'),
     path('place-ad/<pk>/', mainapp.CreateViewAd.as_view(), name='place-ad'),
-    path('create-ad/', mainapp.ApiCreateViewAd.as_view(), name='create-ad'),
+    path('create-ad/', csrf_exempt(mainapp.ApiCreateViewAd.as_view()), name='create-ad'),
     path('ajax/load-subcategories/', mainapp.load_subcategories, name='ajax-load-subcategories'),
 ]
 

@@ -12,6 +12,7 @@
 				{% if user.is_superuser %}
 				<a href="{% url 'main:logout' %}" class="login">Выход</a> |
 				<a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
+				<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
 				{% else %}
 				<a href="{% url 'main:logout' %}" class="login">Выход</a> |
 				<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
@@ -52,10 +53,11 @@
 	</div>
 	<div class="ad_block mobile_top only_mobile">
 		{% if user.is_authenticated %}
-		{% if user.is_superuser %}
+		{% if user.is_superuser %} >
 		<a href="{% url 'admin:index' %}" class="advetisement">
 			Админка
 		</a>
+		<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
 		{% else %}
 		<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
 			Личный кабинет

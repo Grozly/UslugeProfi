@@ -76,9 +76,8 @@
             <div class="login__links">
                 {% if user.is_authenticated %} {% if user.is_superuser %}
                 <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                <a href="{% url 'admin:index' %}" class="signup"
-                    >Админ панель</a
-                >
+                <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
+                <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">Личный кабинет</a>
                 {% else %}
                 <a href="{% url 'main:logout' %}" class="login">Выход</a> |
                 <a
@@ -96,6 +95,7 @@
                 <a href="{% url 'admin:index' %}" class="advetisement">
                     Админка
                 </a>
+                <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">Личный кабинет</a>
                 {% else %}
                 <a
                     href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"

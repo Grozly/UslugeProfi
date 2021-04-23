@@ -14,8 +14,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse, reverse_lazy
 
-from .forms import CreateAdModelForm
-from .models import Announcement, SubCategory, Category
+from .forms import CreateAdModelForm, CreateServiceAdModelForm
+from .models import Announcement, SubCategory, Category, Service, SelectPrice, SelectCurrency, SelectMeasurement
 from .utils import account_activation_token
 from django.contrib import auth
 
@@ -169,10 +169,28 @@ class CreateViewAd(CreateView):
         context_data = super(CreateViewAd, self).get_context_data(**kwargs)
         context_data['category'] = Category.objects.all()
         context_data['subcategory'] = SubCategory.objects.all()
+        context_data['service'] = Service.objects.all()
         return context_data
 
     def get_success_url(self):
         return reverse("auth:profile", args=(self.object.pk,))
+
+
+class CreateViewServiceAd(CreateView):
+    model = Service
+    template_name = 'mainapp/announcement_form.html'
+    form_class = CreateServiceAdModelForm
+
+    def get_context_data(self, **kwargs):
+        context_data = super(CreateViewServiceAd, self).get_context_data(**kwargs)
+        context_data['service'] = Service.objects.all()
+        context_data['select_price'] = SelectPrice.objects.all()
+        context_data['select_currency'] = SelectCurrency.objects.all()
+        context_data['select_measurement'] = SelectMeasurement.objects.all()
+        return context_data
+    #
+    # def get_success_url(self):
+    #     return reverse("auth:profile", args=(self.object.pk,))
 
 
 def load_subcategories(request):
@@ -180,8 +198,27 @@ def load_subcategories(request):
     subcategory = SubCategory.objects.filter(category_id=category_id).order_by('name')
     return render(request, 'mainapp/announcement_form.html', {'subcategory': subcategory})
 
+
 class ApiCreateViewAd(View):
-    pass
+
+    def get(self, request):
+        return render(request, 'mainapp/announcement_form.html')
+
+    def post(self, request):
+
+        form = CreateAdModelForm(request.POST or None, request.FILES or None)
+        data = {}
+
+        if request.is_ajax:
+            if form.is_valid():
+                form.save()
+                data['name'] = form.cleaned_data.get('name')
+                data['status'] = 'ok'
+                return JsonResponse(data, status=200)
+
+        return JsonResponse({}, status=200)
+
+
 
 
 

@@ -16,8 +16,7 @@ class EditProfileModelForm(forms.ModelForm):
             field.help_text = ''
             field.label = ''
 
-        self.fields['user_profile'].widget.attrs.update({'value': UslugeUserProfile.user_profile})
-        self.fields['user_profile'].widget.attrs.update({'type': 'hidden'})
+        self.fields['user_profile'].widget.attrs.update({'value': UslugeUserProfile.user_profile, 'type': 'hidden'})
         self.fields['status_profile'].widget.attrs.update({'placeholder': 'Статус'})
         self.fields['name_profile'].widget.attrs.update({'placeholder': 'Имя'})
         self.fields['surname_profile'].widget.attrs.update({'placeholder': 'Фамилия'})

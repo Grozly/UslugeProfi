@@ -1,41 +1,42 @@
-var imgBox = document.getElementById('imgBox');
-var form = document.getElementById('create_new_ad_from');
-var adName = document.querySelector("#id_name");
-var adDescription = document.querySelector("#id_description");
-var adCategoty = document.querySelector("#select_category");
-var adSubcategory = document.querySelector("#select_subcategory");
-var adSelectPrice = document.querySelector("#select_price");
-var adSelectCurrency = document.querySelector("#select_currency");
-var adSelectMeasurement = document.querySelector("#select_measurement");
-var adService = document.querySelector(".subcat_checkbox");
-var adAddress = document.querySelector("#id_address");
-var fixedPrice = document.querySelector("#new_ad_fixed_price")
+const imgBox = document.getElementById('imgBox');
+const form = document.getElementById('create_new_ad_from');
+const adName = document.getElementById("id_name");
+const adDescription = document.getElementById("id_description");
+const adCategoty = document.querySelector("#select_category");
+const adSubcategory = document.querySelector("#select_subcategory");
+const adSelectPrice = document.querySelector("#select_price");
+const adSelectCurrency = document.querySelector("#select_currency");
+const adSelectMeasurement = document.querySelector("#select_measurement");
+const adService = document.querySelector(".subcat_checkbox");
+const adAddress = document.getElementById("id_address");
+const fixedPrice = document.querySelector("#new_ad_fixed_price")
     ? document.querySelector("#new_ad_fixed_price"): null;
-var lowerPrice = document.querySelector("#new_ad_lower_price")
+const lowerPrice = document.querySelector("#new_ad_lower_price")
     ? document.querySelector("#new_ad_lower_price"): null;
-var upperPrice = document.querySelector("#new_ad_upper_price")
+const upperPrice = document.querySelector("#new_ad_upper_price")
     ? document.querySelector("#new_ad_upper_price"): null;
-var adImageFile = document.querySelector("#id_photo_announcement");
-var csrf = document.getElementsByName('csrfmiddlewaretoken');
-var url = ""
+const adImageFile = document.getElementById("id_photo_announcement");
+const csrf = document.getElementsByName('csrfmiddlewaretoken');
+const url = ""
 
 adImageFile.addEventListener('change', ()=>{
-    var image_data = adImageFile.files[0]
-    var url = URL.createObjectURL(image_data)
+    const image_data = adImageFile.files[0]
+    const url = URL.createObjectURL(image_data)
     imgBox.innerHTML = `<a href="${url}"><img src="${url}" height="250px"></a>`
 
 })
+form.addEventListener('submit', event=>{
+    event.preventDefault();
 
-form.addEventListener('submit', e=>{
-    e.preventDefault()
-
-    var fd = new FormData()
-    fd.append('csrfmiddlewaretoken', csrf[2].value)
-    fd.append('name', adName.value)
-    fd.append('description', adDescription.value)
-    fd.append('categoty', adCategoty.value)
-    fd.append('image', adImageFile.files[0])
-    fd.append('subcategory', adSubcategory.value)
+    const fd = new FormData()
+    fd.append('csrfmiddlewaretoken', csrf[0].value);
+    fd.append('name', adName.value);
+    fd.append('description', adDescription.value);
+    fd.append('categoty', adCategoty.value);
+    fd.append('image', adImageFile.files[0]);
+    fd.append('subcategory', adSubcategory.value);
+    console.log(fd)
+    console.log(csrf)
 
     if (adService.checked) {
         fd.append("service", adService.value);
@@ -50,10 +51,10 @@ form.addEventListener('submit', e=>{
         fd.append("upper_price", upperPrice.value);
     }
 
-    fd.append('address', adAddress.value)
-    console.log(fd)
+    fd.append('address', adAddress.value);
+    console.log(fd);
     console.log(fd.getAll('files'));
-
+    console.log(fd.get('image'));
     $.ajax({
         type: "POST",
         url: "/create-ad/",

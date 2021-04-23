@@ -187,10 +187,11 @@ class CreateViewServiceAd(CreateView):
         context_data['select_price'] = SelectPrice.objects.all()
         context_data['select_currency'] = SelectCurrency.objects.all()
         context_data['select_measurement'] = SelectMeasurement.objects.all()
+        context_data['user'] = UslugeUserProfile.objects.all()
         return context_data
-    #
-    # def get_success_url(self):
-    #     return reverse("auth:profile", args=(self.object.pk,))
+
+    def get_success_url(self):
+        return reverse("auth:editprofile", args=(self.object.pk,))
 
 
 def load_subcategories(request):
@@ -209,7 +210,7 @@ class ApiCreateViewAd(View):
         form = CreateAdModelForm(request.POST or None, request.FILES or None)
         data = {}
 
-        if request.is_ajax:
+        if request.is_ajax():
             if form.is_valid():
                 form.save()
                 data['name'] = form.cleaned_data.get('name')

@@ -1,7 +1,5 @@
 from django import forms
-from django.forms import ModelForm
-
-from authapp.models import UslugeUser, UslugeUserProfile
+from authapp.models import UslugeUserProfile
 from mainapp.models import Announcement, SubCategory, Service
 
 
@@ -17,8 +15,9 @@ class CreateAdModelForm(forms.ModelForm):
             field.help_text = ''
             field.label = ''
 
-        self.fields['user_id'].widget.attrs.update({'value': UslugeUserProfile.user_profile})
-        self.fields['user_id'].widget.attrs.update({'type': 'hidden'})
+        self.fields['user_id'].widget.attrs.update({'value': UslugeUserProfile.user_profile,
+                                                    'type': 'hidden',
+                                                    'selected': UslugeUserProfile.user_profile})
         self.fields['category_id'].widget.attrs.update({'placeholder': 'Категория'})
         self.fields['subcategory_id'].widget.attrs.update({'placeholder': 'Подкатегория'})
         self.fields['name'].widget.attrs.update({'placeholder': 'Название'})

@@ -32,7 +32,7 @@
             {% endfor %}
         </select>
         {% for service_item in service %}
-            <div class="ads_options">
+            <div class="ads_options new_ad_options" data-id={{service_item.id}} >
                 <div>
                     <input
                         class="subcat_checkbox"
@@ -43,7 +43,7 @@
                     {{ service_item.name }}
                     <br />
                 </div>
-                <select id="select_price_{{ forloop.counter }}" size="1" name="subcategory" class="new_ad_price_category">
+                <select id="select_price_{{ forloop.counter }}" size="1" name="subcategory" class="new_ad_price_category select_price">
                     <option disabled>Цена</option>
                     <option selected value="1">Цена</option>
                     <option value="2">Договорная</option>
@@ -73,13 +73,13 @@
                         style="display: none"
                     />
                 </div>
-                <select id="select_currency_{{ forloop.counter }}" size="1" name="subcategory">
+                <select id="select_currency_{{ forloop.counter }}" size="1" name="subcategory" class="select_currency">
                     <option disabled>Валюта</option>
                     <option value="1">дин</option>
                     <option selected value="2">руб</option>
                     <option value="3">доллар</option>
                 </select>
-                <select id="select_measurement_{{ forloop.counter }}" size="1" name="subcategory">
+                <select id="select_measurement_{{ forloop.counter }}" size="1" name="subcategory" class="select_measurement">
                     <option value="1">шт</option>
                     <option selected value="2">м2</option>
                     <option value="3">кг</option>

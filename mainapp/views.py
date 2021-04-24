@@ -109,17 +109,6 @@ class VerificationView(View):
         return redirect('main:main')
 
 
-# class LoginEmailValidationView(View):
-#
-#     def post(self, request):
-#         data = json.loads(request.body)
-#         email = data['email']
-#
-#         if not validate_email(email):
-#             return JsonResponse({'email_error': 'Введите Ваш E-mail адрес'}, status=400)
-#         if UslugeUser.objects.filter(email=email).exists():
-#             return JsonResponse({'email_valid': True}, status=200)
-
 class LoginUserView(View):
 
     def get(self, request):
@@ -142,38 +131,26 @@ class LoginUserView(View):
                 return HttpResponseRedirect(reverse('main:main'))
             return JsonResponse({'email_error': 'Такой пользователь не зарегистрирован'}, status=400)
 
-        # if not validate_email(email):
-        #     return JsonResponse({'email_error': 'E-mail введен некорректно'}, status=400)
-        # if UslugeUser.objects.filter(email=email, password=password).exists():
-        #     user = auth.authenticate(email=email, password=password)
-        #     if user and user.is_active:
-        #         auth.login(request, user)
-        #         if not remember:
-        #             request.session.set_expiry(0)
-        #             return HttpResponseRedirect(reverse('main:main'))
-        #         return HttpResponseRedirect(reverse('main:main'))
-        #     return JsonResponse({'email_error': 'Такой пользователь не зарегистрирован'}, status=400)
-
 
 class LogoutUserView(LogoutView):
 
     template_name = 'mainapp/index.html'
 
 
-class CreateViewAd(CreateView):
-    model = Announcement
-    template_name = 'mainapp/announcement_form.html'
-    form_class = CreateAdModelForm
+class CreateViewAd(View):
 
-    def get_context_data(self, **kwargs):
-        context_data = super(CreateViewAd, self).get_context_data(**kwargs)
-        context_data['category'] = Category.objects.all()
-        context_data['subcategory'] = SubCategory.objects.all()
-        context_data['service'] = Service.objects.all()
-        return context_data
-
-    def get_success_url(self):
-        return reverse("auth:profile", args=(self.object.pk,))
+    def get(self, request, pk):
+        form = CreateAdModelForm(current_user=request.user)
+        category = Category.objects.all()
+        subcategory = SubCategory.objects.all()
+        service = Service.objects.all()
+        context = {
+            'form': form,
+            'category': category,
+            'subcategory': subcategory,
+            'service': service,
+        }
+        return render(request, 'mainapp/announcement_form.html', context)
 
 
 class CreateViewServiceAd(CreateView):
@@ -187,7 +164,6 @@ class CreateViewServiceAd(CreateView):
         context_data['select_price'] = SelectPrice.objects.all()
         context_data['select_currency'] = SelectCurrency.objects.all()
         context_data['select_measurement'] = SelectMeasurement.objects.all()
-        context_data['user'] = UslugeUserProfile.objects.all()
         return context_data
 
     def get_success_url(self):
@@ -206,18 +182,33 @@ class ApiCreateViewAd(View):
         return render(request, 'mainapp/announcement_form.html')
 
     def post(self, request):
-
-        form = CreateAdModelForm(request.POST or None, request.FILES or None)
-        data = {}
-
-        if request.is_ajax():
+        if request.method == "POST":
+            form = CreateAdModelForm(request.POST, request.FILES, current_user=request.user)
             if form.is_valid():
-                form.save()
-                data['name'] = form.cleaned_data.get('name')
-                data['status'] = 'ok'
-                return JsonResponse(data, status=200)
-
-        return JsonResponse({}, status=200)
+                edited = Announcement.objects.filter(pk=request.user.pk)
+                # edited.update(
+                #     first_name=request.POST.get('first_name'),
+                #     second_name=request.POST.get('second_name'),
+                #     patronymic=request.POST.get('patronymic'),
+                #     birth_date=request.POST.get('birth_date')
+                # )
+        else:
+            form = CreateAdModelForm()
+        form = CreateAdModelForm()
+        return render(request, 'mainapp/announcement_form.html', context={'form': form})
+        # form = CreateAdModelForm(request.POST or None, request.FILES or None, pk=request.user.pk)
+        # print(form)
+        # data = {}
+        #
+        # if request.is_ajax():
+        #     if form.is_valid():
+        #         print(form.data)
+        #         form.save()
+        #         data['name'] = form.cleaned_data.get('name')
+        #         data['status'] = 'ok'
+        #         return JsonResponse(data, status=200)
+        #
+        # return JsonResponse({}, status=200)
 
 
 

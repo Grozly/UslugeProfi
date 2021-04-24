@@ -80,6 +80,10 @@ class UslugeUserProfile(models.Model):
     address_profile = models.CharField(max_length=80, verbose_name='Адресс', blank=True)
     country_profile = models.CharField(max_length=32, verbose_name='Страна', blank=True)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.is_authenticated = None
+
     @receiver(post_save, sender=UslugeUser)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:

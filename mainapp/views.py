@@ -31,6 +31,12 @@ def get_json_subcategory_data(request, *args, **kwargs):
     return JsonResponse({'data': object_subcategory})
 
 
+def get_json_service_data(request, *args, **kwargs):
+    selected_subcategory = kwargs.get('pk')
+    object_service = list(Service.objects.filter(subcategory_id=selected_subcategory).values())
+    return JsonResponse({'data': object_service})
+
+
 class TemplateVerifyView(TemplateView):
 
     template_name = 'mainapp/verify.html'

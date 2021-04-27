@@ -112,6 +112,42 @@ form.addEventListener("submit", (event) => {
     });
 });
 
+$.ajax({
+        type: "GET",
+        url: "/ajax/category-val/",
+        success: function (response) {
+            console.log(response.data);
+            const categoryData = response.data
+            categoryData.map(item=>{
+                const option = document.createElement('option')
+                option.textContent = item.name
+                option.setAttribute('class', 'item')
+                option.setAttribute('data-value', item.name)
+                adCategoty.appendChild(option)
+            })
+        },
+        error: function (error) {
+            console.log(error);
+        }
+});
+
+
+adCategoty.addEventListener('change', e=>{
+    console.log(e.target.value)
+    const selectedCategory = e.target.value
+
+    $.ajax({
+        type: "GET",
+        url: "/ajax/subcategory-val/${selectedCategory}/",
+        success: function (response) {
+            console.log(response);
+            },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+
+});
 //document.querySelector("#create-new-ad").addEventListener("click", (event) => {
 //    event.preventDefault();
 //    var object = {};

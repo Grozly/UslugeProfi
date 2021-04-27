@@ -6,7 +6,7 @@ class Category(models.Model):
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
 
-    name = models.CharField(verbose_name='имя', max_length=64, unique=True)
+    name = models.CharField(verbose_name='название', max_length=64, unique=True)
     is_active = models.BooleanField(verbose_name='активна', default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -20,8 +20,25 @@ class SubCategory(models.Model):
         verbose_name = 'подкатегория'
         verbose_name_plural = 'подкатегории'
 
-    category_id = models.ForeignKey('Category', on_delete=models.CASCADE)
-    name = models.CharField(verbose_name='имя', max_length=64, unique=True)
+    category_id = models.ForeignKey('Category',
+                                    on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='название', max_length=64, unique=True)
+    is_active = models.BooleanField(verbose_name='активна', default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Service(models.Model):
+    class Meta:
+        verbose_name = 'услуга'
+        verbose_name_plural = 'услуги'
+
+    subcategory_id = models.ForeignKey('SubCategory',
+                                       on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='название', max_length=64, unique=False)
     is_active = models.BooleanField(verbose_name='активна', default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -33,7 +50,7 @@ class SubCategory(models.Model):
 class SelectPrice(models.Model):
     class Meta:
         verbose_name = 'Цена'
-        verbose_name_plural = 'Цен'
+        verbose_name_plural = 'Цены'
 
     price_name = models.CharField(verbose_name='цена', max_length=64, unique=True)
 
@@ -63,41 +80,35 @@ class SelectMeasurement(models.Model):
         return self.measurement_name
 
 
-class Service(models.Model):
+class UserService(models.Model):
     class Meta:
-        verbose_name = 'услуга'
-        verbose_name_plural = 'услуги'
+        verbose_name = 'Услуга пользователя'
+        verbose_name_plural = 'Услуги пользователя'
 
-    category_id = models.ForeignKey(
-        'Category',
-        verbose_name='категория',
-        on_delete=models.CASCADE)
-    subcategory_id = models.ForeignKey(
-        'SubCategory',
-        verbose_name='подкатегория',
-        on_delete=models.CASCADE)
-    select_currency = models.ForeignKey(
-        'SelectCurrency',
-        verbose_name='валюта',
-        null=True,
-        blank=True,
-        on_delete=models.DO_NOTHING)
-    select_measurement = models.ForeignKey(
-        'SelectMeasurement',
-        verbose_name='измерение',
-        null=True,
-        blank=True,
-        on_delete=models.DO_NOTHING)
-    select_price = models.ForeignKey(
-        'SelectPrice',
-        verbose_name='цена',
-        null=True,
-        blank=True,
-        on_delete=models.DO_NOTHING)
-    name = models.CharField(verbose_name='имя', max_length=64, unique=False)
-    isActiveService = models.BooleanField(default=False)
-    price_from = models.DecimalField(max_digits=8, decimal_places=2, default=0.00, blank=True)
-    price_up_to = models.DecimalField(max_digits=8, decimal_places=2, default=0.00, blank=True)
+    service_id = models.ForeignKey('Service',
+                                   verbose_name='услуга',
+                                   on_delete=models.CASCADE)
+    user_id = models.ForeignKey('authapp.UslugeUser',
+                                verbose_name='пользователь',
+                                on_delete=models.CASCADE)
+    select_price = models.ForeignKey('SelectPrice',
+                                     verbose_name='цена',
+                                     null=True,
+                                     blank=True,
+                                     on_delete=models.DO_NOTHING)
+    select_currency = models.ForeignKey('SelectCurrency',
+                                        verbose_name='валюта',
+                                        null=True,
+                                        blank=True,
+                                        on_delete=models.DO_NOTHING)
+    select_measurement = models.ForeignKey('SelectMeasurement',
+                                           verbose_name='измерение',
+                                           null=True,
+                                           blank=True,
+                                           on_delete=models.DO_NOTHING)
+    name = models.CharField(verbose_name='название', max_length=64, unique=False)
+    price_lower = models.DecimalField(max_digits=8, decimal_places=2, default=0.00, blank=True)
+    price_upper = models.DecimalField(max_digits=8, decimal_places=2, default=0.00, blank=True)
     is_active = models.BooleanField(verbose_name='активна', default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -111,10 +122,18 @@ class Announcement(models.Model):
         verbose_name = 'объявление'
         verbose_name_plural = 'объявления'
 
-    user_id = models.ForeignKey('authapp.UslugeUser', verbose_name='автор', on_delete=models.CASCADE)
-    category_id = models.ForeignKey('Category', verbose_name='категория', on_delete=models.CASCADE)
-    subcategory_id = models.ForeignKey('SubCategory', verbose_name='подкатегория', on_delete=models.CASCADE)
-    service_id = models.ForeignKey('Service', verbose_name='услуга', on_delete=models.CASCADE)
+    user_id = models.ForeignKey('authapp.UslugeUser',
+                                verbose_name='автор',
+                                on_delete=models.CASCADE)
+    category_id = models.ForeignKey('Category',
+                                    verbose_name='категория',
+                                    on_delete=models.CASCADE)
+    subcategory_id = models.ForeignKey('SubCategory',
+                                       verbose_name='подкатегория',
+                                       on_delete=models.CASCADE)
+    user_service_id = models.ForeignKey('UserService',
+                                        verbose_name='услуга',
+                                        on_delete=models.CASCADE)
     name = models.CharField(max_length=64, verbose_name='имя')
     description = models.TextField(verbose_name='описание', blank=True)
     photo_announcement = models.ImageField(upload_to='photos_announcement',
@@ -122,6 +141,7 @@ class Announcement(models.Model):
                                       verbose_name='фото',
                                       default='photo_announcement/default.png')
     address = models.CharField(max_length=80, verbose_name='Адрес', blank=True)
+    is_active = models.BooleanField(verbose_name='активна', default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

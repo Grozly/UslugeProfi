@@ -11,10 +11,42 @@ const adImageFile = document.getElementById("id_photo_announcement");
 const userID = document.getElementsByName("user_id")[0];
 const csrf = document.getElementsByName("csrfmiddlewaretoken");
 
+$.ajaxSetup({
+    headers: {
+        "X-CSRF-TOKEN": csrf[0].value,
+    },
+});
+
 adImageFile.addEventListener("change", () => {
     const image_data = adImageFile.files[0];
     const url = URL.createObjectURL(image_data);
     imgBox.innerHTML = `<a href="${url}"><img src="${url}" height="250px"></a>`;
+});
+
+adSubcategory.addEventListener("change", (event) => {
+    console.log(event.target.value);
+    const fd = new FormData();
+    fd.append("csrfmiddlewaretoken", csrf[0].value);
+    fd.append("id", event.target.value);
+
+    $.ajax({
+        type: "POST",
+        url: "/ajax/get_json_service_data/",
+        enctype: "multipart/form-data",
+        data: fd,
+        success: function (response) {
+            console.log(response);
+            document.getElementById(
+                "ads_by_subcategory_block"
+            ).innerHTML = response;
+        },
+        error: function (error) {
+            console.log(error);
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+    });
 });
 
 form.addEventListener("submit", (event) => {

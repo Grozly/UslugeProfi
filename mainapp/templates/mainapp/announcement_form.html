@@ -31,6 +31,7 @@
 <!--            </option>-->
 <!--            {% endfor %}-->
         </select>
+        <div id="ads_by_subcategory_block">
         {% for service_item in service %}
             <div class="ads_options new_ad_options" data-id={{service_item.id}} >
                 <div>
@@ -86,6 +87,7 @@
                 </select>
             </div>
         {% endfor %}
+        </div>
         {{ form.address }}
     <div class="form_map">
         <iframe

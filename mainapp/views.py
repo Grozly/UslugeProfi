@@ -26,8 +26,8 @@ def get_json_category_data(request):
 
 
 def get_json_subcategory_data(request, *args, **kwargs):
-    selected_category = kwargs.get('category')
-    object_subcategory = list(SubCategory.objects.filter(category__name=selected_category).values())
+    selected_category = kwargs.get('pk')
+    object_subcategory = list(SubCategory.objects.filter(category_id=selected_category).values())
     return JsonResponse({'data': object_subcategory})
 
 

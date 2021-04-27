@@ -15,6 +15,6 @@ urlpatterns = [
     path('place-ad/<pk>/', mainapp.CreateViewAd.as_view(), name='place-ad'),
     path('create-ad/', csrf_exempt(mainapp.ApiCreateViewAd.as_view()), name='create-ad'),
     path('ajax/category-val/', mainapp.get_json_category_data, name='ajax-category-val'),
-    path('ajax/subcategory-val/<str:category>/', mainapp.get_json_subcategory_data, name='ajax-subcategory-val'),
+    path('ajax/subcategory-val/<pk>/', mainapp.get_json_subcategory_data, name='ajax-subcategory-val'),
 ]
 

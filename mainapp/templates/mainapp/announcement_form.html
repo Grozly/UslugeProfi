@@ -24,12 +24,12 @@
 <!--            {% endfor %}-->
         </select>
         <select id="select_subcategory" class="form_input">
-            <option selected disabled="True"></option>
-            {% for item_subcategory in subcategory %}
-            <option value="{{ item_subcategory.pk }}">
-                {{ item_subcategory.name }}
-            </option>
-            {% endfor %}
+            <option selected disabled="True" id="subcategory_text">-- Выберите подкатегорию --</option>
+<!--            {% for item_subcategory in subcategory %}-->
+<!--            <option value="{{ item_subcategory.pk }}">-->
+<!--                {{ item_subcategory.name }}-->
+<!--            </option>-->
+<!--            {% endfor %}-->
         </select>
         {% for service_item in service %}
             <div class="ads_options new_ad_options" data-id={{service_item.id}} >

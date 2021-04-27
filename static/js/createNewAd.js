@@ -4,6 +4,7 @@ const adName = document.getElementById("id_name");
 const adDescription = document.getElementById("id_description");
 const adCategoty = document.querySelector("#select_category");
 const adSubcategory = document.querySelector("#select_subcategory");
+const subcategoryText = document.getElementById("subcategory_text");
 const adAddress = document.getElementById("id_address");
 const adOptions = document.querySelectorAll(".new_ad_options");
 const adImageFile = document.getElementById("id_photo_announcement");
@@ -114,7 +115,7 @@ form.addEventListener("submit", (event) => {
 
 $.ajax({
         type: "GET",
-        url: "/ajax/category-val/",
+        url: `/ajax/category-val/`,
         success: function (response) {
             console.log(response.data);
             const categoryData = response.data
@@ -131,16 +132,24 @@ $.ajax({
         }
 });
 
-
 adCategoty.addEventListener('change', e=>{
-    console.log(e.target.value)
-    const selectedCategory = e.target.value
+    const selectedCategory = e.target.selectedIndex
+
+    adSubcategory.innerHTML = ""
+    subcategoryText.textContent = "-- Выберите подкатегорию --"
 
     $.ajax({
         type: "GET",
-        url: "/ajax/subcategory-val/${selectedCategory}/",
+        url: `/ajax/subcategory-val/${selectedCategory}/`,
         success: function (response) {
-            console.log(response);
+            const subcategoryData = response.data
+            subcategoryData.map(item=>{
+                const option = document.createElement('option')
+                option.textContent = item.name
+                option.setAttribute('class', 'item')
+                option.setAttribute('data-value', item.name)
+                adSubcategory.appendChild(option)
+            })
             },
         error: function (error) {
             console.log(error);

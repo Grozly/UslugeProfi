@@ -171,60 +171,21 @@ class CreateViewAd(View):
         return render(request, 'mainapp/announcement_form.html', context)
 
 
-# class CreateViewServiceAd(CreateView):
-#     model = Service
-#     template_name = 'mainapp/announcement_form.html'
-#     # form_class = CreateServiceAdModelForm
-#
-#     def get_context_data(self, **kwargs):
-#         context_data = super(CreateViewServiceAd, self).get_context_data(**kwargs)
-#         context_data['service'] = Service.objects.all()
-#         context_data['select_price'] = SelectPrice.objects.all()
-#         context_data['select_currency'] = SelectCurrency.objects.all()
-#         context_data['select_measurement'] = SelectMeasurement.objects.all()
-#         return context_data
-#
-#     def get_success_url(self):
-#         return reverse("auth:editprofile", args=(self.object.pk,))
-
 class ApiCreateViewAd(View):
 
     def get(self, request):
         return render(request, 'mainapp/announcement_form.html')
 
-    # def post(self, request):
-    #     if request.method == "POST":
-    #         form = CreateAdModelForm(request.POST, request.FILES, current_user=request.user)
-    #         if form.is_valid():
-    #             edited = Announcement.objects.filter(pk=request.user.pk)
-    #             # edited.update(
-    #             #     first_name=request.POST.get('first_name'),
-    #             #     second_name=request.POST.get('second_name'),
-    #             #     patronymic=request.POST.get('patronymic'),
-    #             #     birth_date=request.POST.get('birth_date')
-    #             # )
-    #     else:
-    #         form = CreateAdModelForm()
-    #     form = CreateAdModelForm()
-    #     return render(request, 'mainapp/announcement_form.html', context={'form': 'form'})
-    #     # form = CreateAdModelForm(request.POST or None, request.FILES or None, pk=request.user.pk)
-    #     # print(form)
-    #     # data = {}
-    #     #
-    #     # if request.is_ajax():
-    #     #     if form.is_valid():
-    #     #         print(form.data)
-    #     #         form.save()
-    #     #         data['name'] = form.cleaned_data.get('name')
-    #     #         data['status'] = 'ok'
-    #     #         return JsonResponse(data, status=200)
-    #     #
-    #     # return JsonResponse({}, status=200)
-    #
-    #
-    #
-    #
-    #
+    def post(self, request):
+
+        if request.is_ajax():
+            if request.method == "POST":
+                data = request.POST
+                for value in data.values():
+                    print(value)
+                return JsonResponse({'data': data}, status=200)
+            return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
+
 
 class UpdateViewAd(View):
 
@@ -240,13 +201,3 @@ class UpdateViewAd(View):
             'user_service': user_service,
         }
         return render(request, 'mainapp/announcement_update_form.html', context)
-
-
-# class UpdateViewAd(UpdateView):
-#     model = Announcement
-#     template_name = "mainapp/announcement_update_form.html"
-#     form_class = CreateAdModelForm
-#     is_update_view = True
-#
-#     def get_success_url(self):
-#         return reverse("auth:editprofile", args=(self.object.pk,))

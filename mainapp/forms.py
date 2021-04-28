@@ -10,15 +10,16 @@ class CreateAdModelForm(forms.ModelForm):
         fields = '__all__'
 
     def __init__(self, current_user, *args, **kwargs):
-        user = UslugeUser.objects.get(id=current_user.pk)
+        user = UslugeUser.objects.get(email=current_user)
+        user_pk = user.pk
         super(CreateAdModelForm, self).__init__(*args, **kwargs)
-        self.fields['user_id'].initial = user.pk
+        self.fields['user_id'].initial = user_pk
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form_input'
             field.help_text = ''
             field.label = ''
 
-        self.fields['user_id'].widget.attrs.update({'value': user.pk,
+        self.fields['user_id'].widget.attrs.update({'value': user_pk,
                                                     'type': 'hidden'})
         self.fields['category_id'].widget.attrs.update({'placeholder': 'Категория'})
         self.fields['subcategory_id'].widget.attrs.update({'placeholder': 'Подкатегория'})

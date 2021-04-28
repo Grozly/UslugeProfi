@@ -34,11 +34,7 @@ form.addEventListener("submit", (event) => {
     fd.append("image", adImageFile.files[0]);
     fd.append("subcategory", adSubcategory.value);
     fd.append("address", adAddress.value);
-    console.log(userID);
-    console.log(userID.value);
     fd.append("user_id", userID.value);
-    console.log(fd);
-    console.log(csrf);
 
     const optionsArray = [];
 

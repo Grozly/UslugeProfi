@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import TemplateView, View
 import json
 from django.http import JsonResponse, HttpResponseRedirect
@@ -15,7 +15,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse, reverse_lazy
 
 from .forms import CreateAdModelForm
-from .models import Announcement, SubCategory, Category, Service, SelectPrice, SelectCurrency, SelectMeasurement
+from .models import Announcement, SubCategory, Category, Service, SelectPrice, SelectCurrency, SelectMeasurement, \
+    UserService
 from .utils import account_activation_token
 from django.contrib import auth
 
@@ -224,3 +225,28 @@ class ApiCreateViewAd(View):
     #
     #
     #
+
+class UpdateViewAd(View):
+
+    def get(self, request, pk):
+        form = CreateAdModelForm(current_user=request.user)
+        category = Category.objects.all()
+        subcategory = SubCategory.objects.all()
+        user_service = UserService.objects.all()
+        context = {
+            'form': form,
+            'category': category,
+            'subcategory': subcategory,
+            'user_service': user_service,
+        }
+        return render(request, 'mainapp/announcement_update_form.html', context)
+
+
+# class UpdateViewAd(UpdateView):
+#     model = Announcement
+#     template_name = "mainapp/announcement_update_form.html"
+#     form_class = CreateAdModelForm
+#     is_update_view = True
+#
+#     def get_success_url(self):
+#         return reverse("auth:editprofile", args=(self.object.pk,))

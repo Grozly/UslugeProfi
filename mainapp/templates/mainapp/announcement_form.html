@@ -1,38 +1,36 @@
-{% extends 'authapp/index.html' %}
-{% load static %}
-{% block placead %}
+{% extends 'authapp/index.html' %} {% load static %} {% block placead %}
 <h3 class="adv_title">Добавить объявление</h3>
-    <form
-        method="post"
-        action="{% url 'main:create-ad' %}"
-        class="login_form flex_form"
-        enctype="multipart/form-data"
-        id="create_new_ad_from"
-        novalidate
-    >
-    {% csrf_token %}
-    {{ form.errors }}
-        <div class="user_profile_select">{{ form.user_id }}</div>
-        {{ form.name }}
-        {{ form.description }}
-        <div id="imgBox"></div>
-        {{ form.photo_announcement }}
-        <select id="select_category" class="form_input">
-            <option selected disabled="True">-- Выберите категорию --</option>
-<!--            {% for item in category %}-->
-<!--            <option value="{{ item.pk }}">{{ item.name }}</option>-->
-<!--            {% endfor %}-->
-        </select>
-        <select id="select_subcategory" class="form_input">
-            <option selected disabled="True" id="subcategory_text">-- Выберите подкатегорию --</option>
-<!--            {% for item_subcategory in subcategory %}-->
-<!--            <option value="{{ item_subcategory.pk }}">-->
-<!--                {{ item_subcategory.name }}-->
-<!--            </option>-->
-<!--            {% endfor %}-->
-        </select>
-        <div id="ads_by_subcategory_block">
-        {% for service_item in service %}
+<form
+    method="post"
+    action="{% url 'main:create-ad' %}"
+    class="login_form flex_form"
+    enctype="multipart/form-data"
+    id="create_new_ad_from"
+    novalidate
+>
+    {% csrf_token %} {{ form.errors }}
+    <div class="user_profile_select">{{ form.user_id }}</div>
+    {{ form.name }} {{ form.description }}
+    <div id="imgBox"></div>
+    {{ form.photo_announcement }}
+    <select id="select_category" class="form_input">
+        <option selected disabled="True">-- Выберите категорию --</option>
+        <!--            {% for item in category %}-->
+        <!--            <option value="{{ item.pk }}">{{ item.name }}</option>-->
+        <!--            {% endfor %}-->
+    </select>
+    <select id="select_subcategory" class="form_input">
+        <option selected disabled="True" id="subcategory_text">
+            -- Выберите подкатегорию --
+        </option>
+        <!--            {% for item_subcategory in subcategory %}-->
+        <!--            <option value="{{ item_subcategory.pk }}">-->
+        <!--                {{ item_subcategory.name }}-->
+        <!--            </option>-->
+        <!--            {% endfor %}-->
+    </select>
+    <div id="ads_by_subcategory_block">
+        <!-- {% for service_item in service %}
             <div class="ads_options new_ad_options" data-id={{service_item.id}} >
                 <div>
                     <input
@@ -86,9 +84,9 @@
                     <option value="3">кг</option>
                 </select>
             </div>
-        {% endfor %}
-        </div>
-        {{ form.address }}
+        {% endfor %} -->
+    </div>
+    {{ form.address }}
     <div class="form_map">
         <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1999.058118409584!2d30.358355016070213!3d59.931177781873465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469631a5e66d51c5%3A0x6f00589ac258db97!2z0J3QtdCy0YHQutC40Lkg0L_RgC4sINCh0LDQvdC60YIt0J_QtdGC0LXRgNCx0YPRgNCz!5e0!3m2!1sru!2sru!4v1613214625240!5m2!1sru!2sru"
@@ -101,6 +99,11 @@
             tabindex="0"
         ></iframe>
     </div>
-    <input id="create-new-ad" class="blue_btn form_btn" type="submit" value="Сохранить"/>
+    <input
+        id="create-new-ad"
+        class="blue_btn form_btn"
+        type="submit"
+        value="Сохранить"
+    />
 </form>
 {% endblock %}

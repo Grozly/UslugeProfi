@@ -14,7 +14,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse, reverse_lazy
 
-from .forms import CreateAdModelForm
+from .forms import CreateAdModelForm, UpdateServiceAdModelForm, UpdateAdModelForm
 from .models import Announcement, SubCategory, Category, Service, SelectPrice, SelectCurrency, SelectMeasurement, \
     UserService
 from .utils import account_activation_token
@@ -187,17 +187,49 @@ class ApiCreateViewAd(View):
             return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
 
 
+# class UpdateViewAd(UpdateView):
+#     model = Announcement
+#     second_model = UserService
+#     template_name = "mainapp/announcement_update_form.html"
+#     form_class = UpdateAdModelForm
+#     second_form_class = UpdateServiceAdModelForm
+#     is_update_view = True
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(UpdateViewAd, self).get_context_data(**kwargs)
+#         context['active_client'] = True
+#         if 'form_ad' not in context:
+#             context['form_ad'] = self.form_class(self.request.GET)
+#         if 'form_service' not in context:
+#             context['form_service'] = self.second_form_class(self.request.GET)
+#         context['active_client'] = True
+#         return context
+#
+#     def get(self, request, *args, **kwargs):
+#         super(UpdateViewAd, self).get(request, *args, **kwargs)
+#         form_ad = self.form_class
+#         form_service = self.second_form_class
+#         return self.render_to_response(self.get_context_data(
+#             object=self.object,
+#             form_ad=form_ad,
+#             form_service=form_service)
+#         )
+
 class UpdateViewAd(View):
 
     def get(self, request, pk):
-        form = CreateAdModelForm(current_user=request.user)
+        form_ad = UpdateAdModelForm()
+        form_service = UpdateServiceAdModelForm()
         category = Category.objects.all()
         subcategory = SubCategory.objects.all()
         user_service = UserService.objects.all()
+        announcement = Announcement.objects.all()
         context = {
-            'form': form,
+            'form_ad': form_ad,
+            'form_service': form_service,
             'category': category,
             'subcategory': subcategory,
             'user_service': user_service,
+            'announcement': announcement
         }
         return render(request, 'mainapp/announcement_update_form.html', context)

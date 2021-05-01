@@ -8,12 +8,12 @@
 <!--		{% endfor %}-->
 <!--    </div>-->
 <!--</div>-->
-{% for service in user_service %}
+{% for ad in announcement %}
 <div class="tab">
-	<button class="tablinks" onclick="openCity(event, '{{ service.name }}')">Объявление {{ service.name }}</button>
+	<button class="tablinks" onclick="openCity(event, '{{ ad.name }}')">Объявление {{ ad.name }}</button>
 </div>
-<div id="{{ service.name }}" class="tabcontent">
-	<h3 class="adv_title">{{ service.name }}</h3>
+<div id="{{ ad.name }}" class="tabcontent">
+	<h3 class="adv_title">{{ ad.name }}</h3>
 	<div class="my_ads">
 		<select size="1" name="category">
 			<option disabled>Категория</option>
@@ -27,7 +27,7 @@
 			<option selected value="2">Строительство</option>
 			<option value="3">Разработка</option>
 		</select>
-		<p>Активно с <span class="adv_end">{{ service.created_at }}</span></p>
+		<p>Активно с <span class="adv_end">{{ ad.updated_at }}</span></p>
 	</div>
 	<div class="ads_review">
 		<p class="catalog_rate">
@@ -44,96 +44,58 @@
 			72 просмотра
 		</p>
 	</div>
-	<div class="ads_options">
-		<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-		<select size="1" name="subcategory" class="new_ad_price_category">
-			<option disabled>Цена</option>
-			<option selected value="1">Цена</option>
-			<option value="2">Договорная</option>
-			<option value="3">Диапазон</option>
-		</select>
-
-		<div class="ads_input_flex">
-			<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
-			<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
-			<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
+	{% for service in user_service %}
+		<div class="ads_options">
+			<div>
+				{{ form_service.is_active }}
+<!--				<input class="subcat_checkbox" type="checkbox" name="option1" value="a1">-->
+				{{ service.name }}<br>
+			</div>
+			{{ form_service.select_price }}
+<!--			<select size="1" name="subcategory" class="new_ad_price_category">-->
+<!--				<option disabled>Цена</option>-->
+<!--				<option selected value="1">Цена</option>-->
+<!--				<option value="2">Договорная</option>-->
+<!--				<option value="3">Диапазон</option>-->
+<!--			</select>-->
+			{% if form_service.select_price.id == 1 %}
+				<div class="ads_input_flex">
+					{{ from_service.price_lower }}
+				</div>
+			{% endif %}
+			{% if form_service.select_price.id == 2 %}
+				<div class="ads_input_flex">
+					{{ from_service.price_lower }}
+					{{ from_service.price_upper }}
+				</div>
+			{% endif %}
+			{% if form_service.select_price.id == 3 %}
+				<div class="ads_input_flex">
+					Договорная
+				</div>
+			{% endif %}
+<!--			<div class="ads_input_flex">-->
+<!--				<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">-->
+<!--				{{ from_service.price_lower }}-->
+<!--				<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">-->
+<!--				{{ from_service.price_upper }}-->
+<!--				<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">-->
+<!--			</div>-->
+			{{ form_service.select_currency }}
+			{{ form_service.select_measurement }}
 		</div>
-
-		<select size="1" name="subcategory">
-			<option disabled>Валюта</option>
-			<option value="1">дин</option>
-			<option selected value="2">руб</option>
-			<option value="3">доллар</option>
-		</select>
-		<select size="1" name="subcategory">
-			<option value="1">шт</option>
-			<option selected value="2">м2</option>
-			<option value="3">кг</option>
-		</select>
-	</div>
-	<div class="ads_options">
-		<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-		<select size="1" name="subcategory" class="new_ad_price_category">
-			<option disabled>Цена</option>
-			<option selected value="1">Цена</option>
-			<option value="2">Договорная</option>
-			<option value="3">Диапазон</option>
-		</select>
-
-		<div class="ads_input_flex">
-			<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
-			<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
-			<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
-		</div>
-
-		<select size="1" name="subcategory">
-			<option disabled>Валюта</option>
-			<option value="1">дин</option>
-			<option selected value="2">руб</option>
-			<option value="3">доллар</option>
-		</select>
-		<select size="1" name="subcategory">
-			<option value="1">шт</option>
-			<option selected value="2">м2</option>
-			<option value="3">кг</option>
-		</select>
-	</div>
-	<div class="ads_options">
-		<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-		<select size="1" name="subcategory" class="new_ad_price_category">
-			<option disabled>Цена</option>
-			<option selected value="1">Цена</option>
-			<option value="2">Договорная</option>
-			<option value="3">Диапазон</option>
-		</select>
-
-		<div class="ads_input_flex">
-			<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
-			<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
-			<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
-		</div>
-
-		<select size="1" name="subcategory">
-			<option disabled>Валюта</option>
-			<option value="1">дин</option>
-			<option selected value="2">руб</option>
-			<option value="3">доллар</option>
-		</select>
-		<select size="1" name="subcategory">
-			<option value="1">шт</option>
-			<option selected value="2">м2</option>
-			<option value="3">кг</option>
-		</select>
-	</div>
-	<input type="text" style="width: 100%; margin-top: 30px;" class="ads_input" placeholder="Название">
-	<textarea style="width: 100%; margin-top: 30px;" class="ads_input">Описание</textarea>
-	<div class="ads_options">
-		<input type="file" name="f">
-		<input type="file" name="f">
-		<input type="file" name="f">
-		<input type="file" name="f">
-		<input type="file" name="f">
-	</div>
+	{% endfor %}
+	{{ form_ad.name }}
+<!--	<input type="text" style="width: 100%; margin-top: 30px;" class="ads_input" placeholder="Название">-->
+	{{ form_ad.description }}
+<!--	<textarea style="width: 100%; margin-top: 30px;" class="ads_input">Описание</textarea>-->
+<!--	<div class="ads_options">-->
+<!--		<input type="file" name="f">-->
+<!--		<input type="file" name="f">-->
+<!--		<input type="file" name="f">-->
+<!--		<input type="file" name="f">-->
+<!--		<input type="file" name="f">-->
+<!--	</div>-->
 	<input class="blue_btn form_btn com_form-btn" type="submit" value="Сохранить">
 </div>
 {% endfor %}

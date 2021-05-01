@@ -1,10 +1,18 @@
 from django.contrib import admin
 
-from mainapp.models import Category, SubCategory, Announcement, Service, SelectMeasurement, SelectPrice, SelectCurrency
+from mainapp.models import Category, \
+    SubCategory, \
+    Announcement, \
+    Service, \
+    SelectMeasurement, \
+    SelectPrice, \
+    SelectCurrency, \
+    UserService
 
 admin.site.register(Category)
 admin.site.register(SubCategory)
 admin.site.register(Service)
+admin.site.register(UserService)
 admin.site.register(Announcement)
 admin.site.register(SelectPrice)
 admin.site.register(SelectCurrency)

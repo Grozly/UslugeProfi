@@ -38,13 +38,18 @@ form.addEventListener("submit", (event) => {
     const optionsArray = [];
 
     const adOptions = document.querySelectorAll(".new_ad_options");
-    console.log(adOptions);
+
+    const name = document.querySelectorAll('input:checked');
+    console.log(name)
 
     adOptions.forEach((item, index) => {
+        const name = item.querySelectorAll('input:checked')[0].nextElementSibling.innerText;
+        console.log(name)
         const fixedPrice = item.getElementsByClassName("ads_input_fixed")[0];
         const lowerPrice = item.getElementsByClassName("ads_input_lower")[0];
         const upperPrice = item.getElementsByClassName("ads_input_upper")[0];
         const checkbox = item.getElementsByClassName("subcat_checkbox")[0];
+
         const priceSelector = item.getElementsByClassName(
             "new_ad_price_category"
         )[0];
@@ -64,6 +69,7 @@ form.addEventListener("submit", (event) => {
                 case 1:
                     optionsArray.push({
                         id: optionID,
+                        name: name,
                         select_price: adSelectPrice.value,
                         select_currency: adSelectCurrency.value,
                         select_measurement: adSelectMeasurement.value,
@@ -74,6 +80,7 @@ form.addEventListener("submit", (event) => {
                 case 2:
                     optionsArray.push({
                         id: optionID,
+                        name: name,
                         select_price: adSelectPrice,
                         select_currency: adSelectCurrency,
                         select_measurement: adSelectMeasurement,
@@ -83,6 +90,7 @@ form.addEventListener("submit", (event) => {
                 case 3:
                     optionsArray.push({
                         id: optionID,
+                        name: name,
                         lower_price: lowerPrice.value,
                         upper_price: upperPrice.value,
                         select_price: adSelectPrice,
@@ -102,7 +110,7 @@ form.addEventListener("submit", (event) => {
     $.ajax({
         type: "POST",
         url: "/create-ad/",
-        enctype: "multipart/form-data",
+        enctype: 'multipart/form-data',
         data: fd,
         success: function (response) {
             console.log(response);
@@ -120,13 +128,12 @@ $.ajax({
     type: "GET",
     url: `/ajax/category-val/`,
     success: function (response) {
-        console.log(response.data);
         const categoryData = response.data;
         categoryData.map((item) => {
             const option = document.createElement("option");
             option.textContent = item.name;
             option.setAttribute("class", "item");
-            option.setAttribute("data-value", item.name);
+            option.setAttribute("value", item.id);
             adCategoty.appendChild(option);
         });
     },
@@ -145,7 +152,6 @@ adCategoty.addEventListener("change", (e) => {
         type: "GET",
         url: `/ajax/subcategory-val/${selectedCategory}/`,
         success: function (response) {
-            console.log(response.data);
             adSubcategory.innerHTML = `
                 <option selected disabled="True" id="subcategory_text">
                     -- Выберите подкатегорию --
@@ -169,20 +175,20 @@ adCategoty.addEventListener("change", (e) => {
 });
 
 adSubcategory.addEventListener("change", (e) => {
-    const selectedSubcategory = e.target.selectedIndex;
+
+    const selectedSubcategory = e.target.value;
 
     $.ajax({
         type: "GET",
         url: `/ajax/service-val/${selectedSubcategory}/`,
         success: function (response) {
-            console.log(response.data);
             var adsBlock = document.getElementById("ads_by_subcategory_block");
             adsBlock.innerHTML = "";
 
             response.data.forEach((item, index) => {
                 adsBlock.innerHTML =
                     adsBlock.innerHTML +
-                    `<div class="ads_options new_ad_options" data-id=${item.id} >
+                    `<div class="ads_options new_ad_options" data-id=${item.id}>
                         <div>
                             <input
                                 class="subcat_checkbox"
@@ -190,8 +196,7 @@ adSubcategory.addEventListener("change", (e) => {
                                 name="option1"
                                 value="${item.is_active}"
                             />
-                            ${item.name}
-                            <br />
+                            <label class="label_text">${item.name}</label><br/>
                         </div>
                         <select id="select_price_${index}" size="1" name="subcategory" class="new_ad_price_category select_price">
                             <option disabled>Цена</option>
@@ -302,90 +307,3 @@ adSubcategory.addEventListener("change", (e) => {
         },
     });
 });
-
-//adSubcategory.addEventListener("change", (event) => {
-//    console.log(event.target.value);
-//    const fd = new FormData();
-//    fd.append("csrfmiddlewaretoken", csrf[0].value);
-//    fd.append("id", event.target.value);
-//
-//    $.ajax({
-//        type: "POST",
-//        url: "/ajax/service-val/",
-//        enctype: "multipart/form-data",
-//        data: fd,
-//        success: function (response) {
-//            console.log(response);
-//            document.getElementById(
-//                "ads_by_subcategory_block"
-//            ).innerHTML = response;
-//        },
-//        error: function (error) {
-//            console.log(error);
-//        },
-//        cache: false,
-//        contentType: false,
-//        processData: false,
-//    });
-//});
-//document.querySelector("#create-new-ad").addEventListener("click", (event) => {
-//    event.preventDefault();
-//    var object = {};
-//    var adName = document.querySelector("#id_name").value;
-//    var adDescription = document.querySelector("#id_description").value;
-//
-//    var adCategoty = document.querySelector("#select_category").value;
-//    var adSubcategory = document.querySelector("#select_subcategory").value;
-//    var adSelectPrice = document.querySelector("#select_price").value;
-//    var adSelectCurrency = document.querySelector("#select_currency").value;
-//    var adSelectMeasurement = document.querySelector("#select_measurement").value;
-//    var adService = document.querySelector(".subcat_checkbox").checked;
-//    var adAddress = document.querySelector("#id_address").value;
-//
-//
-//    var fixedPrice = document.querySelector("#new_ad_fixed_price")
-//        ? document.querySelector("#new_ad_fixed_price").value
-//        : null;
-//
-//    var lowerPrice = document.querySelector("#new_ad_lower_price")
-//        ? document.querySelector("#new_ad_lower_price").value
-//        : null;
-//
-//    var upperPrice = document.querySelector("#new_ad_upper_price")
-//        ? document.querySelector("#new_ad_upper_price").value
-//        : null;
-//
-//    var formData = new FormData();
-//
-//    formData.set("name", adName);
-//    formData.set("description", adDescription);
-//
-//    formData.set("categoty", adCategoty);
-//    formData.set("subcategory", adSubcategory);
-//
-//   if (adService.checked) {
-//        formData.set("service", adService);
-//        formData.set("select_price", adSelectPrice);
-//        formData.set("select_currency", adSelectCurrency);
-//        formData.set("select_measurement", adSelectMeasurement);
-//    }
-//
-//    formData.set("address", adAddress);
-//
-//    if (fixedPrice) formData.set("price", fixedPrice);
-//    if (lowerPrice && upperPrice) {
-//        formData.set("lower_price", lowerPrice);
-//        formData.set("upper_price", upperPrice);
-//    }
-//
-//    formData.forEach((value, key) => {object[key] = value});
-//
-//    var json = JSON.stringify(object);
-//
-//    console.log(object)
-//    axios.post("/create-ad/", object, {
-//        headers: {
-//            "Content-Type": `application/json`,
-//        },
-//    });
-//});

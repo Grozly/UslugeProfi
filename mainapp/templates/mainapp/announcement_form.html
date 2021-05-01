@@ -8,83 +8,24 @@
     id="create_new_ad_from"
     novalidate
 >
-    {% csrf_token %} {{ form.errors }}
+    {% csrf_token %}
+    {{ form.errors }}
     <div class="user_profile_select">{{ form.user_id }}</div>
-    {{ form.name }} {{ form.description }}
+    {{ form.name }}
+    {{ form.description }}
     <div id="imgBox"></div>
     {{ form.photo_announcement }}
     <select id="select_category" class="form_input">
-        <option selected disabled="True">-- Выберите категорию --</option>
-        <!--            {% for item in category %}-->
-        <!--            <option value="{{ item.pk }}">{{ item.name }}</option>-->
-        <!--            {% endfor %}-->
+        <option selected disabled="True">
+            -- Выберите категорию --
+        </option>
     </select>
     <select id="select_subcategory" class="form_input">
         <option selected disabled="True" id="subcategory_text">
             -- Выберите подкатегорию --
         </option>
-        <!--            {% for item_subcategory in subcategory %}-->
-        <!--            <option value="{{ item_subcategory.pk }}">-->
-        <!--                {{ item_subcategory.name }}-->
-        <!--            </option>-->
-        <!--            {% endfor %}-->
     </select>
     <div id="ads_by_subcategory_block">
-        <!-- {% for service_item in service %}
-            <div class="ads_options new_ad_options" data-id={{service_item.id}} >
-                <div>
-                    <input
-                        class="subcat_checkbox"
-                        type="checkbox"
-                        name="option1"
-                        value="{{ service_item.isActiveService }}"
-                    />
-                    {{ service_item.name }}
-                    <br />
-                </div>
-                <select id="select_price_{{ forloop.counter }}" size="1" name="subcategory" class="new_ad_price_category select_price">
-                    <option disabled>Цена</option>
-                    <option selected value="1">Цена</option>
-                    <option value="2">Договорная</option>
-                    <option value="3">Диапазон</option>
-                </select>
-
-                <div class="ads_input_flex">
-                    <input
-                        id="new_ad_fixed_price_{{ forloop.counter }}"
-                        type="text"
-                        class="ads_input ads_input_fixed"
-                        placeholder="Цена"
-                        style="display: block"
-                    />
-                    <input
-                        id="new_ad_lower_price_{{ forloop.counter }}"
-                        type="text"
-                        class="ads_input ads_input_lower"
-                        placeholder="Цена от"
-                        style="display: none"
-                    />
-                    <input
-                        id="new_ad_upper_price_{{ forloop.counter }}"
-                        type="text"
-                        class="ads_input ads_input_upper"
-                        placeholder="Цена до"
-                        style="display: none"
-                    />
-                </div>
-                <select id="select_currency_{{ forloop.counter }}" size="1" name="subcategory" class="select_currency">
-                    <option disabled>Валюта</option>
-                    <option value="1">дин</option>
-                    <option selected value="2">руб</option>
-                    <option value="3">доллар</option>
-                </select>
-                <select id="select_measurement_{{ forloop.counter }}" size="1" name="subcategory" class="select_measurement">
-                    <option value="1">шт</option>
-                    <option selected value="2">м2</option>
-                    <option value="3">кг</option>
-                </select>
-            </div>
-        {% endfor %} -->
     </div>
     {{ form.address }}
     <div class="form_map">

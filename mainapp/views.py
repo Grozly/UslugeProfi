@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import TemplateView, View
 import json
+import ast
 from django.http import JsonResponse, HttpResponseRedirect
 from validate_email import validate_email
 from django.contrib import messages
@@ -29,12 +30,14 @@ def get_json_category_data(request):
 def get_json_subcategory_data(request, *args, **kwargs):
     selected_category = kwargs.get('pk')
     object_subcategory = list(SubCategory.objects.filter(category_id=selected_category).values())
+    print(object_subcategory)
     return JsonResponse({'data': object_subcategory})
 
 
 def get_json_service_data(request, *args, **kwargs):
     selected_subcategory = kwargs.get('pk')
     object_service = list(Service.objects.filter(subcategory_id=selected_subcategory).values())
+    # print(object_service)
     return JsonResponse({'data': object_service})
 
 
@@ -181,8 +184,47 @@ class ApiCreateViewAd(View):
         if request.is_ajax():
             if request.method == "POST":
                 data = request.POST
-                for value in data.values():
-                    print(value)
+                print(data)
+                user_id = UslugeUser.objects.only('id').get(id=request.POST.get('user_id'))
+                category_id = Category.objects.only('id').get(id=request.POST.get('categoty'))
+                subcategory_id = SubCategory.objects.only('id').get(id=request.POST.get('subcategory'))
+                user_service_object = UserService.objects.only('id').get(user_id=request.POST.get('user_id'))
+                user_services = request.POST.get('options')
+                user_services_id = json.loads(user_services)
+                for item in user_services_id:
+                    print(item['id'])
+                name = request.POST.get('name')
+                description = request.POST.get('description')
+                photo_announcement = request.FILES.get('image')
+                address = request.POST.get('address')
+                if len(user_services_id) > 1:
+                    for item in user_services_id:
+                        if item['fixed_price']:
+                            service_object = Service.objects.only('id').get(id=item['id'])
+                            select_price_object = SelectPrice.objects.only('id').get(id=item['select_price'])
+                            select_currency_object = SelectCurrency.objects.only('id').get(id=item['select_currency'])
+                            select_measurement_object = SelectMeasurement.objects.only('id').\
+                                get(id=item['select_measurement'])
+                            object_service = UserService.objects.create(service_id=service_object,
+                                                                        user_id=user_id,
+                                                                        select_price=select_price_object,
+                                                                        select_currency=select_currency_object,
+                                                                        select_measurement=select_measurement_object,
+                                                                        name=item['name'],
+                                                                        price_lower=item['fixed_price'],
+                                                                        price_upper=0)
+                            object_service.save()
+                            Announcement.objects.create(user_id=user_id,
+                                                        category_id=category_id,
+                                                        subcategory_id=subcategory_id,
+                                                        user_service_id=user_service_object,
+                                                        name=name,
+                                                        description=description,
+                                                        photo_announcement=photo_announcement,
+                                                        address=address)
+
+                            return JsonResponse({'data': 'ok'}, status=200)
+                        return JsonResponse({'data': 'false, not fix_price'}, status=400)
                 return JsonResponse({'data': data}, status=200)
             return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
 

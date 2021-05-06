@@ -43,7 +43,7 @@ form.addEventListener("submit", (event) => {
     console.log(name)
 
     adOptions.forEach((item, index) => {
-        const name = item.querySelectorAll('input:checked')[0].nextElementSibling.innerText;
+        const name = item.querySelectorAll('input:checked').nextElementSibling.innerText;
         console.log(name)
         const fixedPrice = item.getElementsByClassName("ads_input_fixed")[0];
         const lowerPrice = item.getElementsByClassName("ads_input_lower")[0];

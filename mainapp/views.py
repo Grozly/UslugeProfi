@@ -1,9 +1,10 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.views.generic.base import TemplateView, View
 import json
+import ast
 from django.http import JsonResponse, HttpResponseRedirect
 from validate_email import validate_email
 from django.contrib import messages
@@ -14,10 +15,30 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse, reverse_lazy
 
-from .forms import CreateAdModelForm, CreateServiceAdModelForm
-from .models import Announcement, SubCategory, Category, Service, SelectPrice, SelectCurrency, SelectMeasurement
+from .forms import CreateAdModelForm, UpdateServiceAdModelForm, UpdateAdModelForm
+from .models import Announcement, SubCategory, Category, Service, SelectPrice, SelectCurrency, SelectMeasurement, \
+    UserService
 from .utils import account_activation_token
 from django.contrib import auth
+
+
+def get_json_category_data(request):
+    category_val = list(Category.objects.values())
+    return JsonResponse({'data': category_val})
+
+
+def get_json_subcategory_data(request, *args, **kwargs):
+    selected_category = kwargs.get('pk')
+    object_subcategory = list(SubCategory.objects.filter(category_id=selected_category).values())
+    print(object_subcategory)
+    return JsonResponse({'data': object_subcategory})
+
+
+def get_json_service_data(request, *args, **kwargs):
+    selected_subcategory = kwargs.get('pk')
+    object_service = list(Service.objects.filter(subcategory_id=selected_subcategory).values())
+    # print(object_service)
+    return JsonResponse({'data': object_service})
 
 
 class TemplateVerifyView(TemplateView):
@@ -109,17 +130,6 @@ class VerificationView(View):
         return redirect('main:main')
 
 
-# class LoginEmailValidationView(View):
-#
-#     def post(self, request):
-#         data = json.loads(request.body)
-#         email = data['email']
-#
-#         if not validate_email(email):
-#             return JsonResponse({'email_error': 'Введите Ваш E-mail адрес'}, status=400)
-#         if UslugeUser.objects.filter(email=email).exists():
-#             return JsonResponse({'email_valid': True}, status=200)
-
 class LoginUserView(View):
 
     def get(self, request):
@@ -142,62 +152,26 @@ class LoginUserView(View):
                 return HttpResponseRedirect(reverse('main:main'))
             return JsonResponse({'email_error': 'Такой пользователь не зарегистрирован'}, status=400)
 
-        # if not validate_email(email):
-        #     return JsonResponse({'email_error': 'E-mail введен некорректно'}, status=400)
-        # if UslugeUser.objects.filter(email=email, password=password).exists():
-        #     user = auth.authenticate(email=email, password=password)
-        #     if user and user.is_active:
-        #         auth.login(request, user)
-        #         if not remember:
-        #             request.session.set_expiry(0)
-        #             return HttpResponseRedirect(reverse('main:main'))
-        #         return HttpResponseRedirect(reverse('main:main'))
-        #     return JsonResponse({'email_error': 'Такой пользователь не зарегистрирован'}, status=400)
-
 
 class LogoutUserView(LogoutView):
 
     template_name = 'mainapp/index.html'
 
 
-class CreateViewAd(CreateView):
-    model = Announcement
-    template_name = 'mainapp/announcement_form.html'
-    form_class = CreateAdModelForm
+class CreateViewAd(View):
 
-    def get_context_data(self, **kwargs):
-        context_data = super(CreateViewAd, self).get_context_data(**kwargs)
-        context_data['category'] = Category.objects.all()
-        context_data['subcategory'] = SubCategory.objects.all()
-        context_data['service'] = Service.objects.all()
-        return context_data
-
-    def get_success_url(self):
-        return reverse("auth:profile", args=(self.object.pk,))
-
-
-class CreateViewServiceAd(CreateView):
-    model = Service
-    template_name = 'mainapp/announcement_form.html'
-    form_class = CreateServiceAdModelForm
-
-    def get_context_data(self, **kwargs):
-        context_data = super(CreateViewServiceAd, self).get_context_data(**kwargs)
-        context_data['service'] = Service.objects.all()
-        context_data['select_price'] = SelectPrice.objects.all()
-        context_data['select_currency'] = SelectCurrency.objects.all()
-        context_data['select_measurement'] = SelectMeasurement.objects.all()
-        context_data['user'] = UslugeUserProfile.objects.all()
-        return context_data
-
-    def get_success_url(self):
-        return reverse("auth:editprofile", args=(self.object.pk,))
-
-
-def load_subcategories(request):
-    category_id = request.GET.get('category')
-    subcategory = SubCategory.objects.filter(category_id=category_id).order_by('name')
-    return render(request, 'mainapp/announcement_form.html', {'subcategory': subcategory})
+    def get(self, request, pk):
+        form = CreateAdModelForm(current_user=request.user)
+        category = Category.objects.all()
+        subcategory = SubCategory.objects.all()
+        service = Service.objects.all()
+        context = {
+            'form': form,
+            'category': category,
+            'subcategory': subcategory,
+            'service': service,
+        }
+        return render(request, 'mainapp/announcement_form.html', context)
 
 
 class ApiCreateViewAd(View):
@@ -207,19 +181,97 @@ class ApiCreateViewAd(View):
 
     def post(self, request):
 
-        form = CreateAdModelForm(request.POST or None, request.FILES or None)
-        data = {}
-
         if request.is_ajax():
-            if form.is_valid():
-                form.save()
-                data['name'] = form.cleaned_data.get('name')
-                data['status'] = 'ok'
-                return JsonResponse(data, status=200)
+            if request.method == "POST":
+                data = request.POST
+                print(data)
+                user_id = UslugeUser.objects.only('id').get(id=request.POST.get('user_id'))
+                category_id = Category.objects.only('id').get(id=request.POST.get('categoty'))
+                subcategory_id = SubCategory.objects.only('id').get(id=request.POST.get('subcategory'))
+                user_service_object = UserService.objects.only('id').get(user_id=request.POST.get('user_id'))
+                user_services = request.POST.get('options')
+                user_services_id = json.loads(user_services)
+                for item in user_services_id:
+                    print(item['id'])
+                name = request.POST.get('name')
+                description = request.POST.get('description')
+                photo_announcement = request.FILES.get('image')
+                address = request.POST.get('address')
+                if len(user_services_id) > 1:
+                    for item in user_services_id:
+                        if item['fixed_price']:
+                            service_object = Service.objects.only('id').get(id=item['id'])
+                            select_price_object = SelectPrice.objects.only('id').get(id=item['select_price'])
+                            select_currency_object = SelectCurrency.objects.only('id').get(id=item['select_currency'])
+                            select_measurement_object = SelectMeasurement.objects.only('id').\
+                                get(id=item['select_measurement'])
+                            object_service = UserService.objects.create(service_id=service_object,
+                                                                        user_id=user_id,
+                                                                        select_price=select_price_object,
+                                                                        select_currency=select_currency_object,
+                                                                        select_measurement=select_measurement_object,
+                                                                        name=item['name'],
+                                                                        price_lower=item['fixed_price'],
+                                                                        price_upper=0)
+                            object_service.save()
+                            Announcement.objects.create(user_id=user_id,
+                                                        category_id=category_id,
+                                                        subcategory_id=subcategory_id,
+                                                        user_service_id=user_service_object,
+                                                        name=name,
+                                                        description=description,
+                                                        photo_announcement=photo_announcement,
+                                                        address=address)
 
-        return JsonResponse({}, status=200)
+                            return JsonResponse({'data': 'ok'}, status=200)
+                        return JsonResponse({'data': 'false, not fix_price'}, status=400)
+                return JsonResponse({'data': data}, status=200)
+            return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
 
 
+# class UpdateViewAd(UpdateView):
+#     model = Announcement
+#     second_model = UserService
+#     template_name = "mainapp/announcement_update_form.html"
+#     form_class = UpdateAdModelForm
+#     second_form_class = UpdateServiceAdModelForm
+#     is_update_view = True
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(UpdateViewAd, self).get_context_data(**kwargs)
+#         context['active_client'] = True
+#         if 'form_ad' not in context:
+#             context['form_ad'] = self.form_class(self.request.GET)
+#         if 'form_service' not in context:
+#             context['form_service'] = self.second_form_class(self.request.GET)
+#         context['active_client'] = True
+#         return context
+#
+#     def get(self, request, *args, **kwargs):
+#         super(UpdateViewAd, self).get(request, *args, **kwargs)
+#         form_ad = self.form_class
+#         form_service = self.second_form_class
+#         return self.render_to_response(self.get_context_data(
+#             object=self.object,
+#             form_ad=form_ad,
+#             form_service=form_service)
+#         )
 
+class UpdateViewAd(View):
 
-
+    def get(self, request, pk):
+        form_ad = UpdateAdModelForm()
+        form_service = UpdateServiceAdModelForm()
+        category = Category.objects.all()
+        subcategory = SubCategory.objects.all()
+        user_service = UserService.objects.all()
+        announcement = Announcement.objects.all()
+        context = {
+            'form_ad': form_ad,
+            'form_service': form_service,
+            'category': category,
+            'subcategory': subcategory,
+            'user_service': user_service,
+            'announcement': announcement
+        }
+        return render(request, 'mainapp/announcement_update_form.html', context)

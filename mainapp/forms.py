@@ -1,25 +1,29 @@
 from django import forms
-from authapp.models import UslugeUserProfile
-from mainapp.models import Announcement, SubCategory, Service
+from authapp.models import UslugeUser
+from mainapp.models import Announcement, Service, UserService
 
 
 class CreateAdModelForm(forms.ModelForm):
+
     class Meta:
         model = Announcement
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, current_user, *args, **kwargs):
+        user = UslugeUser.objects.get(email=current_user)
+        user_pk = user.pk
+        super(CreateAdModelForm, self).__init__(*args, **kwargs)
+        self.fields['user_id'].initial = user_pk
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form_input'
             field.help_text = ''
             field.label = ''
 
-        self.fields['user_id'].widget.attrs.update({'value': UslugeUserProfile.user_profile,
-                                                    'type': 'hidden',
-                                                    'selected': UslugeUserProfile.user_profile})
+        self.fields['user_id'].widget.attrs.update({'value': user_pk,
+                                                    'type': 'hidden'})
         self.fields['category_id'].widget.attrs.update({'placeholder': 'Категория'})
         self.fields['subcategory_id'].widget.attrs.update({'placeholder': 'Подкатегория'})
+        self.fields['user_service_id'].widget.attrs.update({'placeholder': 'Услуга'})
         self.fields['name'].widget.attrs.update({'placeholder': 'Название'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Описание'})
         self.fields['photo_announcement'].widget = forms.FileInput(attrs={
@@ -28,20 +32,39 @@ class CreateAdModelForm(forms.ModelForm):
         self.fields['address'].widget.attrs.update({'placeholder': 'Адрес'})
 
 
-class CreateServiceAdModelForm(forms.ModelForm):
-    class Meta:
-        model = Service
-        fields = ['isActiveService',
-                  'name',
-                  'select_price',
-                  'price_from',
-                  'price_up_to',
-                  'select_currency',
-                  'select_measurement']
+class UpdateAdModelForm(forms.ModelForm):
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            for field_name, field in self.fields.items():
-                field.widget.attrs['class'] = 'ads_input'
-                field.help_text = ''
-                field.label = ''
+    class Meta:
+        model = Announcement
+        fields = ('name', 'description')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # user = UslugeUser.objects.get(email=current_user)
+        # user_pk = user.pk
+        # self.fields['user_id'].initial = user_pk
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'ads_input'
+            field.help_text = ''
+            field.label = ''
+
+        self.fields['name'].widget.attrs.update({'style': 'width: 100%; margin-top: 30px;'})
+        self.fields['description'].widget.attrs.update({'style': 'width: 100%; margin-top: 30px;'})
+
+
+class UpdateServiceAdModelForm(forms.ModelForm):
+
+    class Meta:
+        model = UserService
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'ads_options'
+            field.help_text = ''
+            field.label = ''
+
+        self.fields['price_lower'].widget.attrs.update({'placeholder': 'Цена от'})
+        self.fields['price_upper'].widget.attrs.update({'placeholder': 'Цена до'})

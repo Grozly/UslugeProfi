@@ -11,7 +11,6 @@
 				{% if user.is_authenticated %}
 				{% if user.is_superuser %}
 				<a href="{% url 'main:logout' %}" class="login">Выход</a> |
-				<a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
 				<a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
 				{% else %}
 				<a href="{% url 'main:logout' %}" class="login">Выход</a> |
@@ -53,7 +52,7 @@
 	</div>
 	<div class="ad_block mobile_top only_mobile">
 		{% if user.is_authenticated %}
-		{% if user.is_superuser %} >
+		{% if user.is_superuser %}
 		<a href="{% url 'admin:index' %}" class="advetisement">
 			Админка
 		</a>
@@ -173,11 +172,6 @@
 		</div>
 	</div>
 	{% include '../inc/inc_profile_menu.html' %}
-	<div id="Мои объявления" class="tabcontent">
-		<div class="tab">
-			<button class="tablinks" onclick="openCity(event, 'Объявление 1')">Объявление 1</button>
-		</div>
-	</div>
 
 	<div id="Избранные объявления" class="tabcontent">
 		<ul>
@@ -215,130 +209,8 @@
 	{% endblock %}
 	{% block editprofile %}
 	{% endblock %}
-	<div id="Объявление 1" class="tabcontent">
-		<h3 class="adv_title">Объявление 1</h3>
-		<div class="my_ads">
-			<select size="1" name="category">
-				<option disabled>Категория</option>
-				<option value="1">Ремонт</option>
-				<option selected value="2">Строительство</option>
-				<option value="3">Разработка</option>
-			</select>
-			<select size="1" name="subcategory" class="new_ad_price_category">
-				<option disabled>Подкатегория</option>
-				<option value="1">Ремонт</option>
-				<option selected value="2">Строительство</option>
-				<option value="3">Разработка</option>
-			</select>
-			<p>Активно с <span class="adv_end">31.02.21</span></p>
-		</div>
-		<div class="ads_review">
-			<p class="catalog_rate">
-				<span class="fa fa-star checked"></span>
-				<span class="fa fa-star checked"></span>
-				<span class="fa fa-star checked"></span>
-				<span class="fa fa-star checked"></span>
-				<span class="fa fa-star"></span>
-			</p>
-			<p class="catalog_com">
-				12 комментариев
-			</p>
-			<p class="bold">
-				72 просмотра
-			</p>
-		</div>
-		<div class="ads_options">
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="subcategory" class="new_ad_price_category">
-				<option disabled>Цена</option>
-				<option selected value="1">Цена</option>
-				<option value="2">Договорная</option>
-				<option value="3">Диапазон</option>
-			</select>
-
-			<div class="ads_input_flex">
-				<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
-				<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
-				<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
-			</div>
-
-			<select size="1" name="subcategory">
-				<option disabled>Валюта</option>
-				<option value="1">дин</option>
-				<option selected value="2">руб</option>
-				<option value="3">доллар</option>
-			</select>
-			<select size="1" name="subcategory">
-				<option value="1">шт</option>
-				<option selected value="2">м2</option>
-				<option value="3">кг</option>
-			</select>
-		</div>
-		<div class="ads_options">
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="subcategory" class="new_ad_price_category">
-				<option disabled>Цена</option>
-				<option selected value="1">Цена</option>
-				<option value="2">Договорная</option>
-				<option value="3">Диапазон</option>
-			</select>
-
-			<div class="ads_input_flex">
-				<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
-				<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
-				<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
-			</div>
-
-			<select size="1" name="subcategory">
-				<option disabled>Валюта</option>
-				<option value="1">дин</option>
-				<option selected value="2">руб</option>
-				<option value="3">доллар</option>
-			</select>
-			<select size="1" name="subcategory">
-				<option value="1">шт</option>
-				<option selected value="2">м2</option>
-				<option value="3">кг</option>
-			</select>
-		</div>
-		<div class="ads_options">
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="subcategory" class="new_ad_price_category">
-				<option disabled>Цена</option>
-				<option selected value="1">Цена</option>
-				<option value="2">Договорная</option>
-				<option value="3">Диапазон</option>
-			</select>
-
-			<div class="ads_input_flex">
-				<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">
-				<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">
-				<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">
-			</div>
-
-			<select size="1" name="subcategory">
-				<option disabled>Валюта</option>
-				<option value="1">дин</option>
-				<option selected value="2">руб</option>
-				<option value="3">доллар</option>
-			</select>
-			<select size="1" name="subcategory">
-				<option value="1">шт</option>
-				<option selected value="2">м2</option>
-				<option value="3">кг</option>
-			</select>
-		</div>
-		<input type="text" style="width: 100%; margin-top: 30px;" class="ads_input" placeholder="Название">
-		<textarea style="width: 100%; margin-top: 30px;" class="ads_input">Описание</textarea>
-		<div class="ads_options">
-			<input type="file" name="f">
-			<input type="file" name="f">
-			<input type="file" name="f">
-			<input type="file" name="f">
-			<input type="file" name="f">
-		</div>
-		<input class="blue_btn form_btn com_form-btn" type="submit" value="Сохранить">
-	</div>
+	{% block updatead %}
+	{% endblock %}
 </div>
 {% endblock %}
 {% block footer %}

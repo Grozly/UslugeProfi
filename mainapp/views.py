@@ -184,11 +184,10 @@ class ApiCreateViewAd(View):
         if request.is_ajax():
             if request.method == "POST":
                 data = request.POST
-                print(data)
                 user_id = UslugeUser.objects.only('id').get(id=request.POST.get('user_id'))
                 category_id = Category.objects.only('id').get(id=request.POST.get('categoty'))
                 subcategory_id = SubCategory.objects.only('id').get(id=request.POST.get('subcategory'))
-                user_service_object = UserService.objects.only('id').get(user_id=request.POST.get('user_id'))
+                user_service_object = UserService.objects.only('id').filter(user_id=request.user.id)
                 user_services = request.POST.get('options')
                 user_services_id = json.loads(user_services)
                 for item in user_services_id:

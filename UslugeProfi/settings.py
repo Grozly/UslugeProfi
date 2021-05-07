@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -25,8 +25,8 @@ SECRET_KEY = '9xdfzyfl0=*y_7cm)5-qj1x#e@m#t8=(x#uur(h7$orh$4rfou'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
-
+# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['135.181.8.131', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -91,9 +91,9 @@ WSGI_APPLICATION = 'UslugeProfi.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'UslugeProfi26',
-        'USER': 'adminusluge',
-        'PASSWORD': 'adminusluge',
+        'NAME': 'uslugeprofi26',
+        'USER': 'adminusluge26',
+        'PASSWORD': 'adminusluge26',
         'HOST': 'localhost',
         'PORT': 5432,
     }
@@ -140,9 +140,8 @@ LOGOUT_REDIRECT_URL = '/'
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
 
 # Media files users (Images)
 
@@ -158,3 +157,10 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'uslugeprofiloc@gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = 'uslugeprofiloc123'
+
+#EMAIL_HOST = 'smtp.yandex.ru'
+#EMAIL_HOST_USER = 'usluge@madi.space'
+#EMAIL_USE_TLS = True
+#DEFAULT_FROM_EMAIL = 'usluge@madi.space'
+#EMAIL_PORT = 465
+#EMAIL_HOST_PASSWORD = 'fyr56790'

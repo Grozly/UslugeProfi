@@ -11,6 +11,82 @@
     {% csrf_token %}
     {{ form.errors }}
     <div class="user_profile_select">{{ form.user_id }}</div>
+<<<<<<< HEAD
+        {{ form.name }}
+        {{ form.description }}
+        <div id="imgBox"></div>
+        {{ form.photo_announcement }}
+        <select id="select_category" class="form_input">
+            <option selected disabled="True">-- Выберите категорию --</option>
+            {% for item in category %}
+            <option value="{{ item.pk }}">{{ item.name }}</option>
+            {% endfor %}
+        </select>
+        <select id="select_subcategory" class="form_input">
+            <option selected disabled="True"></option>
+            {% for item_subcategory in subcategory %}
+            <option value="{{ item_subcategory.pk }}">
+                {{ item_subcategory.name }}
+            </option>
+            {% endfor %}
+        </select>
+        {% for service_item in service %}
+            <div class="ads_options">
+                <div>
+                    <input
+                        class="subcat_checkbox"
+                        type="checkbox"
+                        name="option1"
+                        value="{{ service_item.isActiveService }}"
+                    />
+                    {{ service_item.name }}
+                    <br />
+                </div>
+		<select id="select_price_{{ forloop.counter }}" size="1" name="subcategory" class="new_ad_price_category">
+                    <option disabled>Цена</option>
+                    <option selected value="1">Цена</option>
+                    <option value="2">Договорная</option>
+                    <option value="3">Диапазон</option>
+                </select>
+
+                <div class="ads_input_flex">
+                    <input
+		     id="new_ad_fixed_price_{{ forloop.counter }}"
+                        type="text"
+                        class="ads_input ads_input_fixed"
+                        placeholder="Цена"
+                        style="display: block"
+                    />
+                    <input
+			id="new_ad_lower_price_{{ forloop.counter }}"
+                        type="text"
+                        class="ads_input ads_input_lower"
+                        placeholder="Цена от"
+                        style="display: none"
+                    />
+                    <input
+			id="new_ad_upper_price_{{ forloop.counter }}"
+                        type="text"
+                        class="ads_input ads_input_upper"
+                        placeholder="Цена до"
+                        style="display: none"
+                    />
+                </div>
+		<select id="select_currency_{{ forloop.counter }}" size="1" name="subcategory">
+                    <option disabled>Валюта</option>
+                    <option value="1">дин</option>
+                    <option selected value="2">руб</option>
+                    <option value="3">доллар</option>
+                </select>
+		<select id="select_measurement_{{ forloop.counter }}" size="1" name="subcategory">
+                    <option value="1">шт</option>
+                    <option selected value="2">м2</option>
+                    <option value="3">кг</option>
+                </select>
+            </div>
+        {% endfor %}
+        {{ form.address }}
+=======
     {{ form.name }}
     {{ form.description }}
     <div id="imgBox"></div>
@@ -28,6 +104,7 @@
     <div id="ads_by_subcategory_block">
     </div>
     {{ form.address }}
+>>>>>>> c052f570ffc31fbc6bfedb9cd4d069de44a6ea07
     <div class="form_map">
         <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1999.058118409584!2d30.358355016070213!3d59.931177781873465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469631a5e66d51c5%3A0x6f00589ac258db97!2z0J3QtdCy0YHQutC40Lkg0L_RgC4sINCh0LDQvdC60YIt0J_QtdGC0LXRgNCx0YPRgNCz!5e0!3m2!1sru!2sru!4v1613214625240!5m2!1sru!2sru"

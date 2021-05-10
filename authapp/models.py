@@ -94,4 +94,4 @@ class UslugeUserProfile(models.Model):
         instance.uslugeuserprofile.save()
 
     def __str__(self):
-        return self.user_profile
+        return str(self.user_profile)

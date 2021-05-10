@@ -20,6 +20,9 @@ from .models import Announcement, SubCategory, Category, Service, SelectPrice, S
     UserService
 from .utils import account_activation_token
 from django.contrib import auth
+import datetime
+
+now = datetime.datetime.now()
 
 
 def get_json_category_data(request):
@@ -30,14 +33,12 @@ def get_json_category_data(request):
 def get_json_subcategory_data(request, *args, **kwargs):
     selected_category = kwargs.get('pk')
     object_subcategory = list(SubCategory.objects.filter(category_id=selected_category).values())
-    print(object_subcategory)
     return JsonResponse({'data': object_subcategory})
 
 
 def get_json_service_data(request, *args, **kwargs):
     selected_subcategory = kwargs.get('pk')
     object_service = list(Service.objects.filter(subcategory_id=selected_subcategory).values())
-    # print(object_service)
     return JsonResponse({'data': object_service})
 
 
@@ -78,7 +79,9 @@ class RegisterUserView(View):
         is_over18 = data['is_over18']
         print(email, password1, password2, is_agree, is_over18)
         if validate_email(email):
+            print('valid email 1')
             if not UslugeUser.objects.filter(email=email).exists():
+                print('valid email 2')
 
                 user = UslugeUser.objects.create_user(email=email, is_agree=is_agree, is_over18=is_over18)
                 user.set_password(password1)
@@ -187,23 +190,60 @@ class ApiCreateViewAd(View):
                 user_id = UslugeUser.objects.only('id').get(id=request.POST.get('user_id'))
                 category_id = Category.objects.only('id').get(id=request.POST.get('categoty'))
                 subcategory_id = SubCategory.objects.only('id').get(id=request.POST.get('subcategory'))
-                user_service_object = UserService.objects.only('id').filter(user_id=request.user.id)
                 user_services = request.POST.get('options')
                 user_services_id = json.loads(user_services)
-                for item in user_services_id:
-                    print(item['id'])
                 name = request.POST.get('name')
                 description = request.POST.get('description')
                 photo_announcement = request.FILES.get('image')
                 address = request.POST.get('address')
                 if len(user_services_id) > 1:
                     for item in user_services_id:
+                        service_object = Service.objects.only('id').get(id=item['id'])
+                        select_price_object = SelectPrice.objects.only('id').get(id=item['select_price'])
+                        select_currency_object = SelectCurrency.objects.only('id').get(id=item['select_currency'])
+                        select_measurement_object = SelectMeasurement.objects.only('id'). \
+                            get(id=item['select_measurement'])
                         if item['fixed_price']:
-                            service_object = Service.objects.only('id').get(id=item['id'])
-                            select_price_object = SelectPrice.objects.only('id').get(id=item['select_price'])
-                            select_currency_object = SelectCurrency.objects.only('id').get(id=item['select_currency'])
-                            select_measurement_object = SelectMeasurement.objects.only('id').\
-                                get(id=item['select_measurement'])
+                        #     object_service = UserService.objects.create(service_id=service_object,
+                        #                                                 user_id=user_id,
+                        #                                                 select_price=select_price_object,
+                        #                                                 select_currency=select_currency_object,
+                        #                                                 select_measurement=select_measurement_object,
+                        #                                                 name=item['name'],
+                        #                                                 price_lower=item['fixed_price'],
+                        #                                                 price_upper=0)
+                        #     object_service.save()
+                        #     Announcement.objects.create(user_id=user_id,
+                        #                                 category_id=category_id,
+                        #                                 subcategory_id=subcategory_id,
+                        #                                 user_servics=UserService.objects.add(object_service),
+                        #                                 name=name,
+                        #                                 description=description,
+                        #                                 photo_announcement=photo_announcement,
+                        #                                 address=address)
+                        #
+                        # elif item['upper_price']:
+                        #     object_service = UserService.objects.create(service_id=service_object,
+                        #                                                 user_id=user_id,
+                        #                                                 select_price=select_price_object,
+                        #                                                 select_currency=select_currency_object,
+                        #                                                 select_measurement=select_measurement_object,
+                        #                                                 name=item['name'],
+                        #                                                 price_lower=item['lower_price'],
+                        #                                                 price_upper=item['upper_price'])
+                        #     object_service.save()
+
+                            return JsonResponse({'data': 'ok'}, status=200)
+                        return JsonResponse({'data': 'false, not fix_price'}, status=400)
+                else:
+                    object_services = []
+                    for item in user_services_id:
+                        service_object = Service.objects.only('id').get(id=item['id'])
+                        select_price_object = SelectPrice.objects.only('id').get(id=item['select_price'])
+                        select_currency_object = SelectCurrency.objects.only('id').get(id=item['select_currency'])
+                        select_measurement_object = SelectMeasurement.objects.only('id'). \
+                            get(id=item['select_measurement'])
+                        if user_services_id == 'fixed_price':
                             object_service = UserService.objects.create(service_id=service_object,
                                                                         user_id=user_id,
                                                                         select_price=select_price_object,
@@ -212,18 +252,42 @@ class ApiCreateViewAd(View):
                                                                         name=item['name'],
                                                                         price_lower=item['fixed_price'],
                                                                         price_upper=0)
+                            object_services.append(object_service)
                             object_service.save()
-                            Announcement.objects.create(user_id=user_id,
-                                                        category_id=category_id,
-                                                        subcategory_id=subcategory_id,
-                                                        user_service_id=user_service_object,
-                                                        name=name,
-                                                        description=description,
-                                                        photo_announcement=photo_announcement,
-                                                        address=address)
-
-                            return JsonResponse({'data': 'ok'}, status=200)
-                        return JsonResponse({'data': 'false, not fix_price'}, status=400)
+                        elif user_services_id == 'lower_price':
+                            object_service = UserService.objects.create(service_id=service_object,
+                                                                        user_id=user_id,
+                                                                        select_price=select_price_object,
+                                                                        select_currency=select_currency_object,
+                                                                        select_measurement=select_measurement_object,
+                                                                        name=item['name'],
+                                                                        price_lower=item['lower_price'],
+                                                                        price_upper=item['upper_price'])
+                            object_services.append(object_service)
+                            object_service.save()
+                        else:
+                            object_service = UserService.objects.create(service_id=service_object,
+                                                                        user_id=user_id,
+                                                                        select_price=select_price_object,
+                                                                        select_currency=select_currency_object,
+                                                                        select_measurement=select_measurement_object,
+                                                                        name=item['name'],
+                                                                        price_lower=0,
+                                                                        price_upper=0)
+                            object_services.append(object_service)
+                            object_service.save()
+                    print(object_services)
+                    for i in object_services:
+                        print(i.id)
+                        object_announcement = Announcement.objects.create(user_id=user_id,
+                                                                          category_id=category_id,
+                                                                          subcategory_id=subcategory_id,
+                                                                          user_service_id=i,
+                                                                          name=name,
+                                                                          description=description,
+                                                                          photo_announcement=photo_announcement,
+                                                                          address=address)
+                        object_announcement.save()
                 return JsonResponse({'data': data}, status=200)
             return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
 

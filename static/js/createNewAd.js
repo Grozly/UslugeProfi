@@ -27,24 +27,21 @@ form.addEventListener("submit", (event) => {
 
     const fd = new FormData();
     fd.append("csrfmiddlewaretoken", csrf[0].value);
+    fd.append("user_id", userID.value);
     fd.append("name", adName.value);
     fd.append("description", adDescription.value);
-    fd.append("categoty", adCategoty.value);
     fd.append("image", adImageFile.files[0]);
+    fd.append("categoty", adCategoty.value);
     fd.append("subcategory", adSubcategory.value);
     fd.append("address", adAddress.value);
-    fd.append("user_id", userID.value);
 
     const optionsArray = [];
 
     const adOptions = document.querySelectorAll(".new_ad_options");
 
-    const name = document.querySelectorAll('input:checked');
-    console.log(name)
-
     adOptions.forEach((item, index) => {
-        const name = item.querySelectorAll('input:checked')[0].nextElementSibling.innerText;
-        console.log(name)
+        const name = item.querySelectorAll(".subcat_checkbox")[0].labels[0]
+            .innerText;
         const fixedPrice = item.getElementsByClassName("ads_input_fixed")[0];
         const lowerPrice = item.getElementsByClassName("ads_input_lower")[0];
         const upperPrice = item.getElementsByClassName("ads_input_upper")[0];
@@ -81,9 +78,9 @@ form.addEventListener("submit", (event) => {
                     optionsArray.push({
                         id: optionID,
                         name: name,
-                        select_price: adSelectPrice,
-                        select_currency: adSelectCurrency,
-                        select_measurement: adSelectMeasurement,
+                        select_price: adSelectPrice.value,
+                        select_currency: adSelectCurrency.value,
+                        select_measurement: adSelectMeasurement.value,
                     });
                     break;
 
@@ -93,9 +90,9 @@ form.addEventListener("submit", (event) => {
                         name: name,
                         lower_price: lowerPrice.value,
                         upper_price: upperPrice.value,
-                        select_price: adSelectPrice,
-                        select_currency: adSelectCurrency,
-                        select_measurement: adSelectMeasurement,
+                        select_price: adSelectPrice.value,
+                        select_currency: adSelectCurrency.value,
+                        select_measurement: adSelectMeasurement.value,
                     });
                     break;
 
@@ -110,7 +107,7 @@ form.addEventListener("submit", (event) => {
     $.ajax({
         type: "POST",
         url: "/create-ad/",
-        enctype: 'multipart/form-data',
+        enctype: "multipart/form-data",
         data: fd,
         success: function (response) {
             console.log(response);
@@ -175,7 +172,6 @@ adCategoty.addEventListener("change", (e) => {
 });
 
 adSubcategory.addEventListener("change", (e) => {
-
     const selectedSubcategory = e.target.value;
 
     $.ajax({
@@ -193,10 +189,11 @@ adSubcategory.addEventListener("change", (e) => {
                             <input
                                 class="subcat_checkbox"
                                 type="checkbox"
-                                name="option1"
+                                name="option_${item.id}"
                                 value="${item.is_active}"
+                                id="option_${item.id}"
                             />
-                            <label class="label_text">${item.name}</label><br/>
+                            <label class="label_text" for="option_${item.id}">${item.name}</label><br/>
                         </div>
                         <select id="select_price_${index}" size="1" name="subcategory" class="new_ad_price_category select_price">
                             <option disabled>Цена</option>
@@ -204,7 +201,6 @@ adSubcategory.addEventListener("change", (e) => {
                             <option value="2">Договорная</option>
                             <option value="3">Диапазон</option>
                         </select>
-
                         <div class="ads_input_flex">
                             <input
                                 id="new_ad_fixed_price_${index}"
@@ -243,25 +239,8 @@ adSubcategory.addEventListener("change", (e) => {
             });
 
             $(".new_ad_price_category").change(function (event) {
-                console.log(
-                    event.target.parentElement.getElementsByClassName(
-                        "ads_input_fixed"
-                    )[0]
-                );
-                console.log(
-                    event.target.parentElement.getElementsByClassName(
-                        "ads_input_lower"
-                    )[0]
-                );
-                console.log(
-                    event.target.parentElement.getElementsByClassName(
-                        "ads_input_upper"
-                    )[0]
-                );
-
                 switch (Number(event.target.value)) {
                     case 1:
-                        console.log("TEST 1");
                         event.target.parentElement.getElementsByClassName(
                             "ads_input_fixed"
                         )[0].style.display = "block";
@@ -273,7 +252,6 @@ adSubcategory.addEventListener("change", (e) => {
                         )[0].style.display = "none";
                         break;
                     case 2:
-                        console.log("TEST 2");
                         event.target.parentElement.getElementsByClassName(
                             "ads_input_fixed"
                         )[0].style.display = "none";
@@ -285,7 +263,6 @@ adSubcategory.addEventListener("change", (e) => {
                         )[0].style.display = "none";
                         break;
                     case 3:
-                        console.log("TEST 3");
                         event.target.parentElement.getElementsByClassName(
                             "ads_input_fixed"
                         )[0].style.display = "none";
@@ -297,9 +274,6 @@ adSubcategory.addEventListener("change", (e) => {
                         )[0].style.display = "block";
                         break;
                 }
-
-                console.log(event.target.value);
-                console.log(event);
             });
         },
         error: function (error) {

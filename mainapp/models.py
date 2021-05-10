@@ -137,9 +137,9 @@ class Announcement(models.Model):
     name = models.CharField(max_length=64, verbose_name='имя')
     description = models.TextField(verbose_name='описание', blank=True)
     photo_announcement = models.ImageField(upload_to='photos_announcement',
-                                      blank=True,
-                                      verbose_name='фото',
-                                      default='photo_announcement/default.png')
+                                           blank=True,
+                                           verbose_name='фото',
+                                           default='photo_announcement/default.png')
     address = models.CharField(max_length=80, verbose_name='Адрес', blank=True)
     is_active = models.BooleanField(verbose_name='активна', default=True)
     created_at = models.DateTimeField(auto_now_add=True)

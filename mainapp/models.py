@@ -47,6 +47,35 @@ class Service(models.Model):
         return self.name
 
 
+class Announcement(models.Model):
+    class Meta:
+        verbose_name = 'объявление'
+        verbose_name_plural = 'объявления'
+
+    user_id = models.ForeignKey('authapp.UslugeUser',
+                                verbose_name='автор',
+                                on_delete=models.CASCADE)
+    category_id = models.ForeignKey('Category',
+                                    verbose_name='категория',
+                                    on_delete=models.CASCADE)
+    subcategory_id = models.ForeignKey('SubCategory',
+                                       verbose_name='подкатегория',
+                                       on_delete=models.CASCADE)
+    name = models.CharField(max_length=64, verbose_name='имя')
+    description = models.TextField(verbose_name='описание', blank=True)
+    photo_announcement = models.ImageField(upload_to='photos_announcement',
+                                           blank=True,
+                                           verbose_name='фото',
+                                           default='photo_announcement/default.png')
+    address = models.CharField(max_length=80, verbose_name='Адрес', blank=True)
+    is_active = models.BooleanField(verbose_name='активна', default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
 class SelectPrice(models.Model):
     class Meta:
         verbose_name = 'Цена'
@@ -106,41 +135,12 @@ class UserService(models.Model):
                                            null=True,
                                            blank=True,
                                            on_delete=models.DO_NOTHING)
+    user_announcement_id = models.ForeignKey('Announcement',
+                                             verbose_name='объявление',
+                                             on_delete=models.CASCADE)
     name = models.CharField(verbose_name='название', max_length=64, unique=False)
     price_lower = models.DecimalField(max_digits=8, decimal_places=2, default=0.00, blank=True)
     price_upper = models.DecimalField(max_digits=8, decimal_places=2, default=0.00, blank=True)
-    is_active = models.BooleanField(verbose_name='активна', default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Announcement(models.Model):
-    class Meta:
-        verbose_name = 'объявление'
-        verbose_name_plural = 'объявления'
-
-    user_id = models.ForeignKey('authapp.UslugeUser',
-                                verbose_name='автор',
-                                on_delete=models.CASCADE)
-    category_id = models.ForeignKey('Category',
-                                    verbose_name='категория',
-                                    on_delete=models.CASCADE)
-    subcategory_id = models.ForeignKey('SubCategory',
-                                       verbose_name='подкатегория',
-                                       on_delete=models.CASCADE)
-    user_service_id = models.ForeignKey('UserService',
-                                        verbose_name='услуга',
-                                        on_delete=models.CASCADE)
-    name = models.CharField(max_length=64, verbose_name='имя')
-    description = models.TextField(verbose_name='описание', blank=True)
-    photo_announcement = models.ImageField(upload_to='photos_announcement',
-                                           blank=True,
-                                           verbose_name='фото',
-                                           default='photo_announcement/default.png')
-    address = models.CharField(max_length=80, verbose_name='Адрес', blank=True)
     is_active = models.BooleanField(verbose_name='активна', default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -29,12 +29,6 @@ class UpdateUserProfileView(UpdateView):
     def get_success_url(self):
         return reverse("auth:editprofile", args=(self.object.pk,))
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(UpdateUserProfileView, self).get_context_data(**kwargs)
-    #     context['form'] = EditProfileModelForm
-    #     context['pass'] = PasswordChangeForm
-    #     return context
-
 
 class PasswordChangeUserProfileView(PasswordChangeView):
     template_name = "authapp/uslugeprofile_update_form.html"

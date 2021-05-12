@@ -20,6 +20,9 @@ from .models import Announcement, SubCategory, Category, Service, SelectPrice, S
     UserService
 from .utils import account_activation_token
 from django.contrib import auth
+import datetime
+
+now = datetime.datetime.now()
 
 
 def get_json_category_data(request):
@@ -30,14 +33,12 @@ def get_json_category_data(request):
 def get_json_subcategory_data(request, *args, **kwargs):
     selected_category = kwargs.get('pk')
     object_subcategory = list(SubCategory.objects.filter(category_id=selected_category).values())
-    print(object_subcategory)
     return JsonResponse({'data': object_subcategory})
 
 
 def get_json_service_data(request, *args, **kwargs):
     selected_subcategory = kwargs.get('pk')
     object_service = list(Service.objects.filter(subcategory_id=selected_subcategory).values())
-    # print(object_service)
     return JsonResponse({'data': object_service})
 
 
@@ -78,7 +79,9 @@ class RegisterUserView(View):
         is_over18 = data['is_over18']
         print(email, password1, password2, is_agree, is_over18)
         if validate_email(email):
+            print('valid email 1')
             if not UslugeUser.objects.filter(email=email).exists():
+                print('valid email 2')
 
                 user = UslugeUser.objects.create_user(email=email, is_agree=is_agree, is_over18=is_over18)
                 user.set_password(password1)
@@ -180,82 +183,95 @@ class ApiCreateViewAd(View):
         return render(request, 'mainapp/announcement_form.html')
 
     def post(self, request):
-
         if request.is_ajax():
             if request.method == "POST":
-                data = request.POST
-                print(data)
                 user_id = UslugeUser.objects.only('id').get(id=request.POST.get('user_id'))
                 category_id = Category.objects.only('id').get(id=request.POST.get('categoty'))
                 subcategory_id = SubCategory.objects.only('id').get(id=request.POST.get('subcategory'))
-                user_service_object = UserService.objects.only('id').get(user_id=request.POST.get('user_id'))
                 user_services = request.POST.get('options')
-                user_services_id = json.loads(user_services)
-                for item in user_services_id:
-                    print(item['id'])
+                parse_user_services = json.loads(user_services)
                 name = request.POST.get('name')
                 description = request.POST.get('description')
                 photo_announcement = request.FILES.get('image')
                 address = request.POST.get('address')
-                if len(user_services_id) > 1:
-                    for item in user_services_id:
-                        if item['fixed_price']:
-                            service_object = Service.objects.only('id').get(id=item['id'])
-                            select_price_object = SelectPrice.objects.only('id').get(id=item['select_price'])
-                            select_currency_object = SelectCurrency.objects.only('id').get(id=item['select_currency'])
-                            select_measurement_object = SelectMeasurement.objects.only('id').\
-                                get(id=item['select_measurement'])
+                if len(parse_user_services) >= 1:
+                    object_announcement = Announcement.objects.create(user_id=user_id,
+                                                                      category_id=category_id,
+                                                                      subcategory_id=subcategory_id,
+                                                                      name=name,
+                                                                      description=description,
+                                                                      photo_announcement=photo_announcement,
+                                                                      address=address,
+                                                                      is_active=True)
+                    object_announcement.save()
+                    for item in parse_user_services:
+                        service_object = Service.objects.only('id').get(id=item['id'])
+                        select_price_object = SelectPrice.objects.only('id').get(id=item['select_price'])
+                        select_currency_object = SelectCurrency.objects.only('id').get(id=item['select_currency'])
+                        select_measurement_object = SelectMeasurement.objects.only('id'). \
+                            get(id=item['select_measurement'])
+                        if 'fixed_price' in item:
                             object_service = UserService.objects.create(service_id=service_object,
                                                                         user_id=user_id,
                                                                         select_price=select_price_object,
                                                                         select_currency=select_currency_object,
                                                                         select_measurement=select_measurement_object,
+                                                                        user_announcement_id=object_announcement,
                                                                         name=item['name'],
                                                                         price_lower=item['fixed_price'],
-                                                                        price_upper=0)
+                                                                        price_upper=0,
+                                                                        is_active=True)
                             object_service.save()
-                            Announcement.objects.create(user_id=user_id,
-                                                        category_id=category_id,
-                                                        subcategory_id=subcategory_id,
-                                                        user_service_id=user_service_object,
-                                                        name=name,
-                                                        description=description,
-                                                        photo_announcement=photo_announcement,
-                                                        address=address)
+                        elif 'upper_price' in item:
+                            object_service = UserService.objects.create(service_id=service_object,
+                                                                        user_id=user_id,
+                                                                        select_price=select_price_object,
+                                                                        select_currency=select_currency_object,
+                                                                        select_measurement=select_measurement_object,
+                                                                        user_announcement_id=object_announcement,
+                                                                        name=item['name'],
+                                                                        price_lower=item['lower_price'],
+                                                                        price_upper=item['upper_price'],
+                                                                        is_active=True)
+                            object_service.save()
+                        else:
+                            object_service = UserService.objects.create(service_id=service_object,
+                                                                        user_id=user_id,
+                                                                        select_price=select_price_object,
+                                                                        select_currency=select_currency_object,
+                                                                        select_measurement=select_measurement_object,
+                                                                        user_announcement_id=object_announcement,
+                                                                        name=item['name'],
+                                                                        price_lower=0,
+                                                                        price_upper=0,
+                                                                        is_active=True)
+                            object_service.save()
 
-                            return JsonResponse({'data': 'ok'}, status=200)
-                        return JsonResponse({'data': 'false, not fix_price'}, status=400)
-                return JsonResponse({'data': data}, status=200)
+                    return JsonResponse({'data': 'ok'}, status=200)
+                return JsonResponse({'error': 'no service selected'}, status=400)
             return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
+        return JsonResponse({'error': 'Not AJAX reqeust!'}, status=400)
 
 
 # class UpdateViewAd(UpdateView):
 #     model = Announcement
-#     second_model = UserService
 #     template_name = "mainapp/announcement_update_form.html"
-#     form_class = UpdateAdModelForm
-#     second_form_class = UpdateServiceAdModelForm
 #     is_update_view = True
 #
-#     def get_context_data(self, **kwargs):
-#         context = super(UpdateViewAd, self).get_context_data(**kwargs)
-#         context['active_client'] = True
-#         if 'form_ad' not in context:
-#             context['form_ad'] = self.form_class(self.request.GET)
-#         if 'form_service' not in context:
-#             context['form_service'] = self.second_form_class(self.request.GET)
-#         context['active_client'] = True
-#         return context
-#
-#     def get(self, request, *args, **kwargs):
-#         super(UpdateViewAd, self).get(request, *args, **kwargs)
-#         form_ad = self.form_class
-#         form_service = self.second_form_class
-#         return self.render_to_response(self.get_context_data(
-#             object=self.object,
-#             form_ad=form_ad,
-#             form_service=form_service)
-#         )
+#     def get_form(self, form_class=None):
+#         self.request = self.request.user.pk
+
+    # def get_context_data(self, pk, **kwargs):
+    #     context = super(UpdateViewAd, self).get_context_data(**kwargs)
+    #     context['second_model'] = UserService
+    #     context['form_ad'] = UpdateAdModelForm()
+    #     context['form_service'] = UpdateServiceAdModelForm()
+    #     context['announcement'] = Announcement.objects.filter(user_id=request.user.id)
+    #     context['user_service'] = UserService.objects.filter(user_announcement_id=request.announcement.pk)
+    #     context['category'] = Category.objects.all()
+    #     context['subcategory'] = SubCategory.objects.all()
+    #     return context
+
 
 class UpdateViewAd(View):
 
@@ -264,14 +280,18 @@ class UpdateViewAd(View):
         form_service = UpdateServiceAdModelForm()
         category = Category.objects.all()
         subcategory = SubCategory.objects.all()
-        user_service = UserService.objects.all()
-        announcement = Announcement.objects.all()
+        announcement = Announcement.objects.filter(user_id=request.user.id)
+        print(announcement)
+        for item in announcement:
+            print(item)
+            print(item.id)
+            user_services = UserService.objects.filter(user_announcement_id=item.id)
         context = {
             'form_ad': form_ad,
             'form_service': form_service,
             'category': category,
             'subcategory': subcategory,
-            'user_service': user_service,
+            'user_service': user_services,
             'announcement': announcement
         }
         return render(request, 'mainapp/announcement_update_form.html', context)

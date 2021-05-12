@@ -27,13 +27,13 @@ form.addEventListener("submit", (event) => {
 
     const fd = new FormData();
     fd.append("csrfmiddlewaretoken", csrf[0].value);
+    fd.append("user_id", userID.value);
     fd.append("name", adName.value);
     fd.append("description", adDescription.value);
-    fd.append("categoty", adCategoty.value);
     fd.append("image", adImageFile.files[0]);
+    fd.append("categoty", adCategoty.value);
     fd.append("subcategory", adSubcategory.value);
     fd.append("address", adAddress.value);
-    fd.append("user_id", userID.value);
 
     const optionsArray = [];
 
@@ -201,7 +201,6 @@ adSubcategory.addEventListener("change", (e) => {
                             <option value="2">Договорная</option>
                             <option value="3">Диапазон</option>
                         </select>
-
                         <div class="ads_input_flex">
                             <input
                                 id="new_ad_fixed_price_${index}"

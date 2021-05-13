@@ -40,8 +40,8 @@ form.addEventListener("submit", (event) => {
     const adOptions = document.querySelectorAll(".new_ad_options");
 
     adOptions.forEach((item, index) => {
-        const name = item.querySelectorAll(".subcat_checkbox")[0].labels[0]
-            .innerText;
+        const name =
+            item.querySelectorAll(".subcat_checkbox")[0].labels[0].innerText;
         const fixedPrice = item.getElementsByClassName("ads_input_fixed")[0];
         const lowerPrice = item.getElementsByClassName("ads_input_lower")[0];
         const upperPrice = item.getElementsByClassName("ads_input_upper")[0];
@@ -50,15 +50,11 @@ form.addEventListener("submit", (event) => {
         const priceSelector = item.getElementsByClassName(
             "new_ad_price_category"
         )[0];
-        const adSelectPrice = document.getElementsByClassName(
-            "select_price"
-        )[0];
-        const adSelectCurrency = document.getElementsByClassName(
-            "select_currency"
-        )[0];
-        const adSelectMeasurement = document.getElementsByClassName(
-            "select_measurement"
-        )[0];
+        const adSelectPrice = item.getElementsByClassName("select_price")[0];
+        const adSelectCurrency =
+            item.getElementsByClassName("select_currency")[0];
+        const adSelectMeasurement =
+            item.getElementsByClassName("select_measurement")[0];
 
         const optionID = item.getAttribute("data-id");
         if (checkbox.checked) {

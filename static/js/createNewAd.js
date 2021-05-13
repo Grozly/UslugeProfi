@@ -22,22 +22,38 @@ adImageFile.addEventListener("change", () => {
     imgBox.innerHTML = `<a href="${url}"><img src="${url}" height="250px"></a>`;
 });
 
+function validateForm() {
+    if (!adName.value) {
+        alert("Name not selected");
+        return false;
+    }
+
+    if (!adDescription.value) {
+        alert("Description not selected");
+        return false;
+    }
+
+    if (!adImageFile.files[0]) {
+        alert("Image not selected");
+        return false;
+    }
+
+    if (!adAddress.value) {
+        alert("Address not selected");
+        return false;
+    }
+
+    return true;
+}
+
 form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const fd = new FormData();
-    fd.append("csrfmiddlewaretoken", csrf[0].value);
-    fd.append("user_id", userID.value);
-    fd.append("name", adName.value);
-    fd.append("description", adDescription.value);
-    fd.append("image", adImageFile.files[0]);
-    fd.append("categoty", adCategoty.value);
-    fd.append("subcategory", adSubcategory.value);
-    fd.append("address", adAddress.value);
+    if (!validateForm()) return null;
 
     const optionsArray = [];
-
     const adOptions = document.querySelectorAll(".new_ad_options");
+    let isOptionsSelected = false;
 
     adOptions.forEach((item, index) => {
         const name =
@@ -46,7 +62,6 @@ form.addEventListener("submit", (event) => {
         const lowerPrice = item.getElementsByClassName("ads_input_lower")[0];
         const upperPrice = item.getElementsByClassName("ads_input_upper")[0];
         const checkbox = item.getElementsByClassName("subcat_checkbox")[0];
-
         const priceSelector = item.getElementsByClassName(
             "new_ad_price_category"
         )[0];
@@ -57,7 +72,10 @@ form.addEventListener("submit", (event) => {
             item.getElementsByClassName("select_measurement")[0];
 
         const optionID = item.getAttribute("data-id");
+
         if (checkbox.checked) {
+            isOptionsSelected = true;
+
             switch (Number(priceSelector.value)) {
                 case 1:
                     optionsArray.push({
@@ -98,6 +116,20 @@ form.addEventListener("submit", (event) => {
         }
     });
 
+    if (!isOptionsSelected) {
+        alert("Options not selected");
+        return null;
+    }
+
+    const fd = new FormData();
+    fd.append("csrfmiddlewaretoken", csrf[0].value);
+    fd.append("user_id", userID.value);
+    fd.append("name", adName.value);
+    fd.append("description", adDescription.value);
+    fd.append("image", adImageFile.files[0]);
+    fd.append("categoty", adCategoty.value);
+    fd.append("subcategory", adSubcategory.value);
+    fd.append("address", adAddress.value);
     fd.append("options", JSON.stringify(optionsArray));
 
     $.ajax({
@@ -106,7 +138,7 @@ form.addEventListener("submit", (event) => {
         enctype: "multipart/form-data",
         data: fd,
         success: function (response) {
-            console.log(response);
+            location.reload();
         },
         error: function (error) {
             console.log(error);

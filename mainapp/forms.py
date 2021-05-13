@@ -23,7 +23,6 @@ class CreateAdModelForm(forms.ModelForm):
                                                     'type': 'hidden'})
         self.fields['category_id'].widget.attrs.update({'placeholder': 'Категория'})
         self.fields['subcategory_id'].widget.attrs.update({'placeholder': 'Подкатегория'})
-        self.fields['user_service_id'].widget.attrs.update({'placeholder': 'Услуга'})
         self.fields['name'].widget.attrs.update({'placeholder': 'Название'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Описание'})
         self.fields['photo_announcement'].widget = forms.FileInput(attrs={
@@ -56,7 +55,7 @@ class UpdateServiceAdModelForm(forms.ModelForm):
 
     class Meta:
         model = UserService
-        fields = '__all__'
+        fields = ('is_active', 'name', 'select_price', 'price_lower', 'price_upper', 'select_currency', 'select_measurement')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

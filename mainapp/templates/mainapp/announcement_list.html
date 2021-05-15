@@ -1,0 +1,14 @@
+{% extends 'authapp/index.html' %}
+{% load static %}
+{% block listad %}
+    {% for ad  in object_list %}
+        <div class="tab">
+            <button class="tablinks" onclick="location.href = '{% url 'main:edit-announcement' ad.id %}'">Объявление {{ ad.name }}</button>
+        </div>
+    {% endfor %}
+
+
+        {% block editad %}
+        {% endblock %}
+
+{% endblock %}

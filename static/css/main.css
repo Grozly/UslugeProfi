@@ -1510,3 +1510,13 @@ select.form_input {
     height: 232px;
     border-radius: 100px;
 }
+
+.update_announcement_form {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-content: stretch;
+    align-items: stretch;
+    flex-direction: column;
+}
+

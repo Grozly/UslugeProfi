@@ -1,10 +1,11 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.views.generic.base import TemplateView, View
 import json
 import ast
+from django.forms import inlineformset_factory
 from django.http import JsonResponse, HttpResponseRedirect
 from validate_email import validate_email
 from django.contrib import messages
@@ -14,15 +15,11 @@ from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeEr
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse, reverse_lazy
-
-from .forms import CreateAdModelForm, UpdateServiceAdModelForm, UpdateAdModelForm
+from .forms import CreateAdModelForm, EditAdModelForm, EditUserServiceModelForm
 from .models import Announcement, SubCategory, Category, Service, SelectPrice, SelectCurrency, SelectMeasurement, \
     UserService
 from .utils import account_activation_token
 from django.contrib import auth
-import datetime
-
-now = datetime.datetime.now()
 
 
 def get_json_category_data(request):
@@ -110,6 +107,7 @@ class RegisterUserView(View):
 
 
 class VerificationView(View):
+
     def get(self, request, uidb64, token):
         try:
             id = force_text(urlsafe_base64_decode(uidb64))
@@ -129,7 +127,6 @@ class VerificationView(View):
 
         except Exception as ex:
             pass
-
         return redirect('main:main')
 
 
@@ -157,11 +154,10 @@ class LoginUserView(View):
 
 
 class LogoutUserView(LogoutView):
-
     template_name = 'mainapp/index.html'
 
 
-class CreateViewAd(View):
+class ApiCreateAdView(View):
 
     def get(self, request, pk):
         form = CreateAdModelForm(current_user=request.user)
@@ -175,12 +171,6 @@ class CreateViewAd(View):
             'service': service,
         }
         return render(request, 'mainapp/announcement_form.html', context)
-
-
-class ApiCreateViewAd(View):
-
-    def get(self, request):
-        return render(request, 'mainapp/announcement_form.html')
 
     def post(self, request):
         if request.is_ajax():
@@ -246,11 +236,86 @@ class ApiCreateViewAd(View):
                                                                         price_upper=0,
                                                                         is_active=True)
                             object_service.save()
-
-                    return JsonResponse({'data': 'ok'}, status=200)
+                    return HttpResponseRedirect(reverse('main:main'))
                 return JsonResponse({'error': 'no service selected'}, status=400)
             return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
         return JsonResponse({'error': 'Not AJAX reqeust!'}, status=400)
+
+
+class AnnouncementListView(ListView):
+
+    model = Announcement
+
+    def get_queryset(self):
+        return Announcement.objects.filter(user_id=self.request.user.id)
+
+
+class UpdateAnnouncementView(UpdateView):
+
+    model = Announcement
+    template_name = "mainapp/announcement_update_form.html"
+    form_class = EditAdModelForm
+    is_update_view = True
+    success_url = reverse_lazy('mainapp:announcements')
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateAnnouncementView, self).get_context_data(**kwargs)
+        announcement_formset = inlineformset_factory(Announcement, UserService, form=EditUserServiceModelForm, extra=1)
+        if self.request.POST:
+            formset = announcement_formset(self.request.POST)
+        else:
+            services = UserService.get_services_in_announcement(self.request.resolver_match.kwargs['pk'])
+            if len(services):
+                announcement_formset = inlineformset_factory(Announcement, UserService, form=EditUserServiceModelForm,
+                                                             extra=len(services))
+                formset = announcement_formset()
+                for num, form in enumerate(formset.forms):
+                    form.initial['is_active'] = services[num].is_active
+                    form.initial['name'] = services[num].name
+                    form.initial['select_price'] = services[num].select_price
+                    form.initial['price_lower'] = services[num].price_lower
+                    form.initial['price_upper'] = services[num].price_upper
+                    form.initial['select_currency'] = services[num].select_currency
+                    form.initial['select_measurement'] = services[num].select_measurement
+            else:
+                formset = announcement_formset()
+
+        context['user_services'] = formset
+        context['announcement'] = Announcement.objects.get(id=self.kwargs['pk'])
+        return context
+
+
+# class UpdateAnnouncementView(UpdateView):
+#     model = Announcement
+#     template_name = "mainapp/announcement_update_form.html"
+#     form_class = EditAdModelForm
+#     second_form_class = EditUserServiceModelForm
+#     is_update_view = True
+#
+#     def get_form_class(self):
+#         """Return the form class to use."""
+#         return self.form_class
+#
+#     def get_second_form_class(self):
+#         """Return the form class to use."""
+#         return self.second_form_class
+#
+#     def get_form(self, form_class=None, second_form_class=None):
+#         """Return an instance of the form to be used in this view."""
+#         if form_class is None:
+#             form_class = self.get_form_class()
+#         if second_form_class is None:
+#             second_form_class = self.get_second_form_class()
+#         print(form_class, second_form_class)
+#         return [form_class(**self.get_form_kwargs()), second_form_class(**self.get_form_kwargs())]
+#
+#     def get_context_data(self, **kwargs):
+#         """Insert the form into the context dict."""
+#         if 'form' not in kwargs:
+#             kwargs['form'] = self.get_form()
+#         if 'form2' not in kwargs:
+#             kwargs['form2'] = self.get_form()
+#         return super().get_context_data(**kwargs)
 
 
 # class UpdateViewAd(UpdateView):
@@ -260,38 +325,38 @@ class ApiCreateViewAd(View):
 #
 #     def get_form(self, form_class=None):
 #         self.request = self.request.user.pk
+#
+#     def get_context_data(self, pk, **kwargs):
+#         context = super(UpdateViewAd, self).get_context_data(**kwargs)
+#         context['second_model'] = UserService
+#         context['form_ad'] = UpdateAdModelForm()
+#         context['form_service'] = UpdateServiceAdModelForm()
+#         context['announcement'] = Announcement.objects.filter(user_id=request.user.id)
+#         context['user_service'] = UserService.objects.filter(user_announcement_id=request.announcement.pk)
+#         context['category'] = Category.objects.all()
+#         context['subcategory'] = SubCategory.objects.all()
+#         return context
 
-    # def get_context_data(self, pk, **kwargs):
-    #     context = super(UpdateViewAd, self).get_context_data(**kwargs)
-    #     context['second_model'] = UserService
-    #     context['form_ad'] = UpdateAdModelForm()
-    #     context['form_service'] = UpdateServiceAdModelForm()
-    #     context['announcement'] = Announcement.objects.filter(user_id=request.user.id)
-    #     context['user_service'] = UserService.objects.filter(user_announcement_id=request.announcement.pk)
-    #     context['category'] = Category.objects.all()
-    #     context['subcategory'] = SubCategory.objects.all()
-    #     return context
 
-
-class UpdateViewAd(View):
-
-    def get(self, request, pk):
-        form_ad = UpdateAdModelForm()
-        form_service = UpdateServiceAdModelForm()
-        category = Category.objects.all()
-        subcategory = SubCategory.objects.all()
-        announcement = Announcement.objects.filter(user_id=request.user.id)
-        print(announcement)
-        for item in announcement:
-            print(item)
-            print(item.id)
-            user_services = UserService.objects.filter(user_announcement_id=item.id)
-        context = {
-            'form_ad': form_ad,
-            'form_service': form_service,
-            'category': category,
-            'subcategory': subcategory,
-            'user_service': user_services,
-            'announcement': announcement
-        }
-        return render(request, 'mainapp/announcement_update_form.html', context)
+# class UpdateViewAd(View):
+#
+#     def get(self, request, pk):
+#         form_ad = UpdateAdModelForm()
+#         form_service = UpdateServiceAdModelForm()
+#         category = Category.objects.all()
+#         subcategory = SubCategory.objects.all()
+#         announcement = Announcement.objects.filter(user_id=request.user.id)
+#         print(announcement)
+#         for item in announcement:
+#             print(item)
+#             print(item.id)
+#             user_services = UserService.objects.filter(user_announcement_id=item.id)
+#         context = {
+#             'form_ad': form_ad,
+#             'form_service': form_service,
+#             'category': category,
+#             'subcategory': subcategory,
+#             'user_service': user_services,
+#             'announcement': announcement
+#         }
+#         return render(request, 'mainapp/announcement_update_form.html', context)

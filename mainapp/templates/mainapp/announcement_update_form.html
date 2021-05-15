@@ -1,93 +1,164 @@
-{% extends 'authapp/index.html' %}
+{% extends 'mainapp/announcement_list.html' %}
 {% load static %}
-{% block updatead %}
-<!--<div id="Мои объявления" class="tabcontent" style="display:block;">-->
-<!--    <div class="tab">-->
-<!--        {% for service in user_service%}-->
-<!--        	<button class="tablinks" onclick="openCity(event, '{{ service.name }}')">Объявление {{ service.name }}</button>-->
-<!--		{% endfor %}-->
-<!--    </div>-->
-<!--</div>-->
-{% for ad in announcement %}
-<div class="tab">
-	<button class="tablinks" onclick="openCity(event, '{{ ad.name }}')">Объявление {{ ad.name }}</button>
-</div>
-<div id="{{ ad.name }}" class="tabcontent">
-	<h3 class="adv_title">{{ ad.name }}</h3>
-	<div class="my_ads">
-		<select size="1" name="category">
-			<option disabled>Категория</option>
-			<option value="1">Ремонт</option>
-			<option selected value="2">Строительство</option>
-			<option value="3">Разработка</option>
-		</select>
-		<select size="1" name="subcategory" class="new_ad_price_category">
-			<option disabled>Подкатегория</option>
-			<option value="1">Ремонт</option>
-			<option selected value="2">Строительство</option>
-			<option value="3">Разработка</option>
-		</select>
-		<p>Активно с <span class="adv_end">{{ ad.updated_at }}</span></p>
-	</div>
-	<div class="ads_review">
-		<p class="catalog_rate">
+{% block editad %}
+	<div id="announcement.name" class="tabcontent" style="display: block;">
+	<h3 class="adv_title">{{ announcement.name }}</h3>
+		<div class="my_ads">
+			<select size="1" id="select_category" name="category">
+				<option selected disabled="True">
+				-- Выберите категорию --
+				</option>
+			</select>
+			<select size="1" id="select_subcategory" name="subcategory">
+				<option selected disabled="True" id="subcategory_text">
+				-- Выберите подкатегорию --
+				</option>
+			</select>
+			<p>Активно с <span class="adv_end">{{ announcement.created_at }}</span></p>
+		</div>
+		<div class="ads_review">
+			<p class="catalog_rate">
 			<span class="fa fa-star checked"></span>
 			<span class="fa fa-star checked"></span>
 			<span class="fa fa-star checked"></span>
 			<span class="fa fa-star checked"></span>
 			<span class="fa fa-star"></span>
-		</p>
-		<p class="catalog_com">
-			12 комментариев
-		</p>
-		<p class="bold">
-			72 просмотра
-		</p>
-	</div>
-	{% for service in user_service %}
-		<div class="ads_options">
-			<div>
-				{{ form_service.is_active }}
-<!--				<input class="subcat_checkbox" type="checkbox" name="option1" value="a1">-->
-				{{ service.name }}<br>
-			</div>
-			{{ form_service.select_price }}
-<!--			<select size="1" name="subcategory" class="new_ad_price_category">-->
-<!--				<option disabled>Цена</option>-->
-<!--				<option selected value="1">Цена</option>-->
-<!--				<option value="2">Договорная</option>-->
-<!--				<option value="3">Диапазон</option>-->
-<!--			</select>-->
-			{% if form_service.select_price.id == 1 %}
-				<div class="ads_input_flex">
-					{{ from_service.price_lower }}
-				</div>
-			{% endif %}
-			{% if form_service.select_price.id == 2 %}
-				<div class="ads_input_flex">
-					{{ from_service.price_lower }}
-					{{ from_service.price_upper }}
-				</div>
-			{% endif %}
-			{% if form_service.select_price.id == 3 %}
-				<div class="ads_input_flex">
-					Договорная
-				</div>
-			{% endif %}
-<!--			<div class="ads_input_flex">-->
-<!--				<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">-->
-<!--				{{ from_service.price_lower }}-->
-<!--				<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">-->
-<!--				{{ from_service.price_upper }}-->
-<!--				<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">-->
-<!--			</div>-->
-			{{ form_service.select_currency }}
-			{{ form_service.select_measurement }}
+			</p>
+			<p class="catalog_com">0 комментариев</p>
+			<p class="bold">0 просмотра</p>
 		</div>
-	{% endfor %}
-	{{ form_ad.name }}
+		<form method="post"
+			  action="{% url 'mainapp:edit-announcement' announcement.id %}"
+			  class="update_announcement_form"
+			  enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ user_services.management_form }}
+			{% for form in user_services.forms %}
+				<div class="ads_options">
+					<div>
+					{{ form.is_active }}{{ form.name.value }}<br>
+					</div>
+					{{ form.select_price }}
+					{% if form.select_price.value == 1 %}
+						{{ form.price_lower }}
+					{% endif %}
+					{% if form.select_price.value == 2 %}
+						<h4>Договорная</h4>
+					{% endif %}
+					{% if form.select_price.value == 3 %}
+						{{ form.price_lower }}
+						{{ form.price_upper }}
+					{% endif %}
+					{{ form.select_currency }}
+					{{ form.select_measurement }}
+				</div>
+			{% endfor %}
+			{{ form.name }}
+			{{ form.description }}
+			{{ form.photo_announcement }}
+			<input class="blue_btn form_btn com_form-btn" type="submit" value="Сохранить">
+		</form>
+	</div>
+{% endblock %}
+<!--<div id="Объявление 1" class="tabcontent">-->
+<!--	<h3 class="adv_title">Объявление 1</h3>-->
+<!--	<div class="my_ads">-->
+<!--	  	<select size="1" name="category">-->
+<!--			<option disabled>Категория</option>-->
+<!--			<option value="1">Ремонт</option>-->
+<!--			<option selected value="2">Строительство</option>-->
+<!--			<option value="3">Разработка</option>-->
+<!--	   	</select>-->
+<!--		<select size="1" name="subcategory">-->
+<!--			<option disabled>Подкатегория</option>-->
+<!--			<option value="1">Ремонт</option>-->
+<!--			<option selected value="2">Строительство</option>-->
+<!--			<option value="3">Разработка</option>-->
+<!--	   </select>-->
+<!--	   <p>Активно с <span class="adv_end">31.02.21</span></p>-->
+<!--	</div>-->
+<!--	<div class="ads_review">-->
+<!--		<p class="catalog_rate">-->
+<!--			<span class="fa fa-star checked"></span>-->
+<!--			<span class="fa fa-star checked"></span>-->
+<!--			<span class="fa fa-star checked"></span>-->
+<!--			<span class="fa fa-star checked"></span>-->
+<!--			<span class="fa fa-star"></span>-->
+<!--		</p>-->
+<!--		<p class="catalog_com">-->
+<!--				12 комментариев-->
+<!--		</p>-->
+<!--		<p class="bold">-->
+<!--			72 просмотра-->
+<!--		</p>-->
+<!--	</div>-->
+<!--	<div class="ads_options">-->
+<!--		<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>-->
+<!--		<select size="1" name="subcategory">-->
+<!--			<option disabled>Цена</option>-->
+<!--			<option value="1">Цена</option>-->
+<!--			<option selected value="2">Договорная</option>-->
+<!--			<option value="3">Диапазон</option>-->
+<!--	   </select>-->
+<!--	   <input type="text" class="ads_input" placeholder="Цена">-->
+<!--	   <input type="text" class="ads_input" placeholder="Цена">-->
+<!--	   <select size="1" name="subcategory">-->
+<!--			<option disabled>Валюта</option>-->
+<!--			<option value="1">дин</option>-->
+<!--			<option selected value="2">руб</option>-->
+<!--			<option value="3">доллар</option>-->
+<!--	   </select>-->
+<!--	   <select size="1" name="subcategory">-->
+<!--			<option value="1">шт</option>-->
+<!--			<option selected value="2">м2</option>-->
+<!--			<option value="3">кг</option>-->
+<!--	   </select>-->
+<!--	</div>-->
+<!--	<div class="ads_options">-->
+<!--		<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>-->
+<!--		<select size="1" name="subcategory">-->
+<!--			<option disabled>Цена</option>-->
+<!--			<option value="1">Цена</option>-->
+<!--			<option selected value="2">Договорная</option>-->
+<!--			<option value="3">Диапазон</option>-->
+<!--	   </select>-->
+<!--	   <input type="text" class="ads_input" placeholder="Цена">-->
+<!--	   <input type="text" class="ads_input" placeholder="Цена">-->
+<!--	   <select size="1" name="subcategory">-->
+<!--			<option disabled>Валюта</option>-->
+<!--			<option value="1">дин</option>-->
+<!--			<option selected value="2">руб</option>-->
+<!--			<option value="3">доллар</option>-->
+<!--	   </select>-->
+<!--	   <select size="1" name="subcategory">-->
+<!--			<option value="1">шт</option>-->
+<!--			<option selected value="2">м2</option>-->
+<!--			<option value="3">кг</option>-->
+<!--	   </select>-->
+<!--	</div>-->
+<!--	<div class="ads_options">-->
+<!--		<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>-->
+<!--		<select size="1" name="subcategory">-->
+<!--			<option disabled>Цена</option>-->
+<!--			<option value="1">Цена</option>-->
+<!--			<option selected value="2">Договорная</option>-->
+<!--			<option value="3">Диапазон</option>-->
+<!--	   </select>-->
+<!--	   <input type="text" class="ads_input" placeholder="Цена">-->
+<!--	   <input type="text" class="ads_input" placeholder="Цена">-->
+<!--	   <select size="1" name="subcategory">-->
+<!--			<option disabled>Валюта</option>-->
+<!--			<option value="1">дин</option>-->
+<!--			<option selected value="2">руб</option>-->
+<!--			<option value="3">доллар</option>-->
+<!--	   </select>-->
+<!--	   <select size="1" name="subcategory">-->
+<!--			<option value="1">шт</option>-->
+<!--			<option selected value="2">м2</option>-->
+<!--			<option value="3">кг</option>-->
+<!--	   </select>-->
+<!--	</div>-->
 <!--	<input type="text" style="width: 100%; margin-top: 30px;" class="ads_input" placeholder="Название">-->
-	{{ form_ad.description }}
 <!--	<textarea style="width: 100%; margin-top: 30px;" class="ads_input">Описание</textarea>-->
 <!--	<div class="ads_options">-->
 <!--		<input type="file" name="f">-->
@@ -96,7 +167,100 @@
 <!--		<input type="file" name="f">-->
 <!--		<input type="file" name="f">-->
 <!--	</div>-->
-	<input class="blue_btn form_btn com_form-btn" type="submit" value="Сохранить">
-</div>
-{% endfor %}
-{% endblock %}
+<!--	<input class="blue_btn form_btn com_form-btn" type="submit" value="Сохранить">-->
+
+
+
+<!--	</div>-->
+<!--{% for ad in announcement %}-->
+<!--<div class="tab">-->
+<!--	<button class="tablinks" onclick="openCity(event, '{{ ad.name }}')">Объявление {{ ad.name }}</button>-->
+<!--</div>-->
+<!--<div id="{{ ad.name }}" class="tabcontent">-->
+<!--	<h3 class="adv_title">{{ ad.name }}</h3>-->
+<!--	<div class="my_ads">-->
+<!--		<select size="1" name="category">-->
+<!--			<option disabled>Категория</option>-->
+<!--			<option value="1">Ремонт</option>-->
+<!--			<option selected value="2">Строительство</option>-->
+<!--			<option value="3">Разработка</option>-->
+<!--		</select>-->
+<!--		<select size="1" name="subcategory" class="new_ad_price_category">-->
+<!--			<option disabled>Подкатегория</option>-->
+<!--			<option value="1">Ремонт</option>-->
+<!--			<option selected value="2">Строительство</option>-->
+<!--			<option value="3">Разработка</option>-->
+<!--		</select>-->
+<!--		<p>Активно с <span class="adv_end">{{ ad.updated_at }}</span></p>-->
+<!--	</div>-->
+<!--	<div class="ads_review">-->
+<!--		<p class="catalog_rate">-->
+<!--			<span class="fa fa-star checked"></span>-->
+<!--			<span class="fa fa-star checked"></span>-->
+<!--			<span class="fa fa-star checked"></span>-->
+<!--			<span class="fa fa-star checked"></span>-->
+<!--			<span class="fa fa-star"></span>-->
+<!--		</p>-->
+<!--		<p class="catalog_com">-->
+<!--			12 комментариев-->
+<!--		</p>-->
+<!--		<p class="bold">-->
+<!--			72 просмотра-->
+<!--		</p>-->
+<!--	</div>-->
+<!--&lt;!&ndash;	{% for service in user_service %}&ndash;&gt;-->
+<!--&lt;!&ndash;		<div class="ads_options">&ndash;&gt;-->
+<!--&lt;!&ndash;			<div>&ndash;&gt;-->
+<!--&lt;!&ndash;				{{ form_service.is_active }}&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				<input class="subcat_checkbox" type="checkbox" name="option1" value="a1">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;				{{ service.name }}<br>&ndash;&gt;-->
+<!--&lt;!&ndash;			</div>&ndash;&gt;-->
+<!--&lt;!&ndash;			{{ form_service.select_price }}&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;			<select size="1" name="subcategory" class="new_ad_price_category">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				<option disabled>Цена</option>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				<option selected value="1">Цена</option>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				<option value="2">Договорная</option>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				<option value="3">Диапазон</option>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;			</select>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;			{% if form_service.select_price.id == 1 %}&ndash;&gt;-->
+<!--&lt;!&ndash;				<div class="ads_input_flex">&ndash;&gt;-->
+<!--&lt;!&ndash;					{{ from_service.price_lower }}&ndash;&gt;-->
+<!--&lt;!&ndash;				</div>&ndash;&gt;-->
+<!--&lt;!&ndash;			{% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;			{% if form_service.select_price.id == 2 %}&ndash;&gt;-->
+<!--&lt;!&ndash;				<div class="ads_input_flex">&ndash;&gt;-->
+<!--&lt;!&ndash;					{{ from_service.price_lower }}&ndash;&gt;-->
+<!--&lt;!&ndash;					{{ from_service.price_upper }}&ndash;&gt;-->
+<!--&lt;!&ndash;				</div>&ndash;&gt;-->
+<!--&lt;!&ndash;			{% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;			{% if form_service.select_price.id == 3 %}&ndash;&gt;-->
+<!--&lt;!&ndash;				<div class="ads_input_flex">&ndash;&gt;-->
+<!--&lt;!&ndash;					Договорная&ndash;&gt;-->
+<!--&lt;!&ndash;				</div>&ndash;&gt;-->
+<!--&lt;!&ndash;			{% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;			<div class="ads_input_flex">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				<input type="text" class="ads_input ads_input_fixed" placeholder="Цена" style="display:block">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				{{ from_service.price_lower }}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				<input type="text" class="ads_input ads_input_lower" placeholder="Цена от" style="display:none">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				{{ from_service.price_upper }}&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;				<input type="text" class="ads_input ads_input_upper" placeholder="Цена до" style="display:none">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;			</div>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;			{{ form_service.select_currency }}&ndash;&gt;-->
+<!--&lt;!&ndash;			{{ form_service.select_measurement }}&ndash;&gt;-->
+<!--&lt;!&ndash;		</div>&ndash;&gt;-->
+<!--&lt;!&ndash;	{% endfor %}&ndash;&gt;-->
+<!--	{{ form_ad.name }}-->
+<!--&lt;!&ndash;	<input type="text" style="width: 100%; margin-top: 30px;" class="ads_input" placeholder="Название">&ndash;&gt;-->
+<!--	{{ form_ad.description }}-->
+<!--&lt;!&ndash;	<textarea style="width: 100%; margin-top: 30px;" class="ads_input">Описание</textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;	<div class="ads_options">&ndash;&gt;-->
+<!--&lt;!&ndash;		<input type="file" name="f">&ndash;&gt;-->
+<!--&lt;!&ndash;		<input type="file" name="f">&ndash;&gt;-->
+<!--&lt;!&ndash;		<input type="file" name="f">&ndash;&gt;-->
+<!--&lt;!&ndash;		<input type="file" name="f">&ndash;&gt;-->
+<!--&lt;!&ndash;		<input type="file" name="f">&ndash;&gt;-->
+<!--&lt;!&ndash;	</div>&ndash;&gt;-->
+<!--	<input class="blue_btn form_btn com_form-btn" type="submit" value="Сохранить">-->
+<!--</div>-->
+<!--{% endfor %}-->
+

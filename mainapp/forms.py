@@ -31,39 +31,48 @@ class CreateAdModelForm(forms.ModelForm):
         self.fields['address'].widget.attrs.update({'placeholder': 'Адрес'})
 
 
-class UpdateAdModelForm(forms.ModelForm):
-
+class EditAdModelForm(forms.ModelForm):
     class Meta:
         model = Announcement
-        fields = ('name', 'description')
+        fields = ('name', 'description', 'photo_announcement')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # user = UslugeUser.objects.get(email=current_user)
-        # user_pk = user.pk
-        # self.fields['user_id'].initial = user_pk
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'ads_input'
             field.help_text = ''
             field.label = ''
 
-        self.fields['name'].widget.attrs.update({'style': 'width: 100%; margin-top: 30px;'})
-        self.fields['description'].widget.attrs.update({'style': 'width: 100%; margin-top: 30px;'})
+        self.fields['name'].widget.attrs.update({'style': 'width: 100%; margin-top: 30px;',
+                                                 'placeholder': 'Название'})
+        self.fields['description'].widget.attrs.update({'style': 'width: 100%; margin-top: 30px;',
+                                                        'placeholder': 'Описание'})
+        self.fields['photo_announcement'].widget = forms.FileInput(attrs={
+            'class': 'ads_input'
+        })
 
 
-class UpdateServiceAdModelForm(forms.ModelForm):
-
+class EditUserServiceModelForm(forms.ModelForm):
     class Meta:
         model = UserService
-        fields = ('is_active', 'name', 'select_price', 'price_lower', 'price_upper', 'select_currency', 'select_measurement')
+        fields = ('is_active',
+                  'name',
+                  'select_price',
+                  'price_lower',
+                  'price_upper',
+                  'select_currency',
+                  'select_measurement')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # for field_name, field in self.fields.items():
+            # field.widget.attrs['class'] = 'ads_options'
+            # field.help_text = ''
+            # field.label = ''
 
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'ads_options'
-            field.help_text = ''
-            field.label = ''
-
+        self.fields['is_active'].widget.attrs['class'] = 'subcat_checkbox'
+        self.fields['name'].widget.attrs['type'] = 'text'
+        self.fields['price_lower'].widget.attrs['class'] = 'ads_input'
+        self.fields['price_upper'].widget.attrs['class'] = 'ads_input'
         self.fields['price_lower'].widget.attrs.update({'placeholder': 'Цена от'})
         self.fields['price_upper'].widget.attrs.update({'placeholder': 'Цена до'})

@@ -147,3 +147,8 @@ class UserService(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def get_services_in_announcement(announcement):
+        return UserService.objects.filter(user_announcement_id=announcement).order_by('created_at')
+

@@ -1,12 +1,14 @@
-const imgBox = document.getElementById("imgBox");
-const form = document.getElementById("create_new_ad_from");
-const adName = document.getElementById("id_name");
-const adDescription = document.getElementById("id_description");
-const adCategoty = document.querySelector("#select_category");
-const adSubcategory = document.querySelector("#select_subcategory");
-const subcategoryText = document.getElementById("subcategory_text");
-const adAddress = document.getElementById("id_address");
-const adImageFile = document.getElementById("id_photo_announcement");
+const form = document.getElementsByClassName("create_new_ad_from")[0];
+const adName = document.getElementsByClassName("ad_name"[0]);
+const adDescription = document.getElementsByClassName("ad_description")[0];
+const adCategoty = document.getElementsByClassName("ad_category")[0];
+const adSubcategory = document.getElementsByClassName("ad_subcategory")[0];
+const subcategoryText = document.getElementsByClassName(
+    "ad_subcategory_text"
+)[0];
+const adAddress = document.getElementsByClassName("ad_address")[0];
+const adImageBox = document.getElementsByClassName("ad_image")[0];
+const adImageFile = document.getElementsByClassName("ad_photo_announcement")[0];
 const userID = document.getElementsByName("user_id")[0];
 const csrf = document.getElementsByName("csrfmiddlewaretoken");
 
@@ -19,7 +21,7 @@ $.ajaxSetup({
 adImageFile.addEventListener("change", () => {
     const image_data = adImageFile.files[0];
     const url = URL.createObjectURL(image_data);
-    imgBox.innerHTML = `<a href="${url}"><img src="${url}" height="250px"></a>`;
+    adImageBox.innerHTML = `<a href="${url}"><img src="${url}" height="250px"></a>`;
 });
 
 function validateForm() {

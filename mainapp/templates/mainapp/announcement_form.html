@@ -3,9 +3,8 @@
 <form
     method="post"
     action="{% url 'main:create-ad' %}"
-    class="login_form flex_form"
+    class="login_form flex_form create_new_ad_from"
     enctype="multipart/form-data"
-    id="create_new_ad_from"
     novalidate
 >
     {% csrf_token %}
@@ -13,15 +12,15 @@
     <div class="user_profile_select">{{ form.user_id }}</div>
     {{ form.name }}
     {{ form.description }}
-    <div id="imgBox"></div>
+    <div class="ad_image"></div>
     {{ form.photo_announcement }}
-    <select id="select_category" class="form_input">
+    <select class="form_input ad_category">
         <option selected disabled="True">
             -- Выберите категорию --
         </option>
     </select>
-    <select id="select_subcategory" class="form_input">
-        <option selected disabled="True" id="subcategory_text">
+    <select class="form_input ad_subcategory">
+        <option selected disabled="True" class="ad_subcategory_text">
             -- Выберите подкатегорию --
         </option>
     </select>

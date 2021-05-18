@@ -341,10 +341,18 @@ select {
 }
 
 .header__search_form {
+    flex-grow: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
     background: #004da8;
     padding: 18px 35px;
-    display: block;
-    width: 70%;
+    margin-bottom: 20px;
+    /* width: 70%; */
+}
+
+.header__links {
+    margin-bottom: 12px;
 }
 
 .search_input {
@@ -1189,6 +1197,10 @@ select.form_input {
         display: none;
     }
 
+    .header__search_form {
+        display: none;
+    }
+
     .only_mobile {
         display: block;
     }
@@ -1210,10 +1222,6 @@ select.form_input {
 
     .top {
         margin-top: 30px;
-    }
-
-    .header__search_form {
-        width: 95%;
     }
 
     .page_body {
@@ -1326,7 +1334,6 @@ select.form_input {
 
     .search_mob {
         margin-top: 20px;
-        width: 95%;
         display: flex;
         padding: 10px;
     }

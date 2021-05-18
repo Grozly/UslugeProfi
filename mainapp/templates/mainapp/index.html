@@ -72,68 +72,6 @@
             class="favorites_icon">Избранное
         </a>
     </div>
-    <div class="header__bottom">
-        <div class="header__links">
-            <div class="login__links">
-                {% if user.is_authenticated %} {% if user.is_superuser %}
-                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                <a href="{% url 'admin:index' %}" class="signup"
-                    >Админ панель</a
-                >
-                <a
-                    href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-                    class="signup"
-                    >Личный кабинет</a
-                >
-                {% else %}
-                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                <a
-                    href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-                    class="signup"
-                    >{{ user }}</a
-                >
-                {% endif %} {% else %}
-                <a href="#" class="login myLinkModal">Войти</a> |
-                <a href="#" class="signup myLinkModal1">Регистрация</a>
-                {% endif %}
-            </div>
-            <div class="ad_block">
-                {% if user.is_authenticated %} {% if user.is_superuser %}
-                <a href="{% url 'admin:index' %}" class="advetisement">
-                    Админка
-                </a>
-                <a
-                    href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-                    class="signup"
-                    >Личный кабинет</a
-                >
-                {% else %}
-                <a
-                    href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-                    class="advetisement"
-                >
-                    Личный кабинет
-                </a>
-                {% endif %} {% else %}
-                <a
-                    href="{% url 'main:main' %}"
-                    class="advetisement myLinkModal"
-                >
-                    Личный кабинет
-                </a>
-                {% endif %}
-            </div>
-        </div>
-        <form class="header__search_form">
-            <input
-                class="search_input"
-                type="search"
-                name="search"
-                placeholder="Поиск по объявлениям"
-            />
-            <input class="white_btn" type="submit" value="Искать" />
-        </form>
-    </div>
     <form class="header__search_form search_mob only_mobile">
         <input
             class="search_input"

@@ -242,6 +242,10 @@
 
 /*Header*/
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: "Gilroy", sans-serif;
     font-size: 18px;
@@ -385,8 +389,12 @@ select {
     font-family: "Gilroy", sans-serif;
     background: none;
     font-size: 18px;
-    margin-top: 12px;
+    margin-bottom: 12px;
     cursor: pointer;
+}
+
+.filter_attr:last-child {
+    margin-bottom: 0;
 }
 
 .filter_attr:hover {
@@ -400,13 +408,16 @@ select {
 }
 
 .sidebar {
-    width: 15%;
+    min-width: 150px;
+    width: 20%;
+    flex-shrink: 0;
+    margin-right: 20px;
 }
 
 /*Main page*/
 
 .page_body {
-    width: 75%;
+    flex-grow: 1;
 }
 
 /*Фильтр основной*/
@@ -444,6 +455,7 @@ select {
     font-size: 18px;
     padding: 10px 65px;
     cursor: pointer;
+    display: block;
 }
 
 .blue_btn:hover {
@@ -454,24 +466,50 @@ select {
 /*Товары и подкатегории*/
 
 .catalog__block {
-    margin-top: 70px;
+    margin-top: 20px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
 }
 
 .main_catalog {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    width: 80%;
+    display: grid;
+    row-gap: 10px;
+    column-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    align-items: stretch;
+    flex-grow: 1;
+    margin: 0 0 20px;
 }
 
-.catalog_item {
+/* .catalog_item {
     width: 40%;
     margin-right: 30px;
     margin-top: 30px;
+} */
+
+.subcategory_filter {
+    width: 20%;
+    margin-left: 20px;
+    flex-shrink: 0;
+}
+
+.catalog_link {
+    display: block;
+}
+
+.catalog_link_image_wrapper {
+    width: 100%;
+    /* padding-bottom: 100%; */
+    position: relative;
+    overflow: hidden;
+}
+
+.catalog_link_image_wrapper .catalog_img {
+    /* position: absolute;
+    min-width: 100%;
+    min-height: 100%; */
+    width: 100%;
 }
 
 .catalog_title {
@@ -512,6 +550,20 @@ select {
 input[type="checkbox" i] {
     background-color: #f8a300;
     margin: 10px 20px;
+}
+
+.mainpage_subcat_checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.mainpage_subcat_checkbox:last-child {
+    margin-bottom: 0;
+}
+
+.mainpage_subcat_checkbox input[type="checkbox"] {
+    margin: 0 8px 0 0;
 }
 
 /*Футер*/
@@ -691,35 +743,41 @@ input[type="checkbox" i] {
     flex-direction: column;
 }
 
-select.form_input {
-    margin: 10px 30px;
-    width: 93%;
-}
-
 .form_input {
     background: rgba(0, 77, 168, 0.5);
-    height: 40px;
-    margin: 10px 30px;
-    border: none;
-    padding: 10px;
+    height: 3em;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    padding: 10px 20px;
     font-family: "Gilroy", sans-serif;
     font-size: 18px;
-    width: 90%;
     color: #fff;
+    transition: 0.3s;
+}
+
+.form_input:focus {
+    background: rgba(0, 77, 168, 0.4);
+    border: 1px solid rgba(0, 77, 168, 0.5);
+    outline: none;
+}
+
+.form_input:last-child {
+    margin-bottom: 0;
+}
+
+textarea.form_input {
+    height: 5em;
+    resize: none;
+}
+
+.form_map {
+    min-height: 80px;
+    /* margin-bottom: 10px; */
 }
 
 input.form_checkbox {
     text-align: left;
-}
-
-.form_btn {
-    height: 60px;
-    margin: 10px 30px;
-    width: 93%;
-}
-
-.form_map {
-    margin: 10px 30px;
 }
 
 .password {
@@ -897,10 +955,17 @@ textarea.lac_txt {
 .tab {
     overflow: hidden;
     margin-top: 50px;
+    margin-bottom: 20px;
+    display: grid;
+    align-items: stretch;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    row-gap: 10px;
+    column-gap: 10px;
     color: #004da8;
 }
 
 .tab button {
+    display: block;
     background-color: #fff;
     float: left;
     border: none;
@@ -912,7 +977,6 @@ textarea.lac_txt {
     border: 1px solid #004da8;
     font-family: "Gilroy", sans-serif;
     font-size: 18px;
-    margin-right: 20px;
 }
 
 .tab button:hover {
@@ -927,7 +991,7 @@ textarea.lac_txt {
 
 .tabcontent {
     display: none;
-    padding: 6px 12px;
+    /* padding: 6px 12px; */
     border-top: none;
 }
 
@@ -940,9 +1004,9 @@ textarea.lac_txt {
     margin-right: 20px;
 }
 
-.profile_col-1 select {
+/* .profile_col-1 select {
     width: 95%;
-}
+} */
 
 .profile_col-1 {
     width: 55%;
@@ -1519,4 +1583,3 @@ select.form_input {
     align-items: stretch;
     flex-direction: column;
 }
-

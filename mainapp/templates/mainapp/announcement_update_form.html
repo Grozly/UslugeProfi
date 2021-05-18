@@ -2,18 +2,10 @@
 {% load static %}
 {% block editad %}
 	<div id="announcement.name" class="tabcontent" style="display: block;">
-	<h3 class="adv_title">{{ announcement.name }}</h3>
+		<h3 class="adv_title">Категория: {{ category.name }} > Подкатегория: {{ subcategory.name }}</h3>
+		<h3 class="adv_title">{{ announcement.name }}</h3>
+
 		<div class="my_ads">
-			<select size="1" id="select_category" name="category">
-				<option selected disabled="True">
-				-- Выберите категорию --
-				</option>
-			</select>
-			<select size="1" id="select_subcategory" name="subcategory">
-				<option selected disabled="True" id="subcategory_text">
-				-- Выберите подкатегорию --
-				</option>
-			</select>
 			<p>Активно с <span class="adv_end">{{ announcement.created_at }}</span></p>
 		</div>
 		<div class="ads_review">

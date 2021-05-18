@@ -21,6 +21,33 @@
 	<header id="header">
 		{% include "inc/_inc_messages.html" %}
 		{% block header %}
+		<div class="header__selectors">
+			<select size="1" name="city">
+				<option value="0">Все города</option>
+				<option value="1">Санкт-Петербург</option>
+				<option value="2">Москва</option>
+				<option value="3">Краснодар</option>
+				<option value="4">Калининград</option>
+			</select>
+			<select size="1" name="radius">
+				<option value="0">Все расстояния</option>
+				<option value="1">25 км</option>
+				<option value="2">50 км</option>
+				<option value="3">150 км</option>
+			</select>
+			<select size="1" name="face">
+				<option value="0">Все</option>
+				<option value="1">Юр.лицо</option>
+				<option value="2">Физ.лицо</option>
+				<option value="3">ИП</option>
+			</select>
+			<select size="1" name="ch_price">
+				<option value="0">Фильтровать по</option>
+				<option value="2">Сначала новые</option>
+				<option value="1">Сначала старые</option>
+				<option value="3">По рейтингу</option>
+			</select>
+		</div>
 		{% endblock %}
 	</header>
 	<section id="main__shop">

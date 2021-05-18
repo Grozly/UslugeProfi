@@ -144,17 +144,9 @@
 </div>
 {% endblock %} {% block sidebar%}
 <div class="category__filter">
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
+	{% for category in category_list %}
+		<a class="filter_attr" href="#">{{ category }}</a>
+	{% endfor %}
 </div>
 {% endblock %} {% block content %}
 <div class="page_body-top">

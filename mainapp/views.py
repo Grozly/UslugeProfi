@@ -48,6 +48,10 @@ class TemplateIndexView(TemplateView):
 
     template_name = 'mainapp/index.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(TemplateIndexView, self).get_context_data(**kwargs)
+        return context
+
 
 class EmailValidationView(View):
 
@@ -258,8 +262,10 @@ class UpdateAnnouncementView(UpdateView):
     is_update_view = True
     success_url = reverse_lazy('mainapp:announcements')
 
+
     def get_context_data(self, **kwargs):
         context = super(UpdateAnnouncementView, self).get_context_data(**kwargs)
+        this_announcement = Announcement.objects.get(id=self.kwargs['pk'])
         announcement_formset = inlineformset_factory(Announcement, UserService, form=EditUserServiceModelForm, extra=1)
         if self.request.POST:
             formset = announcement_formset(self.request.POST)
@@ -282,6 +288,8 @@ class UpdateAnnouncementView(UpdateView):
 
         context['user_services'] = formset
         context['announcement'] = Announcement.objects.get(id=self.kwargs['pk'])
+        context['category'] = Category.objects.get(id=this_announcement.category_id.id)
+        context['subcategory'] = SubCategory.objects.get(id=this_announcement.subcategory_id.id)
         return context
 
 

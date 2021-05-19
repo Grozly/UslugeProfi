@@ -23,12 +23,34 @@ class CreateAdModelForm(forms.ModelForm):
                                                     'type': 'hidden'})
         self.fields['category_id'].widget.attrs.update({'placeholder': 'Категория'})
         self.fields['subcategory_id'].widget.attrs.update({'placeholder': 'Подкатегория'})
-        self.fields['name'].widget.attrs.update({'placeholder': 'Название'})
-        self.fields['description'].widget.attrs.update({'placeholder': 'Описание'})
+        self.fields['name'].widget.attrs.update({'class': 'ad_name form_input', 'placeholder': 'Название'})
+        self.fields['description'].widget.attrs.update({'class': 'form_input ad_description', 'placeholder': 'Описание'})
         self.fields['photo_announcement'].widget = forms.FileInput(attrs={
-            'class': 'form_input'
+            'class': 'form_input ad_photo_announcement'
         })
-        self.fields['address'].widget.attrs.update({'placeholder': 'Адрес'})
+        self.fields['address'].widget.attrs.update({'class': 'form_input ad_address', 'placeholder': 'Адрес'})
+
+
+# class CreateUserServiceModelForm(forms.ModelForm):
+#     class Meta:
+#         model = UserService
+#         fields = ('is_active',
+#                   'name',
+#                   'select_price',
+#                   'price_lower',
+#                   'price_upper',
+#                   'select_currency',
+#                   'select_measurement')
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#
+#         self.fields['is_active'].widget.attrs['class'] = 'subcat_checkbox'
+#         self.fields['name'].widget.attrs.update({'class': 'form_input ad_name', 'placeholder': 'Название'})
+#         self.fields['price_lower'].widget.attrs['class'] = 'ads_input'
+#         self.fields['price_upper'].widget.attrs['class'] = 'ads_input'
+#         self.fields['price_lower'].widget.attrs.update({'placeholder': 'Цена от'})
+#         self.fields['price_upper'].widget.attrs.update({'placeholder': 'Цена до'})
 
 
 class EditAdModelForm(forms.ModelForm):
@@ -65,10 +87,6 @@ class EditUserServiceModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # for field_name, field in self.fields.items():
-            # field.widget.attrs['class'] = 'ads_options'
-            # field.help_text = ''
-            # field.label = ''
 
         self.fields['is_active'].widget.attrs['class'] = 'subcat_checkbox'
         self.fields['name'].widget.attrs['type'] = 'text'

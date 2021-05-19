@@ -254,6 +254,11 @@ class AnnouncementListView(ListView):
         return Announcement.objects.filter(user_id=self.request.user.id)
 
 
+class FeaturedAnnouncementsListView(TemplateView):
+
+    template_name = 'mainapp/featured_announcements.html'
+
+
 class UpdateAnnouncementView(UpdateView):
 
     model = Announcement

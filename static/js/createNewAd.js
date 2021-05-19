@@ -25,6 +25,7 @@ adImageFile.addEventListener("change", () => {
 });
 
 function validateForm() {
+    console.log(adName.value)
     if (!adName.value) {
         alert("Name not selected");
         return false;

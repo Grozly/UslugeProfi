@@ -1,0 +1,36 @@
+{% extends 'authapp/index.html' %}
+{% load static %}
+{% block featuredads %}
+<div id="Избранные объявления" class="tabcontent" style="display: block;">
+    <ul>
+        <li class="detail_block">
+                <div class="photo_block">
+                    <img src="{% static 'img/detail.png' %}" alt="" class="detail_img">
+                    <a href="#" class="fav_link"><img src="img/heart.png" alt=""></a>
+                </div>
+            <div class="description_block">
+                <h1 class="detail_title">
+                    Ремонт “под ключ”
+                </h1>
+                <p class="price">
+                    от 10 000 руб.
+                </p>
+                <p class="description">
+                    Ремонт квартир, офисов, нежилых помещений “под ключ”. Составление сметы, договор составляем, своя бригада, проверенные материалы
+                </p>
+                <a href="#" class="location_link">
+                    Санкт-Петербург
+                </a>
+                <div class="owner_block">
+                    <img src="{% static 'img/photo.png' %}" alt="">
+                    <p class="owner_info">
+                        Михаил Рябинин<br> <span class="bold tel">
+                            +7(911) 123-45-56
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+{% endblock %}

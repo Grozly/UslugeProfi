@@ -21,36 +21,30 @@ class CreateAdModelForm(forms.ModelForm):
 
         self.fields['user_id'].widget.attrs.update({'value': user_pk,
                                                     'type': 'hidden'})
-        self.fields['category_id'].widget.attrs.update({'placeholder': 'Категория'})
-        self.fields['subcategory_id'].widget.attrs.update({'placeholder': 'Подкатегория'})
-        self.fields['name'].widget.attrs.update({'class': 'ad_name form_input', 'placeholder': 'Название'})
-        self.fields['description'].widget.attrs.update({'class': 'form_input ad_description', 'placeholder': 'Описание'})
+
+        self.fields['name'].widget.attrs.update({
+            'placeholder': 'Название',
+            'class': 'form_input ad_name_input'}
+        )
+        self.fields['description'].widget.attrs.update({
+            'placeholder': 'Описание',
+            'class': 'form_input ad_description_input'}
+        )
         self.fields['photo_announcement'].widget = forms.FileInput(attrs={
-            'class': 'form_input ad_photo_announcement'
+            'class': 'form_input ad_photo_announcement_input'
         })
-        self.fields['address'].widget.attrs.update({'class': 'form_input ad_address', 'placeholder': 'Адрес'})
-
-
-# class CreateUserServiceModelForm(forms.ModelForm):
-#     class Meta:
-#         model = UserService
-#         fields = ('is_active',
-#                   'name',
-#                   'select_price',
-#                   'price_lower',
-#                   'price_upper',
-#                   'select_currency',
-#                   'select_measurement')
-#
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#
-#         self.fields['is_active'].widget.attrs['class'] = 'subcat_checkbox'
-#         self.fields['name'].widget.attrs.update({'class': 'form_input ad_name', 'placeholder': 'Название'})
-#         self.fields['price_lower'].widget.attrs['class'] = 'ads_input'
-#         self.fields['price_upper'].widget.attrs['class'] = 'ads_input'
-#         self.fields['price_lower'].widget.attrs.update({'placeholder': 'Цена от'})
-#         self.fields['price_upper'].widget.attrs.update({'placeholder': 'Цена до'})
+        self.fields['category_id'].widget.attrs.update({
+            'placeholder': 'Категория',
+            'class': 'form_input ad_category_input'}
+        )
+        self.fields['subcategory_id'].widget.attrs.update({
+            'placeholder': 'Подкатегория',
+            'class': 'form_input ad_subcategory_input'}
+        )
+        self.fields['address'].widget.attrs.update({
+            'placeholder': 'Адрес',
+            'class': 'form_input ad_address_input'}
+        )
 
 
 class EditAdModelForm(forms.ModelForm):
@@ -92,5 +86,7 @@ class EditUserServiceModelForm(forms.ModelForm):
         self.fields['name'].widget.attrs['type'] = 'text'
         self.fields['price_lower'].widget.attrs['class'] = 'ads_input'
         self.fields['price_upper'].widget.attrs['class'] = 'ads_input'
-        self.fields['price_lower'].widget.attrs.update({'placeholder': 'Цена от'})
-        self.fields['price_upper'].widget.attrs.update({'placeholder': 'Цена до'})
+        self.fields['price_lower'].widget.attrs.update(
+            {'placeholder': 'Цена от'})
+        self.fields['price_upper'].widget.attrs.update(
+            {'placeholder': 'Цена до'})

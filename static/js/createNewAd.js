@@ -1,14 +1,20 @@
 const form = document.getElementsByClassName("create_new_ad_from")[0];
-const adName = document.getElementsByClassName("ad_name"[0]);
-const adDescription = document.getElementsByClassName("ad_description")[0];
-const adCategoty = document.getElementsByClassName("ad_category")[0];
-const adSubcategory = document.getElementsByClassName("ad_subcategory")[0];
+const adName = document.getElementsByClassName("ad_name_input")[0];
+const adDescription = document.getElementsByClassName(
+    "ad_description_input"
+)[0];
+const adCategoty = document.getElementsByClassName("ad_category_input")[0];
+const adSubcategory = document.getElementsByClassName(
+    "ad_subcategory_input"
+)[0];
 const subcategoryText = document.getElementsByClassName(
     "ad_subcategory_text"
 )[0];
-const adAddress = document.getElementsByClassName("ad_address")[0];
-const adImageBox = document.getElementsByClassName("ad_image")[0];
-const adImageFile = document.getElementsByClassName("ad_photo_announcement")[0];
+const adAddress = document.getElementsByClassName("ad_address_input")[0];
+const adImageBox = document.getElementsByClassName("ad_image_block")[0];
+const adImageFile = document.getElementsByClassName(
+    "ad_photo_announcement_input"
+)[0];
 const userID = document.getElementsByName("user_id")[0];
 const csrf = document.getElementsByName("csrfmiddlewaretoken");
 
@@ -156,7 +162,7 @@ $.ajax({
     url: `/ajax/category-val/`,
     success: function (response) {
         const categoryData = response.data;
-        categoryData.map((item) => {
+        categoryData.forEach((item) => {
             const option = document.createElement("option");
             option.textContent = item.name;
             option.setAttribute("class", "item");

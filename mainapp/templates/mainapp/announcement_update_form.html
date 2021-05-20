@@ -24,6 +24,7 @@
 			  class="update_announcement_form"
 			  enctype="multipart/form-data">
 			{% csrf_token %}
+			{{ form.errors }}
 			{{ user_services.management_form }}
 			{% for form in user_services.forms %}
 				<div class="ads_options">
@@ -32,21 +33,45 @@
 					</div>
 					{{ form.select_price }}
 					{% if form.select_price.value == 1 %}
-						{{ form.price_lower }}
+						<input
+							id="new_ad_fixed_price_${index}"
+							type="text"
+							class="ads_input ads_input_fixed"
+							placeholder="Цена"
+							style="display: none"
+						/>
+<!--					{{ form.price_lower }}-->
 					{% endif %}
 					{% if form.select_price.value == 2 %}
 						<h4>Договорная</h4>
 					{% endif %}
 					{% if form.select_price.value == 3 %}
-						{{ form.price_lower }}
-						{{ form.price_upper }}
+						<input
+							id="new_ad_lower_price_${index}"
+							type="text"
+							class="ads_input ads_input_lower"
+							placeholder="Цена от"
+							style="display: none"
+						/>
+						<input
+							id="new_ad_upper_price_${index}"
+							type="text"
+							class="ads_input ads_input_upper"
+							placeholder="Цена до"
+							style="display: none"
+						/>
+<!--					{{ form.price_lower }}-->
+<!--					{{ form.price_upper }}-->
 					{% endif %}
+					<div class="ads_input_flex">
+					</div>
 					{{ form.select_currency }}
 					{{ form.select_measurement }}
 				</div>
 			{% endfor %}
 			{{ form.name }}
 			{{ form.description }}
+			<div class="ad_image_block"></div>
 			{{ form.photo_announcement }}
 			<input class="blue_btn form_btn com_form-btn" type="submit" value="Сохранить">
 		</form>

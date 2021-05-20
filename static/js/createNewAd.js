@@ -70,6 +70,7 @@ form.addEventListener("submit", (event) => {
         const fixedPrice = item.getElementsByClassName("ads_input_fixed")[0];
         const lowerPrice = item.getElementsByClassName("ads_input_lower")[0];
         const upperPrice = item.getElementsByClassName("ads_input_upper")[0];
+        const negotiable = item.getElementsByClassName("ads_input_negotiable")[0];
         const checkbox = item.getElementsByClassName("subcat_checkbox")[0];
         const priceSelector = item.getElementsByClassName(
             "new_ad_price_category"
@@ -234,7 +235,7 @@ adSubcategory.addEventListener("change", (e) => {
                         </div>
                         <select id="select_price_${index}" size="1" name="subcategory" class="new_ad_price_category select_price">
                             <option disabled>Цена</option>
-                            <option selected value="1">Цена</option>
+                            <option value="1" selected>Цена</option>
                             <option value="2">Договорная</option>
                             <option value="3">Диапазон</option>
                         </select>
@@ -260,6 +261,7 @@ adSubcategory.addEventListener("change", (e) => {
                                 placeholder="Цена до"
                                 style="display: none"
                             />
+                            <h4 class="ads_input ads_input_negotiable" style="display: none">Договорная</h4>
                         </div>
                         <select id="select_currency_${index}" size="1" name="subcategory" class="select_currency">
                             <option disabled>Валюта</option>
@@ -287,6 +289,9 @@ adSubcategory.addEventListener("change", (e) => {
                         event.target.parentElement.getElementsByClassName(
                             "ads_input_upper"
                         )[0].style.display = "none";
+                        event.target.parentElement.getElementsByClassName(
+                            "ads_input_negotiable"
+                        )[0].style.display = "none";
                         break;
                     case 2:
                         event.target.parentElement.getElementsByClassName(
@@ -298,6 +303,9 @@ adSubcategory.addEventListener("change", (e) => {
                         event.target.parentElement.getElementsByClassName(
                             "ads_input_upper"
                         )[0].style.display = "none";
+                        event.target.parentElement.getElementsByClassName(
+                            "ads_input_negotiable"
+                        )[0].style.display = "block";
                         break;
                     case 3:
                         event.target.parentElement.getElementsByClassName(
@@ -309,6 +317,9 @@ adSubcategory.addEventListener("change", (e) => {
                         event.target.parentElement.getElementsByClassName(
                             "ads_input_upper"
                         )[0].style.display = "block";
+                        event.target.parentElement.getElementsByClassName(
+                            "ads_input_negotiable"
+                        )[0].style.display = "none";
                         break;
                 }
             });

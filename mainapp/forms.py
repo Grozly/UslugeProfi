@@ -19,32 +19,33 @@ class CreateAdModelForm(forms.ModelForm):
             field.help_text = ''
             field.label = ''
 
-        self.fields['user_id'].widget.attrs.update({'value': user_pk,
-                                                    'type': 'hidden'})
-
+        self.fields['user_id'].widget.attrs.update({
+            'value': user_pk,
+            'type': 'hidden'
+        })
         self.fields['name'].widget.attrs.update({
             'placeholder': 'Название',
-            'class': 'form_input ad_name_input'}
-        )
+            'class': 'form_input ad_name_input'
+        })
         self.fields['description'].widget.attrs.update({
             'placeholder': 'Описание',
-            'class': 'form_input ad_description_input'}
-        )
+            'class': 'form_input ad_description_input'
+        })
         self.fields['photo_announcement'].widget = forms.FileInput(attrs={
             'class': 'form_input ad_photo_announcement_input'
         })
         self.fields['category_id'].widget.attrs.update({
             'placeholder': 'Категория',
-            'class': 'form_input ad_category_input'}
-        )
+            'class': 'form_input ad_category_input'
+        })
         self.fields['subcategory_id'].widget.attrs.update({
             'placeholder': 'Подкатегория',
-            'class': 'form_input ad_subcategory_input'}
-        )
+            'class': 'form_input ad_subcategory_input'
+        })
         self.fields['address'].widget.attrs.update({
             'placeholder': 'Адрес',
-            'class': 'form_input ad_address_input'}
-        )
+            'class': 'form_input ad_address_input'
+        })
 
 
 class EditAdModelForm(forms.ModelForm):
@@ -59,10 +60,14 @@ class EditAdModelForm(forms.ModelForm):
             field.help_text = ''
             field.label = ''
 
-        self.fields['name'].widget.attrs.update({'style': 'width: 100%; margin-top: 30px;',
-                                                 'placeholder': 'Название'})
-        self.fields['description'].widget.attrs.update({'style': 'width: 100%; margin-top: 30px;',
-                                                        'placeholder': 'Описание'})
+        self.fields['name'].widget.attrs.update({
+            'style': 'width: 100%; margin-top: 30px;',
+            'placeholder': 'Название'
+        })
+        self.fields['description'].widget.attrs.update({
+            'style': 'width: 100%; margin-top: 30px;',
+            'placeholder': 'Описание'
+        })
         self.fields['photo_announcement'].widget = forms.FileInput(attrs={
             'class': 'ads_input'
         })
@@ -84,9 +89,23 @@ class EditUserServiceModelForm(forms.ModelForm):
 
         self.fields['is_active'].widget.attrs['class'] = 'subcat_checkbox'
         self.fields['name'].widget.attrs['type'] = 'text'
-        self.fields['price_lower'].widget.attrs['class'] = 'ads_input'
-        self.fields['price_upper'].widget.attrs['class'] = 'ads_input'
-        self.fields['price_lower'].widget.attrs.update(
-            {'placeholder': 'Цена от'})
-        self.fields['price_upper'].widget.attrs.update(
-            {'placeholder': 'Цена до'})
+        self.fields['select_price'].widget.attrs.update({
+            'class': 'new_ad_price_category select_price'
+        })
+        self.fields['price_lower'].widget.attrs.update({
+            'placeholder': 'Цена от',
+            'class': 'ads_input ad_subcategory_input'
+        })
+        self.fields['price_upper'].widget.attrs.update({
+            'placeholder': 'Цена до',
+            'class': 'ads_input ad_subcategory_input'
+        })
+        self.fields['select_currency'].widget.attrs.update({
+            'class': 'ads_input select_currency'
+        })
+        self.fields['select_measurement'].widget.attrs.update({
+            'class': 'select_measurement'
+        })
+
+
+

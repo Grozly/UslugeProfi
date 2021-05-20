@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,108 +15,20 @@
 	<link rel="stylesheet" href="{% static "css/main.css" %}">
 	{% endblock %}
 </head>
-
 <body>
 	<header id="header">
 		{% include "inc/_inc_messages.html" %}
 		{% block header %}
-		<div class="header__selectors">
-			<select size="1" name="city">
-				<option value="0">Все города</option>
-				<option value="1">Санкт-Петербург</option>
-				<option value="2">Москва</option>
-				<option value="3">Краснодар</option>
-				<option value="4">Калининград</option>
-			</select>
-			<select size="1" name="radius">
-				<option value="0">Все расстояния</option>
-				<option value="1">25 км</option>
-				<option value="2">50 км</option>
-				<option value="3">150 км</option>
-			</select>
-			<select size="1" name="face">
-				<option value="0">Все</option>
-				<option value="1">Юр.лицо</option>
-				<option value="2">Физ.лицо</option>
-				<option value="3">ИП</option>
-			</select>
-			<select size="1" name="ch_price">
-				<option value="0">Фильтровать по</option>
-				<option value="2">Сначала новые</option>
-				<option value="1">Сначала старые</option>
-				<option value="3">По рейтингу</option>
-			</select>
-		</div>
 		{% endblock %}
 	</header>
 	<section id="main__shop">
 		<div class="container">
 			<div class="flex__container">
 				<div class="sidebar">
-					<div class="header__links">
-						<div class="login__links">
-							{% if user.is_authenticated %} {% if user.is_superuser %}
-							<a href="{% url 'main:logout' %}" class="login">Выход</a> |
-							<a href="{% url 'admin:index' %}" class="signup"
-								>Админ панель</a
-							>
-							<a
-								href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-								class="signup"
-								>Личный кабинет</a
-							>
-							{% else %}
-							<a href="{% url 'main:logout' %}" class="login">Выход</a> |
-							<a
-								href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-								class="signup"
-								>{{ user }}</a
-							>
-							{% endif %} {% else %}
-							<a href="#" class="login myLinkModal">Войти</a> |
-							<a href="#" class="signup myLinkModal1">Регистрация</a>
-							{% endif %}
-						</div>
-						<div class="ad_block">
-							{% if user.is_authenticated %} {% if user.is_superuser %}
-							<a href="{% url 'admin:index' %}" class="advetisement">
-								Админка
-							</a>
-							<a
-								href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-								class="signup"
-								>Личный кабинет</a
-							>
-							{% else %}
-							<a
-								href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-								class="advetisement"
-							>
-								Личный кабинет
-							</a>
-							{% endif %} {% else %}
-							<a
-								href="{% url 'main:main' %}"
-								class="advetisement myLinkModal"
-							>
-								Личный кабинет
-							</a>
-							{% endif %}
-						</div>
-					</div>
 					{% block sidebar%}
 					{% endblock %}
 				</div>
 				<div class="page_body">
-					<form class="header__search_form">
-						<input
-							class="search_input"
-							type="search"
-							name="search"
-							placeholder="Поиск по объявлениям"
-						/>
-						<input class="white_btn" type="submit" value="Искать" />
-					</form>
 					{% block content %}
 					{% endblock %}
 				</div>
@@ -134,15 +45,13 @@
 		<span id="myModal__close" class="close">
 			<img src="{% static "img/close.png" %}" alt="">
 		</span>
-
 		<form action="{% url 'main:login' %}" class="login_form flex_form" type="post" id="loginForm">
 			{% csrf_token %}
 			<input type="email" class="form_input" placeholder="Ваш e-mail" id="loginEmailField">
-			<div class="loginEmailFeedBackArea invalid-feedback" style="display:none">
-			</div>
+			<div class="loginEmailFeedBackArea invalid-feedback" style="display:none"></div>
 			<div class="password">
 				<input class="form_input" type="password" id="loginPassword" placeholder="Введите пароль"
-					name="password">
+					   name="password">
 				<a href="#" class="password-control"></a>
 			</div>
 			<div class="loginPasswordFeedBackArea invalid-feedback" style="display:none">

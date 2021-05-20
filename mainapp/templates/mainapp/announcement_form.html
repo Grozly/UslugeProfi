@@ -7,13 +7,17 @@
     enctype="multipart/form-data"
     novalidate
 >
-    {% csrf_token %} {{ form.errors }}
+    {% csrf_token %}
+    {{ form.errors }}
     <div class="user_profile_select">{{ form.user_id }}</div>
-    {{ form.name }} {{ form.description }}
+    {{ form.name }}
+    {{ form.description }}
     <div class="ad_image_block"></div>
     {{ form.photo_announcement }}
     <select class="form_input ad_category_input">
-        <option selected disabled="True">-- Выберите категорию --</option>
+        <option selected disabled="True">
+            -- Выберите категорию --
+        </option>
     </select>
     <select class="form_input ad_subcategory_input">
         <option selected disabled="True" class="ad_subcategory_text">

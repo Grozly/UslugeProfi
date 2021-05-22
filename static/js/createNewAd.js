@@ -261,7 +261,6 @@ adSubcategory.addEventListener("change", (e) => {
                                 placeholder="Цена до"
                                 style="display: none"
                             />
-                            <h4 class="ads_input ads_input_negotiable" style="display: none">Договорная</h4>
                         </div>
                         <select id="select_currency_${index}" size="1" name="subcategory" class="select_currency">
                             <option disabled>Валюта</option>

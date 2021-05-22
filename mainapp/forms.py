@@ -76,7 +76,8 @@ class EditAdModelForm(forms.ModelForm):
 class EditUserServiceModelForm(forms.ModelForm):
     class Meta:
         model = UserService
-        fields = ('is_active',
+        fields = ('id',
+                  'is_active',
                   'name',
                   'select_price',
                   'price_lower',
@@ -89,20 +90,27 @@ class EditUserServiceModelForm(forms.ModelForm):
 
         self.fields['is_active'].widget.attrs['class'] = 'subcat_checkbox'
         self.fields['name'].widget.attrs['type'] = 'text'
+        self.fields['select_price'].empty_label = None
         self.fields['select_price'].widget.attrs.update({
             'class': 'new_ad_price_category select_price'
         })
         self.fields['price_lower'].widget.attrs.update({
             'placeholder': 'Цена от',
-            'class': 'ads_input ad_subcategory_input'
+            'class': 'ads_input ads_input_lower',
+            'type': 'text',
+            'step': 1
         })
         self.fields['price_upper'].widget.attrs.update({
             'placeholder': 'Цена до',
-            'class': 'ads_input ad_subcategory_input'
+            'class': 'ads_input ads_input_upper',
+            'type': 'text',
+            'step': 1
         })
+        self.fields['select_currency'].empty_label = None
         self.fields['select_currency'].widget.attrs.update({
             'class': 'ads_input select_currency'
         })
+        self.fields['select_measurement'].empty_label = None
         self.fields['select_measurement'].widget.attrs.update({
             'class': 'select_measurement'
         })

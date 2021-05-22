@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,7 +15,6 @@
 	<link rel="stylesheet" href="{% static "css/main.css" %}">
 	{% endblock %}
 </head>
-
 <body>
 	<header id="header">
 		{% include "inc/_inc_messages.html" %}
@@ -47,15 +45,13 @@
 		<span id="myModal__close" class="close">
 			<img src="{% static "img/close.png" %}" alt="">
 		</span>
-
 		<form action="{% url 'main:login' %}" class="login_form flex_form" type="post" id="loginForm">
 			{% csrf_token %}
 			<input type="email" class="form_input" placeholder="Ваш e-mail" id="loginEmailField">
-			<div class="loginEmailFeedBackArea invalid-feedback" style="display:none">
-			</div>
+			<div class="loginEmailFeedBackArea invalid-feedback" style="display:none"></div>
 			<div class="password">
 				<input class="form_input" type="password" id="loginPassword" placeholder="Введите пароль"
-					name="password">
+					   name="password">
 				<a href="#" class="password-control"></a>
 			</div>
 			<div class="loginPasswordFeedBackArea invalid-feedback" style="display:none">
@@ -224,9 +220,9 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://unpkg.com/axios@0.21.1/dist/axios.min.js"></script>
-	<script src="{% static "js/main.js" %}"></script>
-	<script src="{% static "js/registrvalidate.js" %}"></script>
-	<script src="{% static "js/createNewAd.js" %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+	<script src="{% static 'js/registrvalidate.js' %}"></script>
+	<script src="{% static 'js/createNewAd.js' %}"></script>
 	<script src="https://use.fontawesome.com/61f08ed9ff.js"></script>
 </body>
 

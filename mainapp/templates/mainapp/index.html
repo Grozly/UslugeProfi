@@ -9,16 +9,16 @@
         <div class="header__links only_mobile">
             <div class="login__links">
                 {% if user.is_authenticated %}
-                {% if user.is_superuser %}
-                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+                        <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
+                    {% else %}
+                        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+                        <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
+                    {% endif %}
                 {% else %}
-                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
-                {% endif %}
-                {% else %}
-                <a href="#" class="login myLinkModal">Войти</a> |
-                <a href="#" class="signup myLinkModal1">Регистрация</a>
+                    <a href="#" class="login myLinkModal">Войти</a> |
+                    <a href="#" class="signup myLinkModal1">Регистрация</a>
                 {% endif %}
             </div>
         </div>
@@ -52,85 +52,45 @@
     </div>
     <div class="ad_block mobile_top only_mobile">
         {% if user.is_authenticated %}
-        {% if user.is_superuser %}
-        <a href="{% url 'admin:index' %}" class="advetisement">
-            Админка
-        </a>
+            <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">Личный кабинет</a>
         {% else %}
-        <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">
-            Личный кабинет
-        </a>
-        {% endif %}
-        {% else %}
-        <a href="{% url 'main:main' %}" class="advetisement myLinkModal">
-            Личный кабинет
-        </a>
+            <a href="{% url 'main:main' %}" class="advetisement myLinkModal">Личный кабинет</a>
         {% endif %}
         <a href="#" class="favorites">
-            <img src="{% static "img/heart.png" %}" alt=""
-            class="favorites_icon">Избранное
-        </a>
+        <img src="{% static 'img/heart.png' %}" alt="" class="favorites_icon">Избранное</a>
     </div>
     <div class="header__bottom">
         <div class="header__links">
             <div class="login__links">
-                {% if user.is_authenticated %} {% if user.is_superuser %}
-                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
-                <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">Личный кабинет</a>
+                {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+                        <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
+                    {% else %}
+                        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+                        <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
+                    {% endif %}
                 {% else %}
-                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                <a
-                    href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-                    class="signup"
-                    >{{ user }}</a
-                >
-                {% endif %} {% else %}
-                <a href="#" class="login myLinkModal">Войти</a> |
-                <a href="#" class="signup myLinkModal1">Регистрация</a>
+                    <a href="#" class="login myLinkModal">Войти</a> |
+                    <a href="#" class="signup myLinkModal1">Регистрация</a>
                 {% endif %}
             </div>
             <div class="ad_block">
-                {% if user.is_authenticated %} {% if user.is_superuser %}
-                <a href="{% url 'admin:index' %}" class="advetisement">
-                    Админка
-                </a>
-                <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">Личный кабинет</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">Личный кабинет</a>
                 {% else %}
-                <a
-                    href="{% url 'auth:profile' user.uslugeuserprofile.pk %}"
-                    class="advetisement"
-                >
-                    Личный кабинет
-                </a>
-                {% endif %} {% else %}
-                <a
-                    href="{% url 'main:main' %}"
-                    class="advetisement myLinkModal"
-                >
-                    Личный кабинет
-                </a>
+                    <a href="{% url 'main:main' %}" class="advetisement myLinkModal">Личный кабинет</a>
                 {% endif %}
             </div>
         </div>
         <form class="header__search_form">
-            <input
-                class="search_input"
-                type="search"
-                name="search"
-                placeholder="Поиск по объявлениям"
-            />
-            <input class="white_btn" type="submit" value="Искать" />
+            <input class="search_input" type="search" name="search" placeholder="Поиск по объявлениям">
+            <input class="white_btn" type="submit" value="Искать">
         </form>
     </div>
     <form class="header__search_form search_mob only_mobile">
-        <input
-            class="search_input"
-            type="search"
-            name="search"
-            placeholder="Поиск по объявлениям"
-        />
-        <input class="white_btn" type="submit" value="Искать" />
+        <input class="search_input" type="search" name="search" placeholder="Поиск по объявлениям">
+        <input class="white_btn" type="submit" value="Искать">
     </form>
     <div class="only_mobile flex-mob">
         <select size="1" name="category">
@@ -142,19 +102,12 @@
         <a href="#" class="only_mobile bold myLinkModal3">Фильтровать</a>
     </div>
 </div>
-{% endblock %} {% block sidebar%}
+{% endblock %}
+{% block sidebar%}
 <div class="category__filter">
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
-    <a class="filter_attr" href="#">Ремонт</a>
+    {% for category in category_list %}
+    <a class="filter_attr" href="#">{{ category }}</a>
+    {% endfor %}
 </div>
 {% endblock %} {% block content %}
 <div class="page_body-top">
@@ -184,8 +137,10 @@
     <ul class="main_catalog">
         <li class="catalog_item">
             <a href="detail.html" class="catalog_link">
-                <img src="{% static "img/catalog.png" %}" alt=""
-                class="catalog_img">
+                <div class="catalog_link_image_wrapper">
+                    <img src="{% static "img/catalog.png" %}"
+                    alt=""class="catalog_img">
+                </div>
                 <h3 class="catalog_title">Ремонт “под ключ”</h3>
                 <p class="catalog_description">
                     Ремонт квартир, офисов, нежилых помещений “под ключ”.
@@ -205,8 +160,10 @@
         </li>
         <li class="catalog_item">
             <a href="detail.html" class="catalog_link">
-                <img src="{% static "img/catalog.png" %}" alt=""
-                class="catalog_img">
+                <div class="catalog_link_image_wrapper">
+                    <img src="{% static "img/catalog.png" %}"
+                    alt=""class="catalog_img">
+                </div>
                 <h3 class="catalog_title">Ремонт “под ключ”</h3>
                 <p class="catalog_description">
                     Ремонт квартир, офисов, нежилых помещений “под ключ”.
@@ -226,8 +183,10 @@
         </li>
         <li class="catalog_item">
             <a href="detail.html" class="catalog_link">
-                <img src="{% static "img/catalog.png" %}" alt=""
-                class="catalog_img">
+                <div class="catalog_link_image_wrapper">
+                    <img src="{% static "img/catalog.png" %}"
+                    alt=""class="catalog_img">
+                </div>
                 <h3 class="catalog_title">Ремонт “под ключ”</h3>
                 <p class="catalog_description">
                     Ремонт квартир, офисов, нежилых помещений “под ключ”.
@@ -247,8 +206,10 @@
         </li>
         <li class="catalog_item">
             <a href="detail.html" class="catalog_link">
-                <img src="{% static "img/catalog.png" %}" alt=""
-                class="catalog_img">
+                <div class="catalog_link_image_wrapper">
+                    <img src="{% static "img/catalog.png" %}"
+                    alt=""class="catalog_img">
+                </div>
                 <h3 class="catalog_title">Ремонт “под ключ”</h3>
                 <p class="catalog_description">
                     Ремонт квартир, офисов, нежилых помещений “под ключ”.
@@ -268,66 +229,26 @@
         </li>
     </ul>
     <div class="subcategory_filter">
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
-        <input
-            class="subcat_checkbox"
-            type="checkbox"
-            name="option1"
-            value="a1"
-        />Шиномонтаж<br />
+        <div class="mainpage_subcat_checkbox">
+            <input type="checkbox" id="option1" name="option1" value="a1" />
+            <label for="option1">Шиномонтаж</label>
+        </div>
+        <div class="mainpage_subcat_checkbox">
+            <input type="checkbox" id="option2" name="option2" value="a2" />
+            <label for="option2">Шиномонтаж</label>
+        </div>
+        <div class="mainpage_subcat_checkbox">
+            <input type="checkbox" id="option3" name="option3" value="a3" />
+            <label for="option3">Шиномонтаж</label>
+        </div>
+        <div class="mainpage_subcat_checkbox">
+            <input type="checkbox" id="option4" name="option4" value="a4" />
+            <label for="option4">Шиномонтаж</label>
+        </div>
+        <div class="mainpage_subcat_checkbox">
+            <input type="checkbox" id="option5" name="option5" value="a5" />
+            <label for="option5">Шиномонтаж</label>
+        </div>
     </div>
 </div>
 <div class="map desktop">

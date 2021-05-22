@@ -1,14 +1,13 @@
-{% extends 'authapp/index.html' %}
-{% load static %}
-{% block listad %}
-    {% for ad  in object_list %}
-        <div class="tab">
-            <button class="tablinks" onclick="location.href = '{% url 'main:edit-announcement' ad.id %}'">Объявление {{ ad.name }}</button>
-        </div>
+{% extends 'authapp/index.html' %} {% load static %} {% block listad %}
+<div class="tab">
+    {% for ad in object_list %}
+    <button
+        class="tablinks"
+        onclick="location.href = '{% url 'main:edit-announcement' ad.id %}'"
+    >
+        Объявление {{ ad.name }}
+    </button>
     {% endfor %}
+</div>
 
-
-        {% block editad %}
-        {% endblock %}
-
-{% endblock %}
+{% block editad %} {% endblock %} {% endblock %}

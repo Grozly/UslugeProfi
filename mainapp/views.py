@@ -48,6 +48,10 @@ class TemplateIndexView(TemplateView):
 
     template_name = 'mainapp/index.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(TemplateIndexView, self).get_context_data(**kwargs)
+        return context
+
 
 class EmailValidationView(View):
 
@@ -236,7 +240,7 @@ class ApiCreateAdView(View):
                                                                         price_upper=0,
                                                                         is_active=True)
                             object_service.save()
-                    return HttpResponseRedirect(reverse('main:main'))
+                    return JsonResponse({'data': 'ok'}, status=200)
                 return JsonResponse({'error': 'no service selected'}, status=400)
             return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
         return JsonResponse({'error': 'Not AJAX reqeust!'}, status=400)
@@ -250,6 +254,11 @@ class AnnouncementListView(ListView):
         return Announcement.objects.filter(user_id=self.request.user.id)
 
 
+class FeaturedAnnouncementsListView(TemplateView):
+
+    template_name = 'mainapp/featured_announcements.html'
+
+
 class UpdateAnnouncementView(UpdateView):
 
     model = Announcement
@@ -260,6 +269,7 @@ class UpdateAnnouncementView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UpdateAnnouncementView, self).get_context_data(**kwargs)
+        this_announcement = Announcement.objects.get(id=self.kwargs['pk'])
         announcement_formset = inlineformset_factory(Announcement, UserService, form=EditUserServiceModelForm, extra=1)
         if self.request.POST:
             formset = announcement_formset(self.request.POST)
@@ -270,6 +280,7 @@ class UpdateAnnouncementView(UpdateView):
                                                              extra=len(services))
                 formset = announcement_formset()
                 for num, form in enumerate(formset.forms):
+                    form.initial['id'] = services[num].id
                     form.initial['is_active'] = services[num].is_active
                     form.initial['name'] = services[num].name
                     form.initial['select_price'] = services[num].select_price
@@ -282,8 +293,70 @@ class UpdateAnnouncementView(UpdateView):
 
         context['user_services'] = formset
         context['announcement'] = Announcement.objects.get(id=self.kwargs['pk'])
+        context['category'] = Category.objects.get(id=this_announcement.category_id.id)
+        context['subcategory'] = SubCategory.objects.get(id=this_announcement.subcategory_id.id)
         return context
 
+
+class ApiEditAdView(View):
+
+    def post(self, request):
+        if request.is_ajax():
+            if request.method == "POST":
+                data = request.POST
+                idAd = request.POST.get('id')
+                name = request.POST.get('name')
+                description = request.POST.get('description')
+                photo_announcement = request.POST.get('image')
+                user_services = request.POST.get('options')
+                parse_user_services = json.loads(user_services)
+                object_announcement = get_object_or_404(Announcement, pk=idAd)
+                form = EditAdModelForm(request.POST, instance=object_announcement)
+                if form.is_valid():
+                    announcement = form.save(commit=False)
+                    announcement.user = request.user
+                    announcement.save()
+                if parse_user_services:
+                    for item in parse_user_services:
+                        service_object = get_object_or_404(UserService, pk=item['id'])
+                        form_service = EditUserServiceModelForm(request.POST, instance=service_object)
+                        checkbox_value = item['is_active']
+                        select_price_object = SelectPrice.objects.only('id').get(id=item['select_price'])
+                        select_currency_object = SelectCurrency.objects.only('id').get(id=item['select_currency'])
+                        select_measurement_object = SelectMeasurement.objects.only('id'). \
+                            get(id=item['select_measurement'])
+                        if form_service.is_valid():
+                            if 'fixed_price' in item:
+                                fixed_price = float(item['fixed_price'].replace(',', '.'))
+                                UserService.objects.filter(id=service_object.id).update(
+                                                           select_price=select_price_object,
+                                                           select_currency=select_currency_object,
+                                                           select_measurement=select_measurement_object,
+                                                           price_lower=fixed_price,
+                                                           price_upper=0,
+                                                           is_active=checkbox_value,)
+                            elif 'upper_price' in item:
+                                lower_price = float(item['lower_price'].replace(',', '.'))
+                                upper_price = float(item['upper_price'].replace(',', '.'))
+                                UserService.objects.filter(id=service_object.id).update(
+                                                           select_price=select_price_object,
+                                                           select_currency=select_currency_object,
+                                                           select_measurement=select_measurement_object,
+                                                           price_lower=lower_price,
+                                                           price_upper=upper_price,
+                                                           is_active=checkbox_value,)
+                            else:
+                                UserService.objects.filter(id=service_object.id).update(
+                                                           select_price=select_price_object,
+                                                           select_currency=select_currency_object,
+                                                           select_measurement=select_measurement_object,
+                                                           price_lower=0,
+                                                           price_upper=0,
+                                                           is_active=checkbox_value,)
+
+                return JsonResponse({'data': data}, status=200)
+            return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
+        return JsonResponse({'error': 'Not AJAX reqeust!'}, status=400)
 
 # class UpdateAnnouncementView(UpdateView):
 #     model = Announcement

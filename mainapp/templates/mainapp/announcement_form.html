@@ -3,9 +3,8 @@
 <form
     method="post"
     action="{% url 'main:create-ad' %}"
-    class="login_form flex_form"
+    class="login_form flex_form create_new_ad_from"
     enctype="multipart/form-data"
-    id="create_new_ad_from"
     novalidate
 >
     {% csrf_token %}
@@ -89,20 +88,19 @@
 =======
     {{ form.name }}
     {{ form.description }}
-    <div id="imgBox"></div>
+    <div class="ad_image_block"></div>
     {{ form.photo_announcement }}
-    <select id="select_category" class="form_input">
+    <select class="form_input ad_category_input">
         <option selected disabled="True">
             -- Выберите категорию --
         </option>
     </select>
-    <select id="select_subcategory" class="form_input">
-        <option selected disabled="True" id="subcategory_text">
+    <select class="form_input ad_subcategory_input">
+        <option selected disabled="True" class="ad_subcategory_text">
             -- Выберите подкатегорию --
         </option>
     </select>
-    <div id="ads_by_subcategory_block">
-    </div>
+    <div id="ads_by_subcategory_block"></div>
     {{ form.address }}
 >>>>>>> c052f570ffc31fbc6bfedb9cd4d069de44a6ea07
     <div class="form_map">

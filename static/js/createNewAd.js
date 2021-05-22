@@ -1,12 +1,20 @@
-const imgBox = document.getElementById("imgBox");
-const form = document.getElementById("create_new_ad_from");
-const adName = document.getElementById("id_name");
-const adDescription = document.getElementById("id_description");
-const adCategoty = document.querySelector("#select_category");
-const adSubcategory = document.querySelector("#select_subcategory");
-const subcategoryText = document.getElementById("subcategory_text");
-const adAddress = document.getElementById("id_address");
-const adImageFile = document.getElementById("id_photo_announcement");
+const form = document.getElementsByClassName("create_new_ad_from")[0];
+const adName = document.getElementsByClassName("ad_name_input")[0];
+const adDescription = document.getElementsByClassName(
+    "ad_description_input"
+)[0];
+const adCategoty = document.getElementsByClassName("ad_category_input")[0];
+const adSubcategory = document.getElementsByClassName(
+    "ad_subcategory_input"
+)[0];
+const subcategoryText = document.getElementsByClassName(
+    "ad_subcategory_text"
+)[0];
+const adAddress = document.getElementsByClassName("ad_address_input")[0];
+const adImageBox = document.getElementsByClassName("ad_image_block")[0];
+const adImageFile = document.getElementsByClassName(
+    "ad_photo_announcement_input"
+)[0];
 const userID = document.getElementsByName("user_id")[0];
 const csrf = document.getElementsByName("csrfmiddlewaretoken");
 
@@ -19,10 +27,11 @@ $.ajaxSetup({
 adImageFile.addEventListener("change", () => {
     const image_data = adImageFile.files[0];
     const url = URL.createObjectURL(image_data);
-    imgBox.innerHTML = `<a href="${url}"><img src="${url}" height="250px"></a>`;
+    adImageBox.innerHTML = `<a href="${url}"><img src="${url}" height="250px"></a>`;
 });
 
 function validateForm() {
+    console.log(adName.value)
     if (!adName.value) {
         alert("Name not selected");
         return false;
@@ -61,6 +70,7 @@ form.addEventListener("submit", (event) => {
         const fixedPrice = item.getElementsByClassName("ads_input_fixed")[0];
         const lowerPrice = item.getElementsByClassName("ads_input_lower")[0];
         const upperPrice = item.getElementsByClassName("ads_input_upper")[0];
+        const negotiable = item.getElementsByClassName("ads_input_negotiable")[0];
         const checkbox = item.getElementsByClassName("subcat_checkbox")[0];
         const priceSelector = item.getElementsByClassName(
             "new_ad_price_category"
@@ -154,7 +164,7 @@ $.ajax({
     url: `/ajax/category-val/`,
     success: function (response) {
         const categoryData = response.data;
-        categoryData.map((item) => {
+        categoryData.forEach((item) => {
             const option = document.createElement("option");
             option.textContent = item.name;
             option.setAttribute("class", "item");
@@ -225,7 +235,7 @@ adSubcategory.addEventListener("change", (e) => {
                         </div>
                         <select id="select_price_${index}" size="1" name="subcategory" class="new_ad_price_category select_price">
                             <option disabled>Цена</option>
-                            <option selected value="1">Цена</option>
+                            <option value="1" selected>Цена</option>
                             <option value="2">Договорная</option>
                             <option value="3">Диапазон</option>
                         </select>
@@ -278,6 +288,9 @@ adSubcategory.addEventListener("change", (e) => {
                         event.target.parentElement.getElementsByClassName(
                             "ads_input_upper"
                         )[0].style.display = "none";
+                        event.target.parentElement.getElementsByClassName(
+                            "ads_input_negotiable"
+                        )[0].style.display = "none";
                         break;
                     case 2:
                         event.target.parentElement.getElementsByClassName(
@@ -289,6 +302,9 @@ adSubcategory.addEventListener("change", (e) => {
                         event.target.parentElement.getElementsByClassName(
                             "ads_input_upper"
                         )[0].style.display = "none";
+                        event.target.parentElement.getElementsByClassName(
+                            "ads_input_negotiable"
+                        )[0].style.display = "block";
                         break;
                     case 3:
                         event.target.parentElement.getElementsByClassName(
@@ -300,6 +316,9 @@ adSubcategory.addEventListener("change", (e) => {
                         event.target.parentElement.getElementsByClassName(
                             "ads_input_upper"
                         )[0].style.display = "block";
+                        event.target.parentElement.getElementsByClassName(
+                            "ads_input_negotiable"
+                        )[0].style.display = "none";
                         break;
                 }
             });

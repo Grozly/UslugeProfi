@@ -7,6 +7,7 @@ from django.views.generic.edit import FormMixin
 
 from authapp.forms import EditProfileModelForm
 from authapp.models import UslugeUserProfile, UslugeUser
+from mainapp.models import Category
 
 
 class TemplateIndexView(TemplateView):
@@ -15,7 +16,6 @@ class TemplateIndexView(TemplateView):
 
     def get_context_data(self, pk, **kwargs):
         context = super(TemplateIndexView, self).get_context_data(**kwargs)
-        # here's the difference:
         context['uslugeuserprofile'] = UslugeUserProfile.objects.get(pk=pk)
         return context
 
@@ -37,10 +37,6 @@ class PasswordChangeUserProfileView(PasswordChangeView):
 
     def get_success_url(self):
         return reverse("auth:editprofile", args=(self.object.pk,))
-
-
-    # def get_success_url(self):
-    #     return reverse("auth:editprofile", args=(self.object.pk,))
 
 
 

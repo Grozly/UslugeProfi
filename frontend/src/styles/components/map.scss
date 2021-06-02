@@ -1,0 +1,16 @@
+.map {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin-bottom: 20px;
+    border: 1px solid #444444;
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}

@@ -1,0 +1,79 @@
+/*Товары и подкатегории*/
+
+.main-catalog {
+    display: grid;
+    row-gap: 16px;
+    column-gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    align-items: stretch;
+    flex-grow: 1;
+    margin: 0 0 20px;
+}
+
+.catalog-item {
+    .catalog-item__link {
+        display: block;
+    }
+
+    .catalog-item__image-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 8px;
+
+        .catalog-item__image {
+            min-width: 100%;
+            min-height: 100%;
+        }
+    }
+
+    .catalog-item__title {
+        font-weight: bold;
+        font-size: 1.4em;
+        margin-bottom: 8px;
+    }
+
+    .catalog-item__description {
+        color: #000000;
+        margin-bottom: 8px;
+    }
+
+    .catalog-item__details {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .catalog-item__rating-block {
+        display: flex;
+        align-items: center;
+
+        .catalog-item__rating-item,
+        .catalog-item__rating-item__checked {
+            margin-right: 2px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            &::after {
+                display: block;
+                color: #c4c4c4;
+                content: "\f005";
+                font-family: "FontAwesome";
+            }
+        }
+
+        .catalog-item__rating-item__checked::after {
+            color: #f8a300;
+        }
+    }
+
+    .catalog-item__comments-count {
+        color: #c4c4c4;
+        margin-bottom: 0;
+    }
+}

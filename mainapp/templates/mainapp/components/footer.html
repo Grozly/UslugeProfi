@@ -1,0 +1,23 @@
+{% load static %}
+
+<div class="container">
+    <div class="footer__top">
+        <a href="/"> <img src="{% static "img/logo-white.png" %}" class="footer__logo"> 
+        <!-- <a href="#" class="up_link">Вверх</a> -->
+        <ul class="footer__menu">
+            <li class="footer__menu-item"><a href="/">Безопасность</a></li>
+            <li class="footer__menu-item"><a href="/">Правила</a></li>
+            <li class="footer__menu-item"><a href="/">Пользовательское соглашение</a></li>
+            <li class="footer__menu-item"><a href="/">Помощь и контакты</a></li>
+            <li class="footer__menu-item"><a href="/">Цены</a></li>
+            <li class="footer__menu-item"><a href="/">О нас</a></li>
+        </ul>
+    </div>
+
+    <div class="footer__bottom">
+        <p class="all-rights">
+            Usluge © {% now "Y" %} by MadiSpace
+            <span>All rights reserved</span>
+        </p>
+    </div>
+</div>

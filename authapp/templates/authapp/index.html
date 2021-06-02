@@ -122,39 +122,5 @@
 </div>
 {% endblock %}
 {% block footer %}
-<div class="container">
-	<div class="footer__top">
-		<a href="index.html">
-			<img src="{% static "img/logo-white.png" %}" class="header__logo">
-		</a>
-		<a href="#" class="up_link">Вверх</a>
-		<ul class="footer__menu_list">
-			<li class="footer__menu_item">
-				Безопасность
-			</li>
-			<li class="footer__menu_item">
-				Правила
-			</li>
-			<li class="footer__menu_item">
-				Пользовательское соглашение
-			</li>
-			<li class="footer__menu_item">
-				Помощь и контакты
-			</li>
-			<li class="footer__menu_item">
-				Цены
-			</li>
-			<li class="footer__menu_item">
-				О нас
-			</li>
-		</ul>
-	</div>
-	<div class="footer__bottom">
-		<p class="all-rights">
-			Usluge © {% now "Y" %} by MadiSpace <span class="all-rights-span">
-				All rights reserved
-			</span>
-		</p>
-	</div>
-</div>
+    {% include 'mainapp/components/footer.html' %}
 {% endblock %}

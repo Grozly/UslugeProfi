@@ -1,0 +1,70 @@
+@import "../colors.scss";
+
+.sidebar-category,
+.sidebar-subcategory {
+    display: block;
+    width: 100%;
+    border: 1px solid $main-color;
+    padding: 10px;
+    color: $main-color;
+    margin-bottom: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar-category,
+.sidebar-subcategory {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &::after {
+        content: "\f078";
+        margin-left: 8px;
+        font-family: "FontAwesome";
+        color: $main-color;
+        font-size: 10px;
+        transform: rotate(-180deg);
+        transition: 0.3s;
+    }
+}
+
+.sidebar-category[data-visible="false"],
+.sidebar-subcategory[data-visible="false"] {
+    &::after {
+        transform: rotate(0deg);
+    }
+}
+
+.sidebar-category[data-visible="false"] + .sidebar__subcategories-block .sidebar-subcategory,
+.sidebar-subcategory[data-visible="false"] + .sidebar__services-block .sidebar-service {
+    height: 0px;
+    opacity: 0;
+    visibility: hidden;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-bottom: 0px;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+
+    label,
+    input[type="checkbox"] {
+        height: 0px;
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.sidebar-service {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    transition: 0.3s;
+
+    input[type="checkbox"] {
+        margin: 0 8px 0 0;
+    }
+}

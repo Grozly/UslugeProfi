@@ -1,0 +1,9 @@
+<div class="sidebar__categoryies-block">
+    {% for category in category_list %}
+    <div class="sidebar__category-item">
+        <button class="sidebar-category" data-id="{{category.id}}" data-visible="false">
+            {{ category }}
+        </button>
+    </div>
+    {% endfor %}
+</div>

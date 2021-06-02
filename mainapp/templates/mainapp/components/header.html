@@ -1,0 +1,59 @@
+{% load static %}
+<div class="container">
+    <div class="header__top">
+        <a href="{% url 'main:main' %}" class="header__logo-wrapper">
+            <img src="{% static "img/logo.png" %}" class="header__logo">
+        </a>
+
+        <div class="header__links header__links__mobile">
+            {% include 'mainapp/components/header-login.html' %}
+        </div>
+        <div class="header__selectors">
+            <select size="1" name="city">
+                <option value="0">Все города</option>
+                <option value="1">Санкт-Петербург</option>
+                <option value="2">Москва</option>
+                <option value="3">Краснодар</option>
+                <option value="4">Калининград</option>
+            </select>
+            <select size="1" name="radius">
+                <option value="0">Все расстояния</option>
+                <option value="1">25 км</option>
+                <option value="2">50 км</option>
+                <option value="3">150 км</option>
+            </select>
+            <select size="1" name="face">
+                <option value="0">Все</option>
+                <option value="1">Юр.лицо</option>
+                <option value="2">Физ.лицо</option>
+                <option value="3">ИП</option>
+            </select>
+            <select size="1" name="ch_price">
+                <option value="0">Фильтровать по</option>
+                <option value="2">Сначала новые</option>
+                <option value="1">Сначала старые</option>
+                <option value="3">По рейтингу</option>
+            </select>
+        </div>
+    </div>
+    <div class="ad_block mobile_top only_mobile"></div>
+    <div class="header__bottom">
+        <div class="header__links header__links__desktop">
+            {% include 'mainapp/components/header-login.html' %}
+        </div>
+        <div class="header__search__desktop">
+            {% include 'mainapp/components/header-search.html' %}
+        </div>
+    </div>
+    <div class="header__search__mobile">{% include 'mainapp/components/header-search.html' %}</div>
+</div>
+
+<!-- <div class="ad_block">
+    {% if user.is_authenticated %}
+    <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement"
+        >Личный кабинет</a
+    >
+    {% else %}
+    <a href="{% url 'main:main' %}" class="advetisement myLinkModal">Личный кабинет</a>
+    {% endif %}
+</div> -->

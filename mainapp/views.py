@@ -1,17 +1,15 @@
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.views import LoginView, LogoutView
+import json
+from django.contrib.auth.views import LogoutView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.views.generic.base import TemplateView, View
-import json
-import ast
 from django.forms import inlineformset_factory
 from django.http import JsonResponse, HttpResponseRedirect
 from validate_email import validate_email
 from django.contrib import messages
 from django.core.mail import EmailMessage
 from authapp.models import UslugeUser, UslugeUserProfile
-from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse, reverse_lazy
@@ -50,6 +48,7 @@ class TemplateIndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(TemplateIndexView, self).get_context_data(**kwargs)
+        context['announcements'] = Announcement.objects.all().order_by('-created_at')
         return context
 
 
@@ -357,6 +356,21 @@ class ApiEditAdView(View):
                 return JsonResponse({'data': data}, status=200)
             return JsonResponse({'error': 'Not POST reqeust!'}, status=400)
         return JsonResponse({'error': 'Not AJAX reqeust!'}, status=400)
+
+
+class AnnouncementDetailView(DetailView):
+
+    model = Announcement
+    template_name = 'mainapp/components/detail_announcement.html'
+    context_object_name = 'announcement'
+
+    def get_context_data(self, **kwargs):
+        announcement_id = Announcement.objects.only('id').get(id=self.kwargs['pk'])
+        ser = UserService.objects.all()
+        print(ser)
+        context = super(AnnouncementDetailView, self).get_context_data(**kwargs)
+        context['services'] = UserService.objects.filter(user_announcement_id=announcement_id)
+        return context
 
 # class UpdateAnnouncementView(UpdateView):
 #     model = Announcement

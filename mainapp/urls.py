@@ -17,6 +17,7 @@ urlpatterns = [
     path('announcements/', mainapp.AnnouncementListView.as_view(), name='announcements'),
     path('edit-announcement/<pk>/', mainapp.UpdateAnnouncementView.as_view(), name='edit-announcement'),
     path('update-announcement/', csrf_exempt(mainapp.ApiEditAdView.as_view()), name='update-announcement'),
+    path('announcement/<pk>/', mainapp.AnnouncementDetailView.as_view(), name='detail'),
     path('featured-announcements/', mainapp.FeaturedAnnouncementsListView.as_view(), name='featured-announcements'),
     path('ajax/category-val/', mainapp.get_json_category_data, name='ajax-category-val'),
     path('ajax/subcategory-val/<pk>/', mainapp.get_json_subcategory_data, name='ajax-subcategory-val'),

@@ -8,6 +8,8 @@
 {% block content %}
     {% include 'mainapp/components/map.html' %}
     {% include 'mainapp/components/catalog.html' %}
+    {% block detail %}
+    {% endblock %}
 {% endblock %}
 {% block footer %}
     {% include 'mainapp/components/footer.html' %}

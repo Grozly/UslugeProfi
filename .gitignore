@@ -118,4 +118,6 @@ GitHub.sublime-settings
 migrations
 node_modules
 static
+data
 package-lock.json
+docker-compose.yml

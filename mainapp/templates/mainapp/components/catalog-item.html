@@ -1,12 +1,13 @@
 {% load static %}
+{% for item in announcements %}
 <li class="catalog-item">
-    <a href="detail.html" class="catalog-item__link">
+    <a href="{% url 'main:detail' item.pk %}" class="catalog-item__link">
         <div class="catalog-item__image-wrapper">
-            <img src="{% static "img/catalog.png" %}" alt="" class="catalog-item__image" >
+            <img src="media/{{ item.photo_announcement }}" alt="" class="catalog-item__image" >
         </div>
-        <h3 class="catalog-item__title">Ремонт “под ключ”</h3>
+        <h3 class="catalog-item__title">{{ item.name }}</h3>
         <p class="catalog-item__description">
-            Ремонт квартир, офисов, нежилых помещений “под ключ”. Составление сметы, договор...
+            {{ item.description }}
         </p>
     </a>
 
@@ -21,3 +22,4 @@
         <p class="catalog-item__comments-count">12 комментариев</p>
     </div>
 </li>
+{% endfor %}

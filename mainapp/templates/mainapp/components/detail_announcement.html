@@ -1,108 +1,74 @@
-{% extends 'mainapp/index.html' %}
-{% load static %}
+{% extends 'mainapp/index.html' %} {% load static %} {% block detail %}
+<div class="announcement">
+    <div class="announcement__info-block">
+        <div class="announcement__left-block">
+            <h1 class="announcement__title">{{ announcement.name }}</h1>
 
-{% block detail %}
-<div class="detail_block">
-    <div class="photo_block">
-        <img src="/media/{{ announcement.photo_announcement }}" alt="" class="detail_img">
-        <a href="#" class="fav_link"><img src="img/fav.png" alt=""></a>
-    </div>
-    <div class="description_block">
-        <h1 class="detail_title">
-            {{ announcement.name }}
-        </h1>
-        <p class="price">
-            от 10 000 руб.
-        </p>
-        <p class="description">
-            {{ announcement.description }}
+            <div class="announcement__image-wrapper">
+                <img
+                    src="/media/{{ announcement.photo_announcement }}"
+                    alt=""
+                    class="announcement__image"
+                />
+                <!-- <a href="#" class="fav_link"><img src="/static/img/fav.png" alt=""></a> -->
+            </div>
+
+            <p class="announcement__description">{{ announcement.description }}</p>
+        </div>
+
+        <div class="announcement__right-block">
+            <p class="announcement__price">от 10 000 руб.</p>
             <p class="bold">Услуги:</p>
+
             <ul class="services">
                 {% for service in services %}
-                <li>
-                    {{ service.name }}
-                </li>
+                <li>{{ service.name }}</li>
                 {% endfor %}
             </ul>
-        </p>
-        <a href="#" class="location_link">
-            {{ announcement.user_id.uslugeuserprofile.address_profile }}
-        </a>
-        <div class="owner_block">
-            <img src="/media/{{ announcement.user_id.uslugeuserprofile.photo_profile }}" alt="">
-            <p class="owner_info">
-                {{ announcement.user_id.uslugeuserprofile.name_profile }}
-                {{ announcement.user_id.uslugeuserprofile.surname_profile }}<br>
-                <span><button class="bold tel show-tel">
-                    Показать номер</button>
-                </span>
+
+            <!-- <a href="#" class="location_link">
+                {{ announcement.user_id.uslugeuserprofile.address_profile }}
+            </a> -->
+
+            <div class="announcement__owner">
+                <div class="announcement__owner-info">
+                    <p>
+                        {{announcement.user_id.uslugeuserprofile.name_profile}}
+                        {{announcement.user_id.uslugeuserprofile.surname_profile}}
+                    </p>
+                    <button class="bold tel show-tel">Показать номер</button>
+                </div>
+
+                <div class="announcement__owner-image-wrapper">
+                    <img
+                        class="announcement__owner-image"
+                        src="/media/{{ announcement.user_id.uslugeuserprofile.photo_profile }}"
+                        alt=""
+                    />
+                </div>
+            </div>
+
+            <p id="tel-hide" class="bold tel-hide">
+                {{ announcement.user_id.uslugeuserprofile.phone_profile }}
             </p>
         </div>
-        <p id="tel-hide" class="bold tel-hide">
-                    {{ announcement.user_id.uslugeuserprofile.phone_profile }}
-                </p>
+    </div>
+
+    <div class="announcement__comments-block">
+        <h3 class="announcement__comments-title">Комментарии</h3>
+        <ul class="announcement__comments-list">
+            <li>{% include 'mainapp/components/comment.html' %}</li>
+            <li>{% include 'mainapp/components/comment.html' %}</li>
+        </ul>
+
+        <form action="#" class="announcement__leave-comment">
+            <p class="announcement__leave-comment-title">Оставить комментарий</p>
+            <textarea name="comment" id="com" class="announcement__leave-textarea"></textarea>
+
+            {% include 'mainapp/components/rating.html' %}
+
+            <input class="announcement__leave-comment-submit" type="submit" value="Отправить" />
+        </form>
     </div>
 </div>
-    <div class="comments_block">
-    <h3 class="comments">
-        Комментарии
-    </h3>
-    <ul class="comments">
-        <li>
-            <div class="owner_block-com">
-                <img src="img/photo.png" alt="">
-                <div class="owner_info">
-                    Михаил Рябинин
-                    <p class="catalog_rate">
-                        <span class="rate_title">Оценка:</span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star"></span>
-                    </p>
-                </div>
-            </div>
-            <div class="com_desc">
-                Сделали ремонт квартиры для дочери с нуля. Качественная работа, высокая скорость. Бригада коммуникабельная, буду обращаться еще!
-            </div>
-        </li>
-        <li>
-            <div class="owner_block-com">
-                <img src="img/photo.png" alt="">
-                <div class="owner_info">
-                    Михаил Рябинин
-                    <p class="catalog_rate">
-                        <span class="rate_title">Оценка:</span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star"></span>
-                    </p>
-                </div>
-            </div>
-            <div class="com_desc">
-                Сделали ремонт квартиры для дочери с нуля. Качественная работа, высокая скорость. Бригада коммуникабельная, буду обращаться еще!
-            </div>
-        </li>
-    </ul>
-    <form action="#" class="leave-a-com">
-        <p class="lac_title">
-            Оставить комментарий
-        </p>
-        <textarea name="comment" id="com" cols="30" rows="10" class="lac_txt"></textarea>
-        <div class="com_submit">
-            <p class="catalog_rate">
-                        <span class="rate_title">Оценка:</span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                    </p>
-            <input class="blue_btn form_btn com_form-btn" type="submit" value="Отправить">
-        </div>
-    </form>
-    </div>
 {% endblock %}

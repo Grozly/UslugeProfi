@@ -1,0 +1,16 @@
+.rating {
+    display: flex;
+
+    .rating-title {
+        margin: 0 8px 0 0;
+    }
+
+    .rating-stars {
+        display: flex;
+
+        * {
+            margin-right: 2px;
+            cursor: pointer;
+        }
+    }
+}

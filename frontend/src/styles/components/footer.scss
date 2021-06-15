@@ -18,6 +18,7 @@
 
         .footer__menu-item {
             margin-left: 16px;
+            text-align: center;
 
             &:first-child {
                 margin-left: 0;
@@ -50,6 +51,10 @@
     .footer__top,
     .footer__menu {
         flex-direction: column;
+
+        .footer__menu-item {
+            margin-left: 0;
+        }
     }
 }
 

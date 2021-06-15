@@ -1,0 +1,15 @@
+@import "./colors.scss";
+
+@mixin blue-button {
+    background: $main-color;
+    color: white;
+    font-weight: bold;
+    padding: 16px 30px;
+    border: 0;
+    transition: 0.3s;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba($color: $main-color, $alpha: 0.8);
+    }
+}

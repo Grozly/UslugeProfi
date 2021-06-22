@@ -1,3 +1,5 @@
+import { getLocationOfAddressAPI } from "./api/geocodingAPI";
+
 const form = document.getElementsByClassName("create_new_ad_from")[0];
 const adName = document.getElementsByClassName("ad_name_input")[0];
 const adDescription = document.getElementsByClassName("ad_description_input")[0];
@@ -17,6 +19,16 @@ $.ajaxSetup({
 });
 
 if (form) {
+    let addressChangeTimeout;
+
+    adAddress.addEventListener("input", (event) => {
+        if (addressChangeTimeout) clearTimeout(addressChangeTimeout);
+        addressChangeTimeout = setTimeout(async () => {
+            const result = await getLocationOfAddressAPI(event.target.value);
+            console.log(result.data.results[0].geometry.location);
+        }, 3000);
+    });
+
     adImageFile.addEventListener("change", () => {
         const image_data = adImageFile.files[0];
         const url = URL.createObjectURL(image_data);

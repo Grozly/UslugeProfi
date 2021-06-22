@@ -2,7 +2,7 @@ import {
     getAllCategoriesAPI,
     getServicesBySubcategoryAPI,
     getSubcategoriesByCategoryAPI,
-} from "./api";
+} from "./api/api";
 
 // const createSidebarCategories = async function (categoriesBlock: Element) {
 //     const categoriesResult = await getAllCategoriesAPI();

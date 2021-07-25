@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,10 +21,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9xdfzyfl0=*y_7cm)5-qj1x#e@m#t8=(x#uur(h7$orh$4rfou'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
@@ -96,7 +97,7 @@ DATABASES = {
         'USER': 'adminusluge',
         'PASSWORD': 'adminusluge',
         'HOST': 'localhost',
-        'PORT': 5432,
+        'PORT': "49153",
     }
 }
 
@@ -153,9 +154,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # email settings
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'uslugeprofiloc@gmail.com'
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'uslugeprofiloc@gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_PASSWORD = 'uslugeprofiloc123'
+EMAIL_HOST = config('EMAIL_HOST', default='localhost')
+EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')

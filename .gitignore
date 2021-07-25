@@ -21,7 +21,9 @@ media
 .idea/**/dynamic.xml 
 .idea/**/uiDesigner.xml 
 .idea/**/gradle.xml 
-.idea/**/libraries 
+.idea/**/libraries
+.idea/UslugeProfi.iml
+.idea/misc.xml 
 *.iws /out/ 
 
 # Python # 
@@ -121,3 +123,6 @@ static
 data
 package-lock.json
 docker-compose.yml
+
+# Settings #
+settings.ini

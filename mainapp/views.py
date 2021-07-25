@@ -37,6 +37,11 @@ def get_json_service_data(request, *args, **kwargs):
     return JsonResponse({'data': object_service})
 
 
+def get_json_announcement_data():
+    context = Announcement.objects.all().order_by('-created_at')
+    return JsonResponse({'data': context})
+
+
 class TemplateVerifyView(TemplateView):
 
     template_name = 'mainapp/verify.html'
@@ -371,79 +376,3 @@ class AnnouncementDetailView(DetailView):
         context = super(AnnouncementDetailView, self).get_context_data(**kwargs)
         context['services'] = UserService.objects.filter(user_announcement_id=announcement_id)
         return context
-
-# class UpdateAnnouncementView(UpdateView):
-#     model = Announcement
-#     template_name = "mainapp/announcement_update_form.html"
-#     form_class = EditAdModelForm
-#     second_form_class = EditUserServiceModelForm
-#     is_update_view = True
-#
-#     def get_form_class(self):
-#         """Return the form class to use."""
-#         return self.form_class
-#
-#     def get_second_form_class(self):
-#         """Return the form class to use."""
-#         return self.second_form_class
-#
-#     def get_form(self, form_class=None, second_form_class=None):
-#         """Return an instance of the form to be used in this view."""
-#         if form_class is None:
-#             form_class = self.get_form_class()
-#         if second_form_class is None:
-#             second_form_class = self.get_second_form_class()
-#         print(form_class, second_form_class)
-#         return [form_class(**self.get_form_kwargs()), second_form_class(**self.get_form_kwargs())]
-#
-#     def get_context_data(self, **kwargs):
-#         """Insert the form into the context dict."""
-#         if 'form' not in kwargs:
-#             kwargs['form'] = self.get_form()
-#         if 'form2' not in kwargs:
-#             kwargs['form2'] = self.get_form()
-#         return super().get_context_data(**kwargs)
-
-
-# class UpdateViewAd(UpdateView):
-#     model = Announcement
-#     template_name = "mainapp/announcement_update_form.html"
-#     is_update_view = True
-#
-#     def get_form(self, form_class=None):
-#         self.request = self.request.user.pk
-#
-#     def get_context_data(self, pk, **kwargs):
-#         context = super(UpdateViewAd, self).get_context_data(**kwargs)
-#         context['second_model'] = UserService
-#         context['form_ad'] = UpdateAdModelForm()
-#         context['form_service'] = UpdateServiceAdModelForm()
-#         context['announcement'] = Announcement.objects.filter(user_id=request.user.id)
-#         context['user_service'] = UserService.objects.filter(user_announcement_id=request.announcement.pk)
-#         context['category'] = Category.objects.all()
-#         context['subcategory'] = SubCategory.objects.all()
-#         return context
-
-
-# class UpdateViewAd(View):
-#
-#     def get(self, request, pk):
-#         form_ad = UpdateAdModelForm()
-#         form_service = UpdateServiceAdModelForm()
-#         category = Category.objects.all()
-#         subcategory = SubCategory.objects.all()
-#         announcement = Announcement.objects.filter(user_id=request.user.id)
-#         print(announcement)
-#         for item in announcement:
-#             print(item)
-#             print(item.id)
-#             user_services = UserService.objects.filter(user_announcement_id=item.id)
-#         context = {
-#             'form_ad': form_ad,
-#             'form_service': form_service,
-#             'category': category,
-#             'subcategory': subcategory,
-#             'user_service': user_services,
-#             'announcement': announcement
-#         }
-#         return render(request, 'mainapp/announcement_update_form.html', context)

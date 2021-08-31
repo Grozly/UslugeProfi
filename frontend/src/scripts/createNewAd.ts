@@ -1,32 +1,87 @@
 import { getLocationOfAddressAPI } from "./api/geocodingAPI";
+import { initMap } from "./map";
 
-const form = document.getElementsByClassName("create_new_ad_from")[0];
-const adName = document.getElementsByClassName("ad_name_input")[0];
-const adDescription = document.getElementsByClassName("ad_description_input")[0];
-const adCategoty = document.getElementsByClassName("ad_category_input")[0];
-const adSubcategory = document.getElementsByClassName("ad_subcategory_input")[0];
-const subcategoryText = document.getElementsByClassName("ad_subcategory_text")[0];
-const adAddress = document.getElementsByClassName("ad_address_input")[0];
-const adImageBox = document.getElementsByClassName("ad_image_block")[0];
-const adImageFile = document.getElementsByClassName("ad_photo_announcement_input")[0];
-const userID = document.getElementsByName("user_id")[0];
-const csrf = document.getElementsByName("csrfmiddlewaretoken");
+const csrf: HTMLInputElement = document.getElementsByName("csrfmiddlewaretoken")[0] as HTMLInputElement;
+
+const form: HTMLInputElement = document.getElementsByClassName("create_new_ad_from")[0] as HTMLInputElement;
+const adName: HTMLInputElement = document.getElementsByClassName("ad_name_input")[0] as HTMLInputElement;
+const adDescription: HTMLInputElement = document.getElementsByClassName("ad_description_input")[0] as HTMLInputElement;
+const adCategoty: HTMLInputElement = document.getElementsByClassName("ad_category_input")[0] as HTMLInputElement;
+const adSubcategory: HTMLInputElement = document.getElementsByClassName("ad_subcategory_input")[0] as HTMLInputElement;
+const subcategoryText: HTMLInputElement = document.getElementsByClassName("ad_subcategory_text")[0] as HTMLInputElement;
+const adAddress: HTMLInputElement = document.getElementsByClassName("ad_address_input")[0] as HTMLInputElement;
+const adImageBox: HTMLInputElement = document.getElementsByClassName("ad_image_block")[0] as HTMLInputElement;
+const userID: HTMLInputElement = document.getElementsByName("user_id")[0] as HTMLInputElement;
+const adImageFile: HTMLInputElement = document.getElementsByClassName(
+    "ad_photo_announcement_input"
+)[0] as HTMLInputElement;
+
+let map: google.maps.Map<HTMLElement>;
+let selectedLocationLatLng: google.maps.LatLng;
+let selectedLocationMarker: google.maps.Marker;
+
+initMap().then((res) => {
+    map = res;
+});
+
+function validateForm() {
+    console.log(adName.value);
+    if (!adName.value) {
+        alert("Name not selected");
+        return false;
+    }
+
+    if (!adDescription.value) {
+        alert("Description not selected");
+        return false;
+    }
+
+    if (!adImageFile.files[0]) {
+        alert("Image not selected");
+        return false;
+    }
+
+    if (!adAddress.value) {
+        alert("Address not selected");
+        return false;
+    }
+
+    return true;
+}
 
 $.ajaxSetup({
     headers: {
-        "X-CSRF-TOKEN": csrf[0].value,
+        "X-CSRF-TOKEN": csrf.value,
     },
 });
 
 if (form) {
-    let addressChangeTimeout;
+    let addressChangeTimeout: NodeJS.Timeout;
 
     adAddress.addEventListener("input", (event) => {
         if (addressChangeTimeout) clearTimeout(addressChangeTimeout);
         addressChangeTimeout = setTimeout(async () => {
-            const result = await getLocationOfAddressAPI(event.target.value);
-            console.log(result.data.results[0].geometry.location);
-        }, 3000);
+            const result = await getLocationOfAddressAPI((event.target as HTMLInputElement).value);
+
+            if (!(Array.isArray(result.data.results) && result.data.results.length > 0 && map)) {
+                console.log(result.data);
+                selectedLocationLatLng = undefined;
+                selectedLocationMarker = undefined;
+                return;
+            }
+
+            let addressLocation = result.data.results[0].geometry.location;
+
+            // Deleting old marker
+            if (selectedLocationMarker) selectedLocationMarker.setMap(null);
+
+            selectedLocationLatLng = addressLocation;
+            selectedLocationMarker = new google.maps.Marker({ position: addressLocation });
+
+            map.setCenter(addressLocation);
+            selectedLocationMarker.setMap(map);
+            (event.target as HTMLInputElement).value = result.data.results[0].formatted_address;
+        }, 1500);
     });
 
     adImageFile.addEventListener("change", () => {
@@ -35,51 +90,37 @@ if (form) {
         adImageBox.innerHTML = `<a href="${url}"><img src="${url}" height="250px"></a>`;
     });
 
-    function validateForm() {
-        console.log(adName.value);
-        if (!adName.value) {
-            alert("Name not selected");
-            return false;
-        }
-
-        if (!adDescription.value) {
-            alert("Description not selected");
-            return false;
-        }
-
-        if (!adImageFile.files[0]) {
-            alert("Image not selected");
-            return false;
-        }
-
-        if (!adAddress.value) {
-            alert("Address not selected");
-            return false;
-        }
-
-        return true;
-    }
-
     form.addEventListener("submit", (event) => {
         event.preventDefault();
 
         if (!validateForm()) return null;
 
-        const optionsArray = [];
+        const optionsArray: Array<{
+            id: string;
+            name: string;
+            select_price: string;
+            select_currency: string;
+            select_measurement: string;
+
+            fixed_price?: string;
+            lower_price?: string;
+            upper_price?: string;
+        }> = [];
+
         const adOptions = document.querySelectorAll(".new_ad_options");
         let isOptionsSelected = false;
 
         adOptions.forEach((item, index) => {
-            const name = item.querySelectorAll(".subcat_checkbox")[0].labels[0].innerText;
-            const fixedPrice = item.getElementsByClassName("ads_input_fixed")[0];
-            const lowerPrice = item.getElementsByClassName("ads_input_lower")[0];
-            const upperPrice = item.getElementsByClassName("ads_input_upper")[0];
-            const negotiable = item.getElementsByClassName("ads_input_negotiable")[0];
-            const checkbox = item.getElementsByClassName("subcat_checkbox")[0];
-            const priceSelector = item.getElementsByClassName("new_ad_price_category")[0];
-            const adSelectPrice = item.getElementsByClassName("select_price")[0];
-            const adSelectCurrency = item.getElementsByClassName("select_currency")[0];
-            const adSelectMeasurement = item.getElementsByClassName("select_measurement")[0];
+            const name = (item.querySelectorAll(".subcat_checkbox")[0] as HTMLInputElement).labels[0].innerText;
+            const fixedPrice = item.getElementsByClassName("ads_input_fixed")[0] as HTMLInputElement;
+            const lowerPrice = item.getElementsByClassName("ads_input_lower")[0] as HTMLInputElement;
+            const upperPrice = item.getElementsByClassName("ads_input_upper")[0] as HTMLInputElement;
+            const negotiable = item.getElementsByClassName("ads_input_negotiable")[0] as HTMLInputElement;
+            const checkbox = item.getElementsByClassName("subcat_checkbox")[0] as HTMLInputElement;
+            const priceSelector = item.getElementsByClassName("new_ad_price_category")[0] as HTMLInputElement;
+            const adSelectPrice = item.getElementsByClassName("select_price")[0] as HTMLInputElement;
+            const adSelectCurrency = item.getElementsByClassName("select_currency")[0] as HTMLInputElement;
+            const adSelectMeasurement = item.getElementsByClassName("select_measurement")[0] as HTMLInputElement;
 
             const optionID = item.getAttribute("data-id");
 
@@ -132,7 +173,7 @@ if (form) {
         }
 
         const fd = new FormData();
-        fd.append("csrfmiddlewaretoken", csrf[0].value);
+        fd.append("csrfmiddlewaretoken", csrf.value);
         fd.append("user_id", userID.value);
         fd.append("name", adName.value);
         fd.append("description", adDescription.value);
@@ -164,7 +205,7 @@ if (form) {
         url: `/ajax/category-val/`,
         success: function (response) {
             const categoryData = response.data;
-            categoryData.forEach((item) => {
+            categoryData.forEach((item: any) => {
                 const option = document.createElement("option");
                 option.textContent = item.name;
                 option.setAttribute("class", "item");
@@ -178,7 +219,7 @@ if (form) {
     });
 
     adCategoty.addEventListener("change", (e) => {
-        const selectedCategory = e.target.selectedIndex;
+        const selectedCategory = (e.target as HTMLSelectElement).selectedIndex;
 
         adSubcategory.innerHTML = "";
         subcategoryText.textContent = "-- Выберите подкатегорию --";
@@ -195,7 +236,7 @@ if (form) {
                 var adsBlock = document.getElementById("ads_by_subcategory_block");
                 adsBlock.innerHTML = "";
 
-                response.data.forEach((item, index) => {
+                response.data.forEach((item: any) => {
                     adSubcategory.innerHTML =
                         adSubcategory.innerHTML +
                         `<option value="${item.id}">
@@ -210,7 +251,7 @@ if (form) {
     });
 
     adSubcategory.addEventListener("change", (e) => {
-        const selectedSubcategory = e.target.value;
+        const selectedSubcategory = (e.target as HTMLSelectElement).value;
 
         $.ajax({
             type: "GET",
@@ -219,7 +260,7 @@ if (form) {
                 var adsBlock = document.getElementById("ads_by_subcategory_block");
                 adsBlock.innerHTML = "";
 
-                response.data.forEach((item, index) => {
+                response.data.forEach((item: any, index: number) => {
                     adsBlock.innerHTML =
                         adsBlock.innerHTML +
                         `<div class="ads_options new_ad_options" data-id=${item.id}>
@@ -277,48 +318,72 @@ if (form) {
                 });
 
                 $(".new_ad_price_category").change(function (event) {
-                    switch (Number(event.target.value)) {
+                    switch (Number((event.target as HTMLSelectElement).value)) {
                         case 1:
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_fixed"
-                            )[0].style.display = "block";
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_lower"
-                            )[0].style.display = "none";
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_upper"
-                            )[0].style.display = "none";
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_negotiable"
-                            )[0].style.display = "none";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_fixed"
+                                )[0] as HTMLInputElement
+                            ).style.display = "block";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_lower"
+                                )[0] as HTMLInputElement
+                            ).style.display = "none";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_upper"
+                                )[0] as HTMLInputElement
+                            ).style.display = "none";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_negotiable"
+                                )[0] as HTMLInputElement
+                            ).style.display = "none";
                             break;
                         case 2:
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_fixed"
-                            )[0].style.display = "none";
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_lower"
-                            )[0].style.display = "none";
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_upper"
-                            )[0].style.display = "none";
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_negotiable"
-                            )[0].style.display = "block";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_fixed"
+                                )[0] as HTMLInputElement
+                            ).style.display = "none";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_lower"
+                                )[0] as HTMLInputElement
+                            ).style.display = "none";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_upper"
+                                )[0] as HTMLInputElement
+                            ).style.display = "none";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_negotiable"
+                                )[0] as HTMLInputElement
+                            ).style.display = "block";
                             break;
                         case 3:
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_fixed"
-                            )[0].style.display = "none";
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_lower"
-                            )[0].style.display = "block";
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_upper"
-                            )[0].style.display = "block";
-                            event.target.parentElement.getElementsByClassName(
-                                "ads_input_negotiable"
-                            )[0].style.display = "none";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_fixed"
+                                )[0] as HTMLInputElement
+                            ).style.display = "none";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_lower"
+                                )[0] as HTMLInputElement
+                            ).style.display = "block";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_upper"
+                                )[0] as HTMLInputElement
+                            ).style.display = "block";
+                            (
+                                event.target.parentElement.getElementsByClassName(
+                                    "ads_input_negotiable"
+                                )[0] as HTMLInputElement
+                            ).style.display = "none";
                             break;
                     }
                 });

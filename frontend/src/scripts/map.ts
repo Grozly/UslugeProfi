@@ -6,7 +6,7 @@ import {
     MAP_DEFAULT_ZOOM,
 } from "../config.map";
 
-async function initMap() {
+export async function initMap() {
     let changeZoomTimeoutId: NodeJS.Timeout;
     let changePositionTimeoutId: NodeJS.Timeout;
 
@@ -38,6 +38,6 @@ async function initMap() {
             console.log("currentZoom", currentZoom);
         }, MAP_CHANGE_LOCATION_TIMEOUT);
     });
-}
 
-initMap();
+    return map;
+}

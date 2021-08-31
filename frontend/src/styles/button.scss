@@ -13,3 +13,7 @@
         background-color: rgba($color: $main-color, $alpha: 0.8);
     }
 }
+
+.blue_btn {
+    @include blue-button;
+}

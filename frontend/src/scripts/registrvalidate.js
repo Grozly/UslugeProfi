@@ -157,7 +157,7 @@ loginSubmit.onclick = (e) => {
     let loginRememberMeVal = loginForm.elements.loginRememberMe.value;
     let loginEmailFeedBackArea = document.querySelector(".loginEmailFeedBackArea");
     let loginPasswordFeedBackArea = document.querySelector(".loginPasswordFeedBackArea");
-    if ((loginEmailVal.length = 0)) {
+    if (loginEmailVal.length < 1) {
         loginEmail.classList.add("is-invalid");
         loginPassword.classList.add("is-invalid");
         loginEmailFeedBackArea.style.display = "block";

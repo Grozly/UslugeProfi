@@ -1,14 +1,12 @@
 <div class="login__links">
-    {% if user.is_authenticated %} 
-        {% if user.is_superuser %}
-        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-        <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
-        {% else %}
-        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-        <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{user}}</a>
-        {% endif %}
+    {% if user.is_authenticated %} {% if user.is_superuser %}
+    <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+    <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
     {% else %}
-    <a href="#" class="login myLinkModal">Войти</a> |
-    <a href="#" class="signup myLinkModal1">Регистрация</a>
+    <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+    <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{user}}</a>
+    {% endif %} {% else %}
+    <a href="#" class="login open__login-popup">Войти</a> |
+    <a href="#" class="signup open__register-popup">Регистрация</a>
     {% endif %}
 </div>

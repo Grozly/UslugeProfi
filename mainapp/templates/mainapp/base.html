@@ -1,226 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>
-		{% block title %}
-		{{ title }}
-		{% endblock %}
-	</title>
-	{% block css %}
-	<link rel="shortcut icon" href="{% static "img/fav.png" %}" type="image/png">
-	<link rel="stylesheet" href="{% static "main.css" %}">
-	{% endblock %}
-</head>
-<body>
-	<header id="header">
-		{% include "inc/_inc_messages.html" %}
-		{% block header %}
-		{% endblock %}
-	</header>
-	<section id="main__shop">
-		<div class="container">
-			<div class="flex__container">
-				<div class="sidebar">
-					{% block sidebar%}
-					{% endblock %}
-				</div>
-				<div class="page_body">
-					{% block content %}
-					{% endblock %}
-				</div>
-			</div>
-		</div>
-	</section>
-	<footer id="footer">
-		{% block footer %}
-		{% endblock %}
-	</footer>
+    {% load static %}
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %} {{ title }} {% endblock %}</title>
+        {% block css %} <link rel="shortcut icon" href="{% static "img/fav.png" %}" type="image/png"> <link
+        rel="stylesheet" href="{% static "main.css" %}"> {% endblock %}
+    </head>
+    <body>
+        <header id="header">{% include "inc/_inc_messages.html" %} {% block header %} {% endblock %}</header>
+        <section id="main__shop">
+            <div class="container">
+                <div class="flex__container">
+                    <div class="sidebar">{% block sidebar%} {% endblock %}</div>
+                    <div class="page_body">{% block content %} {% endblock %}</div>
+                </div>
+            </div>
+        </section>
+        <footer id="footer">{% block footer %} {% endblock %}</footer>
 
-	<div id="myModal">
-		<p>Войти</p>
-		<span id="myModal__close" class="close">
-			<img src="{% static "img/close.png" %}" alt="">
-		</span>
-		<form action="{% url 'main:login' %}" class="login_form flex_form" type="post" id="loginForm">
-			{% csrf_token %}
-			<input type="email" class="form_input" placeholder="Ваш e-mail" id="loginEmailField">
-			<div class="loginEmailFeedBackArea invalid-feedback" style="display:none"></div>
-			<div class="password">
-				<input class="form_input" type="password" id="loginPassword" placeholder="Введите пароль"
-					   name="password">
-				<a href="#" class="password-control"></a>
-			</div>
-			<div class="loginPasswordFeedBackArea invalid-feedback" style="display:none">
-			</div>
-			<p>
-				<input id="loginRememberMe" class="form_checkbox" type="checkbox" name="remember-me"
-					value="remember-me">Запомнить меня<br>
-			</p>
-			<input id="loginSubmit" class="blue_btn form_btn" type="submit" value="Войти">
-		</form>
+        <div class="popup__wrapper">
+            <div class="popup__wrapperInner">
+                <div class="popup__content">
+                    <div class="popup__close-button">+</div>
 
-		<div class="login__links">
-			<a href="#" class="login">Забыли пароль?</a> | <a href="#" class="signup myLinkModal1">Регистрация</a>
-		</div>
-	</div>
-	<div id="myOverlay"></div>
+                    <div class="popup__popup-view" id="login-popup">
+                        <h3>Войти</h3>
 
-	<div id="myModal1">
-		<p>Регистрация</p>
-		<span id="myModal__close1" class="close">
-			<img src="{% static "img/close.png" %}" alt="">
-		</span>
-		<form action="{% url 'main:register' %}" class="login_form flex_form" type="post" id="registrationForm">
-			{% csrf_token %}
+                        <form action="{% url 'main:login' %}" class="login_form flex_form" type="post" id="loginForm">
+                            {% csrf_token %}
+                            <input type="email" class="form_input" placeholder="Ваш e-mail" id="loginEmailField" />
+                            <div class="loginEmailFeedBackArea invalid-feedback" style="display: none"></div>
 
-			<input id="registrationEmailField" type="email" class="form_input registration_input"
-				placeholder="Ваш e-mail">
-			<div class="registrationEmailFeedBackArea invalid-feedback" style="display:none">
-			</div>
-			<div class="password">
-				<input class="form_input registration_input" type="password" id="passwordInputOne"
-					placeholder="Введите пароль" name="password">
-				<a href="#" class="showPasswordToggleOne password-control"></a>
-			</div>
-			<div class="registrationPasswordFeedBackAreaOne invalid-feedback" style="display:none">
-			</div>
-			<div class="password">
-				<input class="form_input registration_input" type="password" id="passwordInputTwo"
-					placeholder="Повторите пароль" name="password">
-				<a href="#" class="showPasswordToggleTwo password-control"></a>
-			</div>
-			<div class="registrationPasswordFeedBackArea invalid-feedback" style="display:none">
-			</div>
-			<div class="registrationPasswordsFeedBackArea invalid-feedback" style="display:none">
-			</div>
-			<p>
-				<input class="form_checkbox registration_input" id="is_agree" type="checkbox" name="remember-me"
-					value="remember-me">Я согласен с условиями
-				<a href="#">Пользовательского соглашения</a>
-			</p>
-			<p>
-				<input class="form_checkbox registration_input" id="is_18over" type="checkbox" name="remember-me"
-					value="remember-me">Мне больше 18 лет
-			</p>
-			<div class="formValidationFeedBack invalid-feedback" style="display:none">
-			</div>
-			<input id="registration_submit" class="blue_btn form_btn" type="submit" value="Зарегистрироватся">
-		</form>
+                            <input
+                                class="form_input"
+                                type="password"
+                                id="loginPassword"
+                                placeholder="Введите пароль"
+                                name="password"
+                            />
+                            <div class="loginPasswordFeedBackArea invalid-feedback" style="display: none"></div>
 
-		<div class="login__links">
-			<a href="#" class="signup myLinkModal">Уже есть аккаунт</a>
-		</div>
-	</div>
-	<div id="myOverlay1"></div>
+                            <div class="checkbox-block" style="margin-bottom: 20px">
+                                <input
+                                    id="loginRememberMe"
+                                    class="form_checkbox"
+                                    type="checkbox"
+                                    name="remember-me"
+                                    value="remember-me"
+                                />
+                                <label for="loginRememberMe">Запомнить меня</label>
+                            </div>
 
-	<div id="myModal2">
-		<p>Добавить объявление</p>
-		<span id="myModal__close2" class="close"><img src="{% static "img/close.png" %}" alt=""></span>
-		<form action="#" class="login_form flex_form">
-			<input type="text" class="form_input" placeholder="Название">
-			<input type="text" class="form_input" placeholder="Описание">
-			<input type="text" class="form_input" placeholder="Цена">
-			<input type="file" class="form_input" name="f">
-			<select size="1" name="category" class="form_input">
-				<option disabled>Категория</option>
-				<option value="1">Ремонт</option>
-				<option selected value="2">Строительство</option>
-				<option value="3">Разработка</option>
-			</select>
-			<select size="1" name="subcategory" class="form_input">
-				<option disabled>Подкатегория</option>
-				<option value="1">Ремонт</option>
-				<option selected value="2">Строительство</option>
-				<option value="3">Разработка</option>
-			</select>
-			<div>
-				<input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br>
-			</div>
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br>
-				<input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br>
-			</div>
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<input type="text" class="form_input" placeholder="Адрес">
-			<div class="form_map"><iframe
-					src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1999.058118409584!2d30.358355016070213!3d59.931177781873465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469631a5e66d51c5%3A0x6f00589ac258db97!2z0J3QtdCy0YHQutC40Lkg0L_RgC4sINCh0LDQvdC60YIt0J_QtdGC0LXRgNCx0YPRgNCz!5e0!3m2!1sru!2sru!4v1613214625240!5m2!1sru!2sru"
-					width="100%" height="70" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
-					tabindex="0"></iframe></div>
-			<input class="blue_btn form_btn" type="submit" value="Сохранить">
-		</form>
-	</div>
-	<div id="myOverlay2"></div>
+                            <button
+                                id="loginSubmit"
+                                class="blue_btn form_btn"
+                                type="submit"
+                                style="margin-bottom: 20px"
+                            >
+                                Войти
+                            </button>
+                        </form>
 
-	<div id="myModal3">
-		<p>Фильтровать</p>
-		<span id="myModal__close3" class="close"><img src="{% static "img/close.png" %}" alt=""></span>
-		<form action="#" class="login_form flex_form dark-form">
-			<select size="1" name="subcategory">
-				<option disabled>Подкатегория</option>
-				<option value="1">Ремонт</option>
-				<option selected value="2">Строительство</option>
-				<option value="3">Разработка</option>
-			</select>
-			<div>
-				<input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br>
-			</div>
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br>
-				<input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br>
-			</div>
-			<div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1">Шиномонтаж<br></div>
-			<select size="1" name="country">
-				<option disabled>Страна</option>
-				<option value="1">Сербия</option>
-				<option selected value="2">Россия</option>
-				<option value="3">Казахстан</option>
-			</select>
-			<select size="1" name="city">
-				<option disabled>Город</option>
-				<option value="1">Санкт-Петербург</option>
-				<option selected value="2">Москва</option>
-				<option value="3">Вильнюс</option>
-			</select>
-			<select size="1" name="radius">
-				<option value="0">Все расстояния</option>
-				<option value="1">25 км</option>
-				<option value="2">50 км</option>
-				<option value="3">150 км</option>
-			</select>
-			<select size="1" name="face">
-				<option value="0">Все</option>
-				<option value="1">Юр.лицо</option>
-				<option value="2">Физ.лицо</option>
-				<option value="3">ИП</option>
-			</select>
-			<select size="1" name="ch_price">
-				<option value="0">Фильтровать по</option>
-				<option value="2">По дате - сначала новые</option>
-				<option value="1">По дате - сначала старые</option>
-				<option value="3">По рейтингу</option>
-			</select>
-			<input class="blue_btn form_btn" type="submit" value="Применить">
-		</form>
-	</div>
-	<div id="myOverlay3"></div>
+                        <div class="login__links">
+                            <a href="#" class="login">Забыли пароль?</a> |
+                            <a href="#" class="signup open__register-popup">Регистрация</a>
+                        </div>
+                    </div>
 
-	<div id="myModal4">
-		<p>Cпасибо за регистрацию!</p>
-		<span id="myModal__close4" class="close">
-			<img src="{% static "img/close.png" %}" alt="">
-		</span>
+                    <div class="popup__popup-view" id="register-popup">
+                        <h3>Регистрация</h3>
 
-		<div>Чтобы войти в свой аккаунт подтвердите его с помошью письма на вашей почте</div>
-	</div>
-	<div id="myOverlay4"></div>
+                        <form
+                            action="{% url 'main:register' %}"
+                            class="login_form flex_form"
+                            type="post"
+                            id="registrationForm"
+                        >
+                            {% csrf_token %}
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://unpkg.com/axios@0.21.1/dist/axios.min.js"></script>
-    <script src="{% static 'main.js'%}"></script>
-	<script src="https://use.fontawesome.com/61f08ed9ff.js"></script>
-</body>
+                            <input
+                                id="registrationEmailField"
+                                type="email"
+                                class="form_input registration_input"
+                                placeholder="Ваш e-mail"
+                            />
+                            <div class="registrationEmailFeedBackArea invalid-feedback" style="display: none"></div>
 
+                            <div class="password">
+                                <input
+                                    class="form_input registration_input"
+                                    type="password"
+                                    id="passwordInputOne"
+                                    placeholder="Введите пароль"
+                                    name="password"
+                                />
+                                <a href="#" class="showPasswordToggleOne password-control"></a>
+                            </div>
+                            <div
+                                class="registrationPasswordFeedBackAreaOne invalid-feedback"
+                                style="display: none"
+                            ></div>
+
+                            <div class="password">
+                                <input
+                                    class="form_input registration_input"
+                                    type="password"
+                                    id="passwordInputTwo"
+                                    placeholder="Повторите пароль"
+                                    name="password"
+                                />
+                                <a href="#" class="showPasswordToggleTwo password-control"></a>
+                            </div>
+                            <div class="registrationPasswordFeedBackArea invalid-feedback" style="display: none"></div>
+                            <div class="registrationPasswordsFeedBackArea invalid-feedback" style="display: none"></div>
+
+                            <div class="checkbox-block" style="margin-bottom: 20px">
+                                <input
+                                    class="form_checkbox registration_input"
+                                    id="is_agree"
+                                    type="checkbox"
+                                    name="remember-me"
+                                    value="remember-me"
+                                />
+                                <label for="is_agree"
+                                    >Я согласен с условиям <a href="#">Пользовательского соглашения</a></label
+                                >
+                            </div>
+
+							
+                            <div class="checkbox-block" style="margin-bottom: 20px">
+                                <input
+                                    class="form_checkbox registration_input"
+                                    id="is_18over"
+                                    type="checkbox"
+                                    name="remember-me"
+                                    value="remember-me"
+                                />
+                                <label for="is_18over"
+                                    >Мне больше 18 лет</a></label
+                                >
+                            </div>
+
+                            <div class="formValidationFeedBack invalid-feedback" style="display: none"></div>
+
+                            <input
+                                id="registration_submit"
+                                class="blue_btn form_btn"
+                                type="submit"
+                                value="Зарегистрироватся"                 
+								style="margin-bottom: 20px"
+                            />
+                        </form>
+
+                        <div class="login__links">
+                            <a href="#" class="signup open__login-popup">Уже есть аккаунт</a>
+                        </div>
+                    </div>
+
+					
+					<div class="popup__popup-view" id="successed-registeration-popup">
+						<h3>Cпасибо за регистрацию!</h3>
+						<div>Чтобы войти в свой аккаунт подтвердите его с помошью письма на вашей почте</div>
+					</div>
+            </div>
+        </div>
+
+        <!-- <div id="myModal2">
+            <p>Добавить объявление</p>
+            <span id="myModal__close2" class="close"><img src="{% static "img/close.png" %}" alt=""></span>
+            <form action="#" class="login_form flex_form">
+                <input type="text" class="form_input" placeholder="Название" />
+                <input type="text" class="form_input" placeholder="Описание" />
+                <input type="text" class="form_input" placeholder="Цена" />
+                <input type="file" class="form_input" name="f" />
+                <select size="1" name="category" class="form_input">
+                    <option disabled>Категория</option>
+                    <option value="1">Ремонт</option>
+                    <option selected value="2">Строительство</option>
+                    <option value="3">Разработка</option>
+                </select>
+                <select size="1" name="subcategory" class="form_input">
+                    <option disabled>Подкатегория</option>
+                    <option value="1">Ремонт</option>
+                    <option selected value="2">Строительство</option>
+                    <option value="3">Разработка</option>
+                </select>
+                <div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br /></div>
+                <div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br /></div>
+                <div>
+                    <input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br />
+                    <input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br />
+                </div>
+                <div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br /></div>
+                <input type="text" class="form_input" placeholder="Адрес" />
+                <div class="form_map">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1999.058118409584!2d30.358355016070213!3d59.931177781873465!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469631a5e66d51c5%3A0x6f00589ac258db97!2z0J3QtdCy0YHQutC40Lkg0L_RgC4sINCh0LDQvdC60YIt0J_QtdGC0LXRgNCx0YPRgNCz!5e0!3m2!1sru!2sru!4v1613214625240!5m2!1sru!2sru"
+                        width="100%"
+                        height="70"
+                        frameborder="0"
+                        style="border: 0"
+                        allowfullscreen=""
+                        aria-hidden="false"
+                        tabindex="0"
+                    ></iframe>
+                </div>
+                <input class="blue_btn form_btn" type="submit" value="Сохранить" />
+            </form>
+        </div>
+        <div id="myOverlay2"></div>
+
+        <div id="myModal3">
+            <p>Фильтровать</p>
+            <span id="myModal__close3" class="close"><img src="{% static "img/close.png" %}" alt=""></span>
+            <form action="#" class="login_form flex_form dark-form">
+                <select size="1" name="subcategory">
+                    <option disabled>Подкатегория</option>
+                    <option value="1">Ремонт</option>
+                    <option selected value="2">Строительство</option>
+                    <option value="3">Разработка</option>
+                </select>
+                <div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br /></div>
+                <div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br /></div>
+                <div>
+                    <input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br />
+                    <input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br />
+                </div>
+                <div><input class="subcat_checkbox" type="checkbox" name="option1" value="a1" />Шиномонтаж<br /></div>
+                <select size="1" name="country">
+                    <option disabled>Страна</option>
+                    <option value="1">Сербия</option>
+                    <option selected value="2">Россия</option>
+                    <option value="3">Казахстан</option>
+                </select>
+                <select size="1" name="city">
+                    <option disabled>Город</option>
+                    <option value="1">Санкт-Петербург</option>
+                    <option selected value="2">Москва</option>
+                    <option value="3">Вильнюс</option>
+                </select>
+                <select size="1" name="radius">
+                    <option value="0">Все расстояния</option>
+                    <option value="1">25 км</option>
+                    <option value="2">50 км</option>
+                    <option value="3">150 км</option>
+                </select>
+                <select size="1" name="face">
+                    <option value="0">Все</option>
+                    <option value="1">Юр.лицо</option>
+                    <option value="2">Физ.лицо</option>
+                    <option value="3">ИП</option>
+                </select>
+                <select size="1" name="ch_price">
+                    <option value="0">Фильтровать по</option>
+                    <option value="2">По дате - сначала новые</option>
+                    <option value="1">По дате - сначала старые</option>
+                    <option value="3">По рейтингу</option>
+                </select>
+                <input class="blue_btn form_btn" type="submit" value="Применить" />
+            </form>
+        </div>
+        <div id="myOverlay3"></div> -->
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://unpkg.com/axios@0.21.1/dist/axios.min.js"></script>
+        <script src="{% static 'main.js'%}"></script>
+        <script src="https://use.fontawesome.com/61f08ed9ff.js"></script>
+    </body>
 </html>

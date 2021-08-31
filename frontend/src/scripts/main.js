@@ -1,55 +1,23 @@
-$("body").on("click", ".showPasswordToggleOne", function () {
-    if ($("#password-input").attr("type") == "password") {
-        $(this).addClass("view");
-        $("#password-input").attr("type", "text");
-    } else {
-        $(this).removeClass("view");
-        $("#password-input").attr("type", "password");
-    }
-    return false;
-});
-$("body").on("click", ".showPasswordToggleTwo", function () {
-    if ($("#password-input").attr("type") == "password") {
-        $(this).addClass("view");
-        $("#password-input").attr("type", "text");
-    } else {
-        $(this).removeClass("view");
-        $("#password-input").attr("type", "password");
-    }
-    return false;
-});
-
-$(document).ready(function () {
-    $("a.myLinkModal").click(function (event) {
-        event.preventDefault();
-        $("#myOverlay").fadeIn(297, function () {
-            $("#myModal").css("display", "block").animate({ opacity: 1 }, 198);
-        });
-    });
-
-    $("#myModal__close, #myOverlay").click(function () {
-        $("#myModal").animate({ opacity: 0 }, 198, function () {
-            $(this).css("display", "none");
-            $("#myOverlay").fadeOut(297);
-        });
-    });
-});
-
-$(document).ready(function () {
-    $("a.myLinkModal1").click(function (event) {
-        event.preventDefault();
-        $("#myOverlay1").fadeIn(297, function () {
-            $("#myModal1").css("display", "block").animate({ opacity: 1 }, 198);
-        });
-    });
-
-    $("#myModal__close1, #myOverlay1").click(function () {
-        $("#myModal1").animate({ opacity: 0 }, 198, function () {
-            $(this).css("display", "none");
-            $("#myOverlay1").fadeOut(297);
-        });
-    });
-});
+// $("body").on("click", ".showPasswordToggleOne", function () {
+//     if ($("#password-input").attr("type") == "password") {
+//         $(this).addClass("view");
+//         $("#password-input").attr("type", "text");
+//     } else {
+//         $(this).removeClass("view");
+//         $("#password-input").attr("type", "password");
+//     }
+//     return false;
+// });
+// $("body").on("click", ".showPasswordToggleTwo", function () {
+//     if ($("#password-input").attr("type") == "password") {
+//         $(this).addClass("view");
+//         $("#password-input").attr("type", "text");
+//     } else {
+//         $(this).removeClass("view");
+//         $("#password-input").attr("type", "password");
+//     }
+//     return false;
+// });
 
 $(document).ready(function () {
     $("a.myLinkModal2").click(function (event) {
@@ -79,15 +47,6 @@ $(document).ready(function () {
         $("#myModal3").animate({ opacity: 0 }, 198, function () {
             $(this).css("display", "none");
             $("#myOverlay3").fadeOut(297);
-        });
-    });
-});
-
-$(document).ready(function () {
-    $("#myModal__close4, #myOverlay4").click(function () {
-        $("#myModal4").animate({ opacity: 0 }, 198, function () {
-            $(this).css("display", "none");
-            $("#myOverlay4").fadeOut(297);
         });
     });
 });
@@ -126,37 +85,19 @@ $(document).ready(function () {
 
         switch (Number(event.target.value)) {
             case 1:
-                event.target.parentElement.getElementsByClassName(
-                    "ads_input_fixed"
-                )[0].style.display = "block";
-                event.target.parentElement.getElementsByClassName(
-                    "ads_input_lower"
-                )[0].style.display = "none";
-                event.target.parentElement.getElementsByClassName(
-                    "ads_input_upper"
-                )[0].style.display = "none";
+                event.target.parentElement.getElementsByClassName("ads_input_fixed")[0].style.display = "block";
+                event.target.parentElement.getElementsByClassName("ads_input_lower")[0].style.display = "none";
+                event.target.parentElement.getElementsByClassName("ads_input_upper")[0].style.display = "none";
                 break;
             case 2:
-                event.target.parentElement.getElementsByClassName(
-                    "ads_input_fixed"
-                )[0].style.display = "none";
-                event.target.parentElement.getElementsByClassName(
-                    "ads_input_lower"
-                )[0].style.display = "none";
-                event.target.parentElement.getElementsByClassName(
-                    "ads_input_upper"
-                )[0].style.display = "none";
+                event.target.parentElement.getElementsByClassName("ads_input_fixed")[0].style.display = "none";
+                event.target.parentElement.getElementsByClassName("ads_input_lower")[0].style.display = "none";
+                event.target.parentElement.getElementsByClassName("ads_input_upper")[0].style.display = "none";
                 break;
             case 3:
-                event.target.parentElement.getElementsByClassName(
-                    "ads_input_fixed"
-                )[0].style.display = "none";
-                event.target.parentElement.getElementsByClassName(
-                    "ads_input_lower"
-                )[0].style.display = "block";
-                event.target.parentElement.getElementsByClassName(
-                    "ads_input_upper"
-                )[0].style.display = "block";
+                event.target.parentElement.getElementsByClassName("ads_input_fixed")[0].style.display = "none";
+                event.target.parentElement.getElementsByClassName("ads_input_lower")[0].style.display = "block";
+                event.target.parentElement.getElementsByClassName("ads_input_upper")[0].style.display = "block";
                 break;
         }
     });

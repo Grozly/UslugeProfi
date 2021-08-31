@@ -1,9 +1,11 @@
+import { openPopup, PopupsEnum } from "./popup";
+
 //login block
 const loginSubmit = document.querySelector("#loginSubmit");
 
 // registration block
-const registrationFrom = document.querySelector("#myModal1 form");
-const registrationInputs = document.querySelectorAll("#myModal1 form input");
+const registrationFrom = document.querySelector("#register-popup form");
+const registrationInputs = document.querySelectorAll("#register-popup form input");
 const registrationSubmit = document.querySelector("#registration_submit");
 const registrationEmailField = document.querySelector("#registrationEmailField");
 const registrationEmailFeedBackArea = document.querySelector(".registrationEmailFeedBackArea");
@@ -11,12 +13,8 @@ const passwordInputOne = document.querySelector("#passwordInputOne");
 const passwordInputTwo = document.querySelector("#passwordInputTwo");
 const passwordInputOneVal = document.querySelector("#passwordInputOne").value;
 const passwordInputTwoVal = document.querySelector("#passwordInputTwo").value;
-const registrationPasswordFeedBackArea = document.querySelector(
-    ".registrationPasswordFeedBackArea"
-);
-const registrationPasswordFeedBackAreaOne = document.querySelector(
-    ".registrationPasswordFeedBackAreaOne"
-);
+const registrationPasswordFeedBackArea = document.querySelector(".registrationPasswordFeedBackArea");
+const registrationPasswordFeedBackAreaOne = document.querySelector(".registrationPasswordFeedBackAreaOne");
 const formValidationFeedBack = document.querySelector(".formValidationFeedBack");
 const showPasswordToggleOne = document.querySelector(".showPasswordToggleOne");
 const showPasswordToggleTwo = document.querySelector(".showPasswordToggleTwo");
@@ -73,12 +71,8 @@ let validPassword = function () {
     let passwordInputTwo = document.querySelector("#passwordInputTwo");
     let passwordOneVal = form.elements.passwordInputOne.value;
     let passwordTwoVal = form.elements.passwordInputTwo.value;
-    let registrationPasswordFeedBackArea = document.querySelector(
-        ".registrationPasswordFeedBackArea"
-    );
-    let registrationPasswordsFeedBackArea = document.querySelector(
-        ".registrationPasswordsFeedBackArea"
-    );
+    let registrationPasswordFeedBackArea = document.querySelector(".registrationPasswordFeedBackArea");
+    let registrationPasswordsFeedBackArea = document.querySelector(".registrationPasswordsFeedBackArea");
 
     if (passwordOneVal == "" || passwordTwoVal == "") {
         passwordInputOne.classList.add("is-invalid");
@@ -144,13 +138,7 @@ registrationSubmit.onclick = (e) => {
             })
             .then((res) => {
                 if (res.status === 200) {
-                    $("#myModal1").animate({ opacity: 0 }, 198, function () {
-                        $(this).css("display", "none");
-                        $("#myOverlay1").fadeOut(297);
-                    });
-                    $("#myOverlay4").fadeIn(297, function () {
-                        $("#myModal4").css("display", "block").animate({ opacity: 1 }, 198);
-                    });
+                    openPopup(PopupsEnum.successedRegistrationPopup);
                 } else console.log(res);
             })
             .catch((err) => console.log(err.response));

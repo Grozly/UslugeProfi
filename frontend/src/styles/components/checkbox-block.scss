@@ -1,0 +1,14 @@
+.checkbox-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    input[type="checkbox"] {
+        cursor: pointer;
+        margin-right: 6px;
+    }
+
+    label {
+        cursor: pointer;
+    }
+}

@@ -1,126 +1,96 @@
-{% extends 'mainapp/base.html' %}
-{% load static %}
-{% block header %}
+{% extends 'mainapp/base.html' %} {% load static %} {% block header %}
 <div class="container">
     <div class="header__top">
-        <a href="{% url 'main:main' %}">
-            <img src="{% static "img/logo.png" %}" class="header__logo">
-        </a>
+        <a href="{% url 'main:main' %}"> <img src="{% static "img/logo.png" %}" class="header__logo"> </a>
         <div class="header__links only_mobile">
             <div class="login__links">
-                {% if user.is_authenticated %}
-                    {% if user.is_superuser %}
-                        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                        <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
-                    {% else %}
-                        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                        <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
-                    {% endif %}
+                {% if user.is_authenticated %} {% if user.is_superuser %}
+                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+                <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
                 {% else %}
-                    <a href="#" class="login myLinkModal">Войти</a> |
-                    <a href="#" class="signup myLinkModal1">Регистрация</a>
+                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+                <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
+                {% endif %} {% else %}
+                <a href="#" class="login open__login-popup">Войти</a> |
+                <a href="#" class="signup open__register-popup">Регистрация</a>
                 {% endif %}
             </div>
         </div>
     </div>
     <div class="ad_block mobile_top only_mobile">
         {% if user.is_authenticated %}
-            <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">Личный кабинет</a>
+        <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">Личный кабинет</a>
         {% else %}
-            <a href="{% url 'main:main' %}" class="advetisement myLinkModal">Личный кабинет</a>
+        <a href="{% url 'main:main' %}" class="advetisement open__login-popup">Личный кабинет</a>
         {% endif %}
         <a href="#" class="favorites">
-        <img src="{% static 'img/heart.png' %}" alt="" class="favorites_icon">Избранное</a>
+            <img src="{% static 'img/heart.png' %}" alt="" class="favorites_icon" />Избранное</a
+        >
     </div>
     <div class="header__bottom">
         <div class="header__links">
             <div class="login__links">
-                {% if user.is_authenticated %}
-                    {% if user.is_superuser %}
-                        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                        <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
-                    {% else %}
-                        <a href="{% url 'main:logout' %}" class="login">Выход</a> |
-                        <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
-                    {% endif %}
+                {% if user.is_authenticated %} {% if user.is_superuser %}
+                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+                <a href="{% url 'admin:index' %}" class="signup">Админ панель</a>
                 {% else %}
-                    <a href="#" class="login myLinkModal">Войти</a> |
-                    <a href="#" class="signup myLinkModal1">Регистрация</a>
+                <a href="{% url 'main:logout' %}" class="login">Выход</a> |
+                <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="signup">{{ user }}</a>
+                {% endif %} {% else %}
+                <a href="#" class="login open__login-popup">Войти</a> |
+                <a href="#" class="signup open__register-popup">Регистрация</a>
                 {% endif %}
             </div>
             <div class="ad_block">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">Личный кабинет</a>
+                <a href="{% url 'auth:profile' user.uslugeuserprofile.pk %}" class="advetisement">Личный кабинет</a>
                 {% else %}
-                    <a href="{% url 'main:main' %}" class="advetisement myLinkModal">Личный кабинет</a>
+                <a href="{% url 'main:main' %}" class="advetisement open__login-popup">Личный кабинет</a>
                 {% endif %}
             </div>
         </div>
-		<form class="header__search_form personal">Личный кабинет</form>
+        <form class="header__search_form personal">Личный кабинет</form>
     </div>
-	<form class="header__search_form personal top only_mobile">Личный кабинет</form>
+    <form class="header__search_form personal top only_mobile">Личный кабинет</form>
 </div>
-{% endblock %}
-{% block sidebar %}
+{% endblock %} {% block sidebar %}
 <div class="category__filter">
-	{% for category in category_list %}
-		<a class="filter_attr" href="#">{{ category }}</a>
-	{% endfor %}
+    {% for category in category_list %}
+    <a class="filter_attr" href="#">{{ category }}</a>
+    {% endfor %}
 </div>
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 <div class="personal_info">
-	<div class="top_info">
-		<p>Ваши объявления будут видны до <span class="adv_end">31.02.21</span></p>
-		<input class="blue_btn form_btn" type="submit" value="Продлить">
-	</div>
-	<div class="main_info">
-		<div class="profile_avatar_wrapper">
-			{% if user.uslugeuserprofile.photo_profile %}
-			<img src="/media/{{ user.uslugeuserprofile.photo_profile }}" alt="{{ uslugeuserprofile.email }}"
-				class="profile_avatar">
-			{% else %}
-			<img src="{% static "img/personal.png" %}" alt="" class="profile_avatar">
-			{% endif %}
-		</div>
-		
-		<div class="per_text">
-			<div class="per_name bold">
-				{% if user.uslugeuserprofile.name_profile %}
-				{{ user.uslugeuserprofile.name_profile }} {{ user.uslugeuserprofile.surname_profile }}
-				{% else %}
-				{{user.email}}
-				{% endif %}
-			</div>
-			<div class="per_long">
-				{{ user.last_login }}
-			</div>
-			<div class="per_adv">
-				Объявлений: <span class="bold">2</span>
-			</div>
-			<div class="per_tel bold">
-				{% if user.uslugeuserprofile.phone_profile %}
-				{{ user.uslugeuserprofile.phone_profile }}
-				{% else %}
-				+7 (999) 999-99-99
-				{% endif %}
-			</div>
-			<div class="per_email bold">
-				{{ user.email }}
-			</div>
-		</div>
-	</div>
-	{% include '../inc/inc_profile_menu.html' %}
-	{% block featuredads %}
-	{% endblock %}
-	{% block placead %}
-	{% endblock %}
-	{% block editprofile %}
-	{% endblock %}
-	{% block listad %}
-	{% endblock %}
+    <div class="top_info">
+        <p>Ваши объявления будут видны до <span class="adv_end">31.02.21</span></p>
+        <input class="blue_btn form_btn" type="submit" value="Продлить" />
+    </div>
+    <div class="main_info">
+        <div class="profile_avatar_wrapper">
+            {% if user.uslugeuserprofile.photo_profile %}
+            <img
+                src="/media/{{ user.uslugeuserprofile.photo_profile }}"
+                alt="{{ uslugeuserprofile.email }}"
+                class="profile_avatar"
+            />
+            {% else %} <img src="{% static "img/personal.png" %}" alt="" class="profile_avatar"> {% endif %}
+        </div>
+
+        <div class="per_text">
+            <div class="per_name bold">
+                {% if user.uslugeuserprofile.name_profile %} {{ user.uslugeuserprofile.name_profile }} {{
+                user.uslugeuserprofile.surname_profile }} {% else %} {{user.email}} {% endif %}
+            </div>
+            <div class="per_long">{{ user.last_login }}</div>
+            <div class="per_adv">Объявлений: <span class="bold">2</span></div>
+            <div class="per_tel bold">
+                {% if user.uslugeuserprofile.phone_profile %} {{ user.uslugeuserprofile.phone_profile }} {% else %} +7
+                (999) 999-99-99 {% endif %}
+            </div>
+            <div class="per_email bold">{{ user.email }}</div>
+        </div>
+    </div>
+    {% include '../inc/inc_profile_menu.html' %} {% block featuredads %} {% endblock %} {% block placead %} {% endblock
+    %} {% block editprofile %} {% endblock %} {% block listad %} {% endblock %}
 </div>
-{% endblock %}
-{% block footer %}
-    {% include 'mainapp/components/footer.html' %}
-{% endblock %}
+{% endblock %} {% block footer %} {% include 'mainapp/components/footer.html' %} {% endblock %}

@@ -1,0 +1,114 @@
+@import "../colors.scss";
+
+.popup__wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    height: -webkit-fill-available;
+    background-color: rgba($color: black, $alpha: 0.8);
+    z-index: 100;
+    padding: 75px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s visibility, 0.3s opacity;
+}
+
+.popup__wrapper__shown {
+    visibility: visible;
+    opacity: 1;
+    transition: 0.3s visibility, 0.3s opacity;
+}
+
+.popup__wrapperInner {
+    width: 100%;
+    min-height: 0px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar,
+    &::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-track {
+        display: none;
+    }
+}
+
+.popup__content {
+    position: relative;
+    max-width: 1000px;
+    width: 80%;
+    padding: 30px 60px;
+    background-color: $bg-main-color;
+    text-align: center;
+    margin: 0 auto;
+
+    h3 {
+        margin-bottom: 24px;
+        font-size: 1.4em;
+    }
+}
+
+.popup__close-button {
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    top: 12px;
+    right: 12px;
+    transform: rotate(45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 2.4em;
+}
+
+.popup__popup-view {
+    visibility: hidden;
+    opacity: 0;
+    height: 0;
+}
+
+.popup__popup-view__shown {
+    visibility: visible;
+    opacity: 1;
+    height: auto;
+}
+
+@media (max-width: 940px) {
+    .popup__content {
+        width: 90%;
+    }
+}
+
+@media (max-width: 560px) {
+    .popup__content {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+@media (max-width: 460px) {
+    .popup__wrapper {
+        background-color: $bg-main-color;
+    }
+
+    .popup__wrapperInner {
+        padding: 0;
+    }
+
+    .popup__content {
+        margin: 0;
+        width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}

@@ -6,3 +6,4 @@ import "./scripts/registrvalidate";
 import "./scripts/sidebar";
 import "./scripts/createNewAd";
 import "./scripts/map";
+import "./scripts/popup";

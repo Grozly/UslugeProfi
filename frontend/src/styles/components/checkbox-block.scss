@@ -1,3 +1,5 @@
+@import "../colors.scss";
+
 .checkbox-block {
     display: flex;
     align-items: center;
@@ -10,5 +12,9 @@
 
     label {
         cursor: pointer;
+
+        a {
+            color: $main-color;
+        }
     }
 }

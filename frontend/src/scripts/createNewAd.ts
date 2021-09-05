@@ -128,49 +128,16 @@ if (form) {
             if (checkbox.checked) {
                 isOptionsSelected = true;
 
-                switch (Number(priceSelector.value)) {
-                    case PriceTypes.Fixed:
-                        optionsArray.push({
-                            id: optionID,
-                            name: name,
-                            select_price: adSelectPrice.value,
-                            select_currency: adSelectCurrency.value,
-                            select_measurement: adSelectMeasurement.value,
-                            fixed_price: fixedPrice.value,
-                            lower_price: undefined,
-                            upper_price: undefined,
-                        });
-                        break;
-
-                    case PriceTypes.Negotiable:
-                        optionsArray.push({
-                            id: optionID,
-                            name: name,
-                            select_price: adSelectPrice.value,
-                            select_currency: adSelectCurrency.value,
-                            select_measurement: adSelectMeasurement.value,
-                            fixed_price: undefined,
-                            lower_price: undefined,
-                            upper_price: undefined,
-                        });
-                        break;
-
-                    case PriceTypes.Range:
-                        optionsArray.push({
-                            id: optionID,
-                            name: name,
-                            select_price: adSelectPrice.value,
-                            select_currency: adSelectCurrency.value,
-                            select_measurement: adSelectMeasurement.value,
-                            fixed_price: undefined,
-                            lower_price: lowerPrice.value,
-                            upper_price: upperPrice.value,
-                        });
-                        break;
-
-                    default:
-                        break;
-                }
+                optionsArray.push({
+                    id: optionID,
+                    name: name,
+                    select_price: adSelectPrice.value,
+                    select_currency: adSelectCurrency.value,
+                    select_measurement: adSelectMeasurement.value,
+                    fixed_price: Number(priceSelector.value) === PriceTypes.Fixed ? fixedPrice.value : undefined,
+                    lower_price: Number(priceSelector.value) === PriceTypes.Range ? lowerPrice.value : undefined,
+                    upper_price: Number(priceSelector.value) === PriceTypes.Range ? upperPrice.value : undefined,
+                });
             }
         });
 

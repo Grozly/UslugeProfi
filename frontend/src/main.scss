@@ -1,4 +1,6 @@
 @import "./styles/main.scss";
+@import "./styles/mainOld.scss";
+
 @import "./styles/components/sidebar.scss";
 @import "./styles/components/catalog.scss";
 @import "./styles/components/map.scss";
@@ -9,6 +11,7 @@
 @import "./styles/components/rating.scss";
 @import "./styles/components/popup.scss";
 @import "./styles/components/checkbox-block.scss";
+@import "./styles/components/errors-block.scss";
 
 @import "./styles/colors.scss";
 @import "./styles/normalize.scss";

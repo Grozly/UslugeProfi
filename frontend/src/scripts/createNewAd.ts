@@ -1,3 +1,5 @@
+import { createAdAPI } from "./api/adsApi";
+import { getAllCategoriesAPI, getServicesBySubcategoryAPI, getSubcategoriesByCategoryAPI } from "./api/api";
 import { getLocationOfAddressAPI } from "./api/geocodingAPI";
 import { initMap } from "./map";
 
@@ -19,6 +21,12 @@ const adImageFile: HTMLInputElement = document.getElementsByClassName(
 let map: google.maps.Map<HTMLElement>;
 let selectedLocationLatLng: google.maps.LatLng;
 let selectedLocationMarker: google.maps.Marker;
+
+enum PriceTypes {
+    Fixed = 1,
+    Negotiable = 2,
+    Range = 3,
+}
 
 initMap().then((res) => {
     map = res;
@@ -48,12 +56,6 @@ function validateForm() {
 
     return true;
 }
-
-$.ajaxSetup({
-    headers: {
-        "X-CSRF-TOKEN": csrf.value,
-    },
-});
 
 if (form) {
     let addressChangeTimeout: NodeJS.Timeout;
@@ -115,7 +117,6 @@ if (form) {
             const fixedPrice = item.getElementsByClassName("ads_input_fixed")[0] as HTMLInputElement;
             const lowerPrice = item.getElementsByClassName("ads_input_lower")[0] as HTMLInputElement;
             const upperPrice = item.getElementsByClassName("ads_input_upper")[0] as HTMLInputElement;
-            const negotiable = item.getElementsByClassName("ads_input_negotiable")[0] as HTMLInputElement;
             const checkbox = item.getElementsByClassName("subcat_checkbox")[0] as HTMLInputElement;
             const priceSelector = item.getElementsByClassName("new_ad_price_category")[0] as HTMLInputElement;
             const adSelectPrice = item.getElementsByClassName("select_price")[0] as HTMLInputElement;
@@ -128,7 +129,7 @@ if (form) {
                 isOptionsSelected = true;
 
                 switch (Number(priceSelector.value)) {
-                    case 1:
+                    case PriceTypes.Fixed:
                         optionsArray.push({
                             id: optionID,
                             name: name,
@@ -136,28 +137,34 @@ if (form) {
                             select_currency: adSelectCurrency.value,
                             select_measurement: adSelectMeasurement.value,
                             fixed_price: fixedPrice.value,
+                            lower_price: undefined,
+                            upper_price: undefined,
                         });
                         break;
 
-                    case 2:
+                    case PriceTypes.Negotiable:
                         optionsArray.push({
                             id: optionID,
                             name: name,
                             select_price: adSelectPrice.value,
                             select_currency: adSelectCurrency.value,
                             select_measurement: adSelectMeasurement.value,
+                            fixed_price: undefined,
+                            lower_price: undefined,
+                            upper_price: undefined,
                         });
                         break;
 
-                    case 3:
+                    case PriceTypes.Range:
                         optionsArray.push({
                             id: optionID,
                             name: name,
+                            select_price: adSelectPrice.value,
+                            select_currency: adSelectCurrency.value,
+                            select_measurement: adSelectMeasurement.value,
+                            fixed_price: undefined,
                             lower_price: lowerPrice.value,
                             upper_price: upperPrice.value,
-                            select_price: adSelectPrice.value,
-                            select_currency: adSelectCurrency.value,
-                            select_measurement: adSelectMeasurement.value,
                         });
                         break;
 
@@ -182,40 +189,28 @@ if (form) {
         fd.append("subcategory", adSubcategory.value);
         fd.append("address", adAddress.value);
         fd.append("options", JSON.stringify(optionsArray));
+        fd.append("coordinates", JSON.stringify(selectedLocationLatLng));
 
-        $.ajax({
-            type: "POST",
-            url: "/create-ad/",
-            enctype: "multipart/form-data",
-            data: fd,
-            success: function (response) {
-                location.reload();
-            },
-            error: function (error) {
-                console.log(error);
-            },
-            cache: false,
-            contentType: false,
-            processData: false,
+        createAdAPI(fd, csrf.value).then((res) => {
+            if (res.status === 200) location.reload();
+            console.log(res);
         });
     });
 
-    $.ajax({
-        type: "GET",
-        url: `/ajax/category-val/`,
-        success: function (response) {
-            const categoryData = response.data;
-            categoryData.forEach((item: any) => {
-                const option = document.createElement("option");
-                option.textContent = item.name;
-                option.setAttribute("class", "item");
-                option.setAttribute("value", item.id);
-                adCategoty.appendChild(option);
-            });
-        },
-        error: function (error) {
-            console.log(error);
-        },
+    getAllCategoriesAPI().then((res) => {
+        if (res.status !== 200) {
+            console.log(res);
+            return;
+        }
+
+        const categoryData = res.data.data;
+        categoryData.forEach((item: any) => {
+            const option = document.createElement("option");
+            option.textContent = item.name;
+            option.setAttribute("class", "item");
+            option.setAttribute("value", item.id);
+            adCategoty.appendChild(option);
+        });
     });
 
     adCategoty.addEventListener("change", (e) => {
@@ -224,46 +219,46 @@ if (form) {
         adSubcategory.innerHTML = "";
         subcategoryText.textContent = "-- Выберите подкатегорию --";
 
-        $.ajax({
-            type: "GET",
-            url: `/ajax/subcategory-val/${selectedCategory}/`,
-            success: function (response) {
-                adSubcategory.innerHTML = `
+        getSubcategoriesByCategoryAPI(selectedCategory).then((res) => {
+            if (res.status !== 200) {
+                console.log(res);
+                return;
+            }
+
+            adSubcategory.innerHTML = `
                 <option selected disabled="True" id="subcategory_text">
                     -- Выберите подкатегорию --
                 </option>`;
 
-                var adsBlock = document.getElementById("ads_by_subcategory_block");
-                adsBlock.innerHTML = "";
+            var adsBlock = document.getElementById("ads_by_subcategory_block");
+            adsBlock.innerHTML = "";
 
-                response.data.forEach((item: any) => {
-                    adSubcategory.innerHTML =
-                        adSubcategory.innerHTML +
-                        `<option value="${item.id}">
+            res.data.data.forEach((item: any) => {
+                adSubcategory.innerHTML =
+                    adSubcategory.innerHTML +
+                    `<option value="${item.id}">
                        ${item.name}
                    </option>`;
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            },
+            });
         });
     });
 
     adSubcategory.addEventListener("change", (e) => {
-        const selectedSubcategory = (e.target as HTMLSelectElement).value;
+        const selectedSubcategory = Number((e.target as HTMLSelectElement).value);
 
-        $.ajax({
-            type: "GET",
-            url: `/ajax/service-val/${selectedSubcategory}/`,
-            success: function (response) {
-                var adsBlock = document.getElementById("ads_by_subcategory_block");
-                adsBlock.innerHTML = "";
+        getServicesBySubcategoryAPI(selectedSubcategory).then((res) => {
+            if (res.status !== 200) {
+                console.log(res);
+                return;
+            }
 
-                response.data.forEach((item: any, index: number) => {
-                    adsBlock.innerHTML =
-                        adsBlock.innerHTML +
-                        `<div class="ads_options new_ad_options" data-id=${item.id}>
+            var adsBlock = document.getElementById("ads_by_subcategory_block");
+            adsBlock.innerHTML = "";
+
+            res.data.data.forEach((item: any, index: number) => {
+                adsBlock.innerHTML =
+                    adsBlock.innerHTML +
+                    `<div class="ads_options new_ad_options" data-id=${item.id}>
                         <div>
                             <input
                                 class="subcat_checkbox"
@@ -315,82 +310,41 @@ if (form) {
                             <option value="3">кг</option>
                         </select>
                     </div>`;
-                });
+            });
 
-                $(".new_ad_price_category").change(function (event) {
-                    switch (Number((event.target as HTMLSelectElement).value)) {
-                        case 1:
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_fixed"
-                                )[0] as HTMLInputElement
-                            ).style.display = "block";
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_lower"
-                                )[0] as HTMLInputElement
-                            ).style.display = "none";
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_upper"
-                                )[0] as HTMLInputElement
-                            ).style.display = "none";
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_negotiable"
-                                )[0] as HTMLInputElement
-                            ).style.display = "none";
-                            break;
-                        case 2:
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_fixed"
-                                )[0] as HTMLInputElement
-                            ).style.display = "none";
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_lower"
-                                )[0] as HTMLInputElement
-                            ).style.display = "none";
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_upper"
-                                )[0] as HTMLInputElement
-                            ).style.display = "none";
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_negotiable"
-                                )[0] as HTMLInputElement
-                            ).style.display = "block";
-                            break;
-                        case 3:
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_fixed"
-                                )[0] as HTMLInputElement
-                            ).style.display = "none";
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_lower"
-                                )[0] as HTMLInputElement
-                            ).style.display = "block";
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_upper"
-                                )[0] as HTMLInputElement
-                            ).style.display = "block";
-                            (
-                                event.target.parentElement.getElementsByClassName(
-                                    "ads_input_negotiable"
-                                )[0] as HTMLInputElement
-                            ).style.display = "none";
-                            break;
-                    }
-                });
-            },
-            error: function (error) {
-                console.log(error);
-            },
+            const priceSelectors = Array.from(document.getElementsByClassName("new_ad_price_category"));
+
+            priceSelectors.forEach((priceSelector) =>
+                priceSelector.addEventListener("change", (event: InputEvent) => {
+                    const eventTarget = event.target as HTMLSelectElement;
+                    const eventTargetValue = Number(eventTarget.value) as PriceTypes;
+
+                    const priceTypesInputsDispay = new Map<number, { fixed: string; range: string }>();
+
+                    priceTypesInputsDispay.set(PriceTypes.Fixed, {
+                        fixed: "block",
+                        range: "none",
+                    });
+                    priceTypesInputsDispay.set(PriceTypes.Negotiable, {
+                        fixed: "none",
+                        range: "none",
+                    });
+                    priceTypesInputsDispay.set(PriceTypes.Range, {
+                        fixed: "none",
+                        range: "block",
+                    });
+
+                    (
+                        eventTarget.parentElement.getElementsByClassName("ads_input_fixed")[0] as HTMLInputElement
+                    ).style.display = priceTypesInputsDispay.get(eventTargetValue).fixed;
+                    (
+                        eventTarget.parentElement.getElementsByClassName("ads_input_lower")[0] as HTMLInputElement
+                    ).style.display = priceTypesInputsDispay.get(eventTargetValue).range;
+                    (
+                        eventTarget.parentElement.getElementsByClassName("ads_input_upper")[0] as HTMLInputElement
+                    ).style.display = priceTypesInputsDispay.get(eventTargetValue).range;
+                })
+            );
         });
     });
 }
